@@ -12,18 +12,49 @@ GROUP NO. = 46
 #include <math.h>
 #include "hash_table.h"
 
-static ht_item* ht_new_item(const char* k, int index, Type tag) {
+ht_item* ht_insert_term_item(ht_hash_table* ht, const char* key, int index, Type tag) {
 
-    ht_item* i = malloc(sizeof(ht_item));
-
-    i->key = strdup(k);
-
+    term_item* i = (term_item *)malloc(sizeof(term_item));
     i->index=index;
-
     i->tag=tag;
-
-    return i;
+    ht_item* j = (ht_item *)malloc(sizeof(ht_item));
+    j->key = strdup(key);
+    ht_data* k = (ht_data *)malloc(sizeof(ht_data));
+    k->t_item = i;
+    j->data = k;
+    j->ct = 0;
+    printf("%s",key);
+    return ht_insert(ht,j);
 }
+
+ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int rootNode) {
+
+    func_item* i = (func_item *)malloc(sizeof(func_item));
+    i->rootNode=rootNode;
+    ht_item* j = (ht_item *)malloc(sizeof(ht_item));
+    j->key = strdup(key);
+    ht_data* k = (ht_data *)malloc(sizeof(ht_data));
+    k->f_item = i;
+    j->data = k;
+    j->ct = 1;
+    return ht_insert(ht,j);
+}
+
+ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int rootNode, VarType type, bool ifArr) {
+
+    var_item* i = (var_item *)malloc(sizeof(var_item));
+    i->rootNode=rootNode;
+    i->type=type;
+    i->ifArr=ifArr;
+    ht_item* j = (ht_item *)malloc(sizeof(ht_item));
+    j->key = strdup(key);
+    ht_data* k = (ht_data *)malloc(sizeof(ht_data));
+    k->v_item = i;
+    j->data = k;
+    j->ct = 2;
+    return ht_insert(ht,j);
+}
+
 
 static int ht_hashing(const char* s, const int a, const int m) {
 
@@ -48,9 +79,7 @@ static int ht_get_hash(const char* s, const int num_buckets, const int attempt)
     	return (hash_1 + (attempt * (hash_2 + 1))) % num_buckets;
 }
 
-ht_item* ht_insert(ht_hash_table* ht, const char* key, int ind, Type tag) {
-
-    	ht_item* item = ht_new_item(key, ind, tag);
+ht_item* ht_insert(ht_hash_table* ht, ht_item *item) {
 
     	int index = ht_get_hash(item->key, ht->size, 0);
 

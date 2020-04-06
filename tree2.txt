@@ -1,0 +1,54 @@
+lexeme		lineno		tokenName		valueIfNumber		parentNodeSymbol	isLeafNode(yes/no)	NodeSymbol
+v_1_2_3		4		ID				0		idList		YES
+----										declareStmt			NO		idList
+----										statements			NO		declareStmt
+integer		4		INTEGER				0		declareStmt		YES
+----										moduleDef			NO		statements
+v_1_2_3		5		ID				0		ioStmt		YES
+----										statements			NO		ioStmt
+----										statements			NO		statements
+result_		6		ID				0		idList		YES
+----										declareStmt			NO		idList
+----										statements			NO		declareStmt
+integer		6		INTEGER				0		declareStmt		YES
+----										statements			NO		statements
+result_		7		ID				0		idList		YES
+----										optional			NO		idList
+----										moduleReuseStmt			NO		optional
+----										statements			NO		moduleReuseStmt
+square		7		ID				0		moduleReuseStmt		YES
+v_1_2_3		7		ID				0		idList		YES
+----										moduleReuseStmt			NO		idList
+----										statements			NO		statements
+result		8		ID				0		var_id_num		YES
+----										ioStmt			NO		var_id_num
+----										statements			NO		ioStmt
+----										statements			NO		statements
+----										driverModule			NO		moduleDef
+----										program			NO		driverModule
+----										ROOT			NO		program
+square		11		ID				0		module		YES
+----										otherModules			NO		module
+x		12		ID				0		input_plist		YES
+----										module			NO		input_plist
+integer		12		INTEGER				0		input_plist		YES
+value		13		ID				0		output_plist		YES
+----										ret			NO		output_plist
+integer		13		INTEGER				0		output_plist		YES
+----										module			NO		ret
+value		15		ID				0		assignmentStmt		YES
+----										statements			NO		assignmentStmt
+x		15		ID				0		var_id_num		YES
+----										term			NO		var_id_num
+----										arithmeticExpr			NO		term
+*		15		MUL				0		N5		YES
+----										term			NO		N5
+x		15		ID				0		var_id_num		YES
+----										N5			NO		var_id_num
+----										AnyTerm			NO		arithmeticExpr
+----										arithmeticOrBooleanExpr			NO		AnyTerm
+----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
+----										assignmentStmt			NO		lvalueIDStmt
+----										moduleDef			NO		statements
+----										module			NO		moduleDef
+----										program			NO		otherModules

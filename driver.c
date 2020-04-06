@@ -17,7 +17,9 @@ GROUP NO. = 46
 #include "utils.h"
 #include "parseTable.h"
 #include "adt.h"
+#include "ast.h"
 #include "parser.h"
+#include "semCheck.h"
 
 
 int main(int argc,char** argv)
@@ -30,6 +32,8 @@ int main(int argc,char** argv)
 	mapping_table= ht_new();
 	
 	keyword_table= ht_new();
+
+	func_table= ht_new();
 
 	int i=0;
 	char line[40];
@@ -49,7 +53,7 @@ int main(int argc,char** argv)
 
 	while (fgets(line, 40, keyword_file)!=NULL) {
         	line[strcspn(line, "\n")] = 0;
-		ht_insert(keyword_table,line, i++,KEYWORD);
+		ht_insert_term_item(keyword_table, line, i++,KEYWORD);
 		
         	//printf("%s", line);
     	}
@@ -68,7 +72,7 @@ int main(int argc,char** argv)
 
 	while (fgets(line, 40, terminal_file)!=NULL) {
         	line[strcspn(line, "\n")] = 0;
-		tokensList[i]=ht_insert(mapping_table,line, i,TERMINAL);
+		tokensList[i]=ht_insert_term_item(mapping_table,line, i,TERMINAL);
 		num_terminals++;		
 		i++;
 		
@@ -87,7 +91,7 @@ int main(int argc,char** argv)
 	}
 	while (fgets(line, 40, nonterminal_file)!=NULL) {
         	line[strcspn(line, "\n")] = 0;
-		tokensList[i]=ht_insert(mapping_table,line, i,NONTERMINAL);
+		tokensList[i]=ht_insert_term_item(mapping_table,line, i,NONTERMINAL);
 		num_nonterminals++;
 		i++;
         	
@@ -105,6 +109,9 @@ int main(int argc,char** argv)
 	printf("CREATING PARSE TABLE\n");
 
 	create_parse_table();
+	//ht_insert_term_item(mapping_table, "qwerty", 1007,KEYWORD);
+	//printf("%s %d",ht_search(mapping_table,"qwerty")->key,ht_search(mapping_table,"qwerty")->data->t_item->index);
+	//printf("%s",tokensList[0]->key);
 
 	printf("CREATION OF PARSE TABLE COMPLETE\n");
 
@@ -162,7 +169,7 @@ int main(int argc,char** argv)
 						if(!next)
 							break;
 						if(next->index!=-1)
-							if(next->index==ht_search(mapping_table,"RNUM")->index)
+							if(next->index==ht_search(mapping_table,"RNUM")->data->t_item->index)
 								printf("LINE NUMBER =  %d  LEXEME = %s  VALUE=  %f  TOKEN_NAME =  %s\n",next->LN,next->lexeme,next->val.f_val,tokensList[next->index]->key);
 							else
 								printf("LINE NUMBER =  %d  LEXEME = %s  VALUE=  %d  TOKEN_NAME =  %s\n",next->LN,next->lexeme,next->val.i_val,tokensList[next->index]->key);
@@ -202,6 +209,16 @@ int main(int argc,char** argv)
 					forwardPointer=-1;
 
 					parseTree(argv[2]);
+
+					astnode *xp = createAST(root);
+
+					FILE* fp2=fopen("tree2.txt","w");
+					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
+					printTraversalAst(xp, fp2);
+					fclose(fp2);
+					printf("\n");
+					
+					checkSemRules(xp);
 
 					end_time = clock();
 

@@ -55,8 +55,12 @@ error_list* parseTree(char* parseTreeFile){
 	ht_item* start=ht_search(mapping_table,"program");
 
 	ht_item* end_marker=(ht_item *)malloc(sizeof(ht_item));
+	ht_data* k = malloc(sizeof(ht_data));
+	term_item* i = malloc(sizeof(term_item));
+	k->t_item = i;
+	end_marker->data = k;
 
-	end_marker->index=-2;
+	end_marker->data->t_item->index=-2;
 
 	end_marker->key=NULL;
 
@@ -88,7 +92,7 @@ error_list* parseTree(char* parseTreeFile){
 
 		st=pop(st);
 
-		if(top->index==ht_search(mapping_table,"e")->index)
+		if(top->data->t_item->index==ht_search(mapping_table,"e")->data->t_item->index)
 		{
 			temp=(node *)malloc(sizeof(node));
 			temp->nonterm = top;
@@ -97,7 +101,7 @@ error_list* parseTree(char* parseTreeFile){
 			continue;
 		}
 		
-		if(top->index==-2)
+		if(top->data->t_item->index==-2)
 		{
 			currentNode=currentNode->parent;
 			continue;
@@ -119,26 +123,26 @@ error_list* parseTree(char* parseTreeFile){
 
 		}
 	
-		if(top->tag==2)
+		if(top->data->t_item->tag==2)
 		{
 			temp=(node *)malloc(sizeof(node));
 			temp->nonterm = top;
 
 			if(isFirst)
 			{
-				currentNode=insertAsChild(currentNode, temp,top->tag );
+				currentNode=insertAsChild(currentNode, temp,top->data->t_item->tag );
 				isFirst=0;
 			}
 			else
 			{
-				currentNode=insertAsNextRightSibling(currentNode, temp,top->tag);
+				currentNode=insertAsNextRightSibling(currentNode, temp,top->data->t_item->tag);
 			}
 
 			st=push(st,end_marker);
 
 			int i=0;
 			
-			int rule_index=parse_table[top->index][nextToken->index];
+			int rule_index=parse_table[top->data->t_item->index][nextToken->index];
 
 			if(rule_index==-1)
 			{
@@ -155,7 +159,7 @@ error_list* parseTree(char* parseTreeFile){
 
 				while(nextToken!=NULL)
 				{
-					rule_index=parse_table[top->index][nextToken->index];
+					rule_index=parse_table[top->data->t_item->index][nextToken->index];
 					if(rule_index!=-1)
 					{
 						break;
@@ -191,7 +195,7 @@ error_list* parseTree(char* parseTreeFile){
 
 		}
 	
-		else if(top->tag==1)
+		else if(top->data->t_item->tag==1)
 		{
 			temp=(node *)malloc(sizeof(node));
 			temp->token=nextToken;
@@ -206,7 +210,7 @@ error_list* parseTree(char* parseTreeFile){
 				currentNode=insertAsNextRightSibling(currentNode, temp, 1);
 			}
 
-			if(top->index==nextToken->index)
+			if(top->data->t_item->index==nextToken->index)
 			{
 				nextToken=getNextToken();
 				validateLexError();
@@ -226,7 +230,7 @@ error_list* parseTree(char* parseTreeFile){
 
 				while(nextToken!=NULL)
 				{
-					if(top->index==nextToken->index)
+					if(top->data->t_item->index==nextToken->index)
 					{
 						break;
 					}
@@ -243,7 +247,7 @@ error_list* parseTree(char* parseTreeFile){
 		}
 	}
 	
-	if((nextToken->index)!=(ht_search(mapping_table,"$")->index))
+	if((nextToken->index)!=(ht_search(mapping_table,"$")->data->t_item->index))
 	{
 			printf("EXTRA TOKENS FOUND \n");
 			error_list* new_error=(error_list*)malloc(sizeof(error_list));
@@ -290,8 +294,12 @@ error_list* parseTree2(char* parseTreeFile){
 	st = push(st,start);
 
 	ht_item* end_marker=(ht_item *)malloc(sizeof(ht_item));
+	ht_data* k = malloc(sizeof(ht_data));
+	term_item* i = malloc(sizeof(term_item));
+	k->t_item = i;
+	end_marker->data = k;
 
-	end_marker->index=-2;
+	end_marker->data->t_item->index=-2;
 
 	end_marker->key=NULL;
 
@@ -326,7 +334,7 @@ error_list* parseTree2(char* parseTreeFile){
 			currentNode = tempNode->right;
 			continue;}
 		//printf("Popped Element = %s\n",top->key);	
-		if(top!=NULL && top->index==ht_search(mapping_table,"e")->index)
+		if(top!=NULL && top->data->t_item->index==ht_search(mapping_table,"e")->data->t_item->index)
 		{
 			if(currentNode==NULL)
 			printf("w");
@@ -341,7 +349,7 @@ error_list* parseTree2(char* parseTreeFile){
 		while(1)
 		{
 			if(nextToken==NULL){break;}
-			if(top->tag==1 && top->index == nextToken->index)
+			if(top->data->t_item->tag==1 && top->data->t_item->index == nextToken->index)
 			{
 				//printf("w %d \n",nextToken->index);
 				st=pop(st);
@@ -367,10 +375,10 @@ error_list* parseTree2(char* parseTreeFile){
 				validateLexError(nextToken);
 				break;*/
 			}
-			else if(top->tag==2 && parse_table[top->index][nextToken->index]!=-1)
+			else if(top->data->t_item->tag==2 && parse_table[top->data->t_item->index][nextToken->index]!=-1)
 			{
 				st=pop(st);
-				rule_rhs* rule = rules[parse_table[top->index][nextToken->index]].key;
+				rule_rhs* rule = rules[parse_table[top->data->t_item->index][nextToken->index]].key;
 				int i=1;
 				rhs_rev[0]=rule->node;
 				temp=(node *)malloc(sizeof(node));
@@ -396,7 +404,7 @@ error_list* parseTree2(char* parseTreeFile){
 					}
 					break;
 			}
-			else if(top->tag==2 && parse_table[top->index][ht_search(mapping_table,"e")->index]!=-1)
+			else if(top->data->t_item->tag==2 && parse_table[top->data->t_item->index][ht_search(mapping_table,"e")->data->t_item->index]!=-1)
 			{
 				st=pop(st);
 				break;

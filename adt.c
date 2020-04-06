@@ -126,8 +126,8 @@ void printTraversal(treenode *t,FILE* fp)
 		{
 			if(t->tag==1)
 			{
-				printf(" %s ",t->data->token->lexeme);
-				if(t->data->token->index==ht_search(mapping_table,"RNUM")->index)
+				printf(" %s,%d ",t->data->token->lexeme,t->data->token->index);
+				if(t->data->token->index==ht_search(mapping_table,"RNUM")->data->t_item->index)
 					fprintf(fp,"%s\t%d\t\t%s\t\t\t\t%f\t%s\t\tYES\n",t->data->token->lexeme,t->data->token->LN,tokensList[t->data->token->index]->key,t->data->token->val.f_val,t->parent->data->nonterm->key);
 				else
 					fprintf(fp,"%s\t\t%d\t\t%s\t\t\t\t%d\t\t%s\t\tYES\n",t->data->token->lexeme,t->data->token->LN,tokensList[t->data->token->index]->key,t->data->token->val.i_val,t->parent->data->nonterm->key);

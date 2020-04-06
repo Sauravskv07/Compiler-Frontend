@@ -43,9 +43,9 @@ unsigned long unionLists(unsigned long items,unsigned long temp)
 }
 unsigned long first(ht_item *term)
 {
-	if(term->tag==1)
+	if(term->data->t_item->tag==1)
 	{
-		return pow(2, term->index);
+		return pow(2, term->data->t_item->index);
 	}
 	unsigned long items = 0;
 	int i=0;
@@ -120,8 +120,8 @@ ht_items_list * computeFirstofRule(rule_rhs* rhs)
 
 unsigned long follow(ht_item *term)
 {
-	if(term->tag==1)
-	{return pow(2, term->index);}
+	if(term->data->t_item->tag==1)
+	{return pow(2, term->data->t_item->index);}
 	if(term==ht_search(mapping_table, "program"))
 	{return 1;}
 	unsigned long items = 0;
