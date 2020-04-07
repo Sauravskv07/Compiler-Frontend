@@ -13,7 +13,6 @@ GROUP NO. = 46
 
 typedef enum{TERM,FUNC,VAR} Category;
 
-
 typedef struct {
     int index;
     Type tag;
@@ -23,7 +22,8 @@ typedef struct {
     int rootNode;		// Add other function attributes also accordingly here.
 } func_item;
 
-typedef enum{INTEGER,REAL} VarType;
+typedef enum{INTEGER,REAL,BOOLEAN} VarType;
+
 typedef struct {
     int rootNode;		// Add other variables attributes also accordingly here.
     VarType type;

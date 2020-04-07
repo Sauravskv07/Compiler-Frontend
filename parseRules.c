@@ -16,6 +16,7 @@ int parse(char *fileName)
 {
 
 	int i=-1;
+
 	FILE* rules_file=fopen(fileName,"r");	
 	char* line;
 
@@ -30,7 +31,7 @@ int parse(char *fileName)
 		//printf("%s\n", line);
 		i = addLine(line,i);
     	}
-
+	
 	fclose(rules_file);
 
 	printf("Rules parsing Successful\n");

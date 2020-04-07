@@ -6,7 +6,7 @@ GROUP NO. = 46
 2017A7PS0111P SIDDHANT KHARBANDA
 2017A7PS0275P SREYAS RAVICHANDRAN
 */
-# define MAX_RULES 200
+# define MAX_RULES 201
 
 typedef struct rule_rhs{
     ht_item *node;

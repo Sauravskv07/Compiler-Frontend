@@ -56,3 +56,4 @@
 <whichId> -> SQBO <index> SQBC | e
 <var_id_num> -> ID <whichId> | NUM | RNUM
 <var> -> <var_id_num> | <boolConstt>
+<any> -> e

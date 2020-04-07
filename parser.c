@@ -128,24 +128,12 @@ error_list* parseTree(char* parseTreeFile){
 			temp=(node *)malloc(sizeof(node));
 			temp->nonterm = top;
 
-			if(isFirst)
-			{
-				currentNode=insertAsChild(currentNode, temp,top->data->t_item->tag );
-				isFirst=0;
-			}
-			else
-			{
-				currentNode=insertAsNextRightSibling(currentNode, temp,top->data->t_item->tag);
-			}
-
-			st=push(st,end_marker);
-
-			int i=0;
-			
 			int rule_index=parse_table[top->data->t_item->index][nextToken->index];
-
+			
+			//printf("rule index = %d and token name = %s\n",rule_index,nextToken->lexeme);	
 			if(rule_index==-1)
-			{
+			{			
+
 				num_errors++;
 				printf("UNEXPECTED TOKEN!!");
 				printf("LINE NUMBER =  %d  LEXEME = %s  TOKEN_NAME =  %s\n",nextToken->LN,nextToken->lexeme,tokensList[nextToken->index]->key);
@@ -175,9 +163,30 @@ error_list* parseTree(char* parseTreeFile){
 					continue;
 			}
 
+			if(rule_index==-3)
+			{
+
+					printf("UNEXPECTED TOKEN!!");
+					printf("LINE NUMBER =  %d  LEXEME = %s  TOKEN_NAME =  %s\n",nextToken->LN,nextToken->lexeme,tokensList[nextToken->index]->key);
+				continue;
+			}
+
+			if(isFirst)
+			{
+				currentNode=insertAsChild(currentNode, temp,top->data->t_item->tag );
+				isFirst=0;
+			}
+			else
+			{
+				currentNode=insertAsNextRightSibling(currentNode, temp,top->data->t_item->tag);
+			}
+
+			st=push(st,end_marker);
+
 			//printf("Rule used = %d \n",rule_index);
 			rule_rhs* rule = rules[rule_index].key;
-
+			int i=0;
+			
 			while(rule)
 			{
 				rhs_rev[i]=rule->node;
@@ -200,50 +209,33 @@ error_list* parseTree(char* parseTreeFile){
 			temp=(node *)malloc(sizeof(node));
 			temp->token=nextToken;
 
-			if(isFirst==1)
-			{
-				currentNode=insertAsChild(currentNode, temp, 1);
-				isFirst=0;
-			}
-			else
-			{
-				currentNode=insertAsNextRightSibling(currentNode, temp, 1);
-			}
-
 			if(top->data->t_item->index==nextToken->index)
 			{
+				if(isFirst)
+				{
+					currentNode=insertAsChild(currentNode, temp, 1);
+					isFirst=0;
+				}
+				else
+				{
+					currentNode=insertAsNextRightSibling(currentNode, temp, 1);
+				}
+
 				nextToken=getNextToken();
 				validateLexError();
 			}
 			else
 			{
+
 				num_errors++;
 				printf("UNEXPECTED TOKEN!!");
 				printf("LINE NUMBER =  %d  LEXEME = %s  TOKEN_NAME =  %s\n",nextToken->LN,nextToken->lexeme,tokensList[nextToken->index]->key);
-				error_list* new_error=(error_list*)malloc(sizeof(error_list));
-				new_error->tk=nextToken;
-				new_error->next=errors;
-				errors=new_error;
-
 				nextToken=getNextToken();
 				validateLexError();
 
-				while(nextToken!=NULL)
-				{
-					if(top->data->t_item->index==nextToken->index)
-					{
-						break;
-					}
-					num_errors++;
-					printf("UNEXPECTED TOKEN!!");
-					printf("LINE NUMBER =  %d  LEXEME = %s  TOKEN_NAME =  %s\n",nextToken->LN,nextToken->lexeme,tokensList[nextToken->index]->key);
-					nextToken=getNextToken();
-					validateLexError();
-				}
-			
-				if(nextToken==NULL)
-					continue;
+				continue;
 			}
+			
 		}
 	}
 	

@@ -24,7 +24,21 @@ void create_parse_table()
 	int index_e = ht_search(mapping_table,"e")->data->t_item->index;
 	//printf("%s",ht_search(mapping_table,"e")->key);
 
-	for(int i=0;i<rule_count;i++)
+
+	for(int i=0;i<rule_count-1;i++)
+	{
+		ht_item* nonterminal=rules[i].lhs;
+
+		ht_items_list * follow=computeFollow(nonterminal)->next;
+
+		while(follow!=NULL)
+		{
+			parse_table[nonterminal->data->t_item->index][follow->node->data->t_item->index]=-3;
+	
+			follow=follow->next;
+		}		
+	}
+	for(int i=0;i<rule_count-1;i++)
 	{
 		ht_item* nonterminal=rules[i].lhs;
 		
@@ -53,11 +67,12 @@ void create_parse_table()
 
 			while(follow!=NULL)
 			{
-				parse_table[nonterminal->data->t_item->index][follow->node->data->t_item->index]=i;
+				parse_table[nonterminal->data->t_item->index][follow->node->data->t_item->index]=rule_count-1;
 	
 				follow=follow->next;
 			}		
 		}
+
 	}
 }
 

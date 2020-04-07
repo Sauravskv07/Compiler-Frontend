@@ -11,7 +11,7 @@ GROUP NO. = 46
 #include <string.h>
 #include <ctype.h>
 #define MAX_BUFF_SIZE 500
-#define MAX_SIZE_MAPPING_TABLE 200
+#define MAX_SIZE_MAPPING_TABLE 251
 
 
 typedef enum{KEYWORD,TERMINAL, NONTERMINAL} Type;
