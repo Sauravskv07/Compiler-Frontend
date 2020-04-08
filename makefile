@@ -1,5 +1,5 @@
-stage1exe : adt.o lexer.o hash_table.o parseTable.o parseRules.o parser.o utils.o ast.o semCheck.o
-	gcc -o stage1exe driver.c adt.o ast.o lexer.o hash_table.o parseTable.o parseRules.o parser.o utils.o semCheck.o -lm -fno-stack-protector
+stage1exe : adt.o lexer.o hash_table.o parseTable.o parseRules.o parser.o utils.o ast.o semCheck.o symbol_table.o
+	gcc -o stage1exe driver.c adt.o ast.o lexer.o hash_table.o parseTable.o parseRules.o parser.o utils.o semCheck.o symbol_table.o -lm -fno-stack-protector
 
 adt.o : adt.c adt.h
 	gcc -c adt.c
@@ -19,6 +19,8 @@ ast.o : ast.c ast.h
 	gcc -c ast.c
 semCheck.o : semCheck.c semCheck.h
 	gcc -c semCheck.c
+symbol_table.o : symbol_table.c symbol_table.h
+	gcc -c symbol_table.c
 clean :
 	rm stage1exe adt.o hash_table.o parser.o parseRules.o utils.o lexer.o parseTable.o ast.o
 

@@ -16,48 +16,179 @@ GROUP NO. = 46
 #include "utils.h"
 #include "adt.h"
 #include "ast.h"
+#include "symbol_table.h"
 #include "semCheck.h"
 
-void checkSemRules(astnode *t)
+symnode* checkSemRules(astnode *t,symnode* current)
 {
+
 	if(t!=NULL)
 	{
-		if(t->child==NULL)
+		if(t->tag==1)
 		{
-			if(t->tag==1)
+			switch(t->parent->data->token->index)
 			{
-				return;
+				case 5://INTEGER
+				{
+					t->attr->baseType=0;
+					break;
+				}
+
+				case 6://REAL
+				{
+					t->attr->baseType=1;
+					break;
+				}
+
+				case 7://BOOLEAN
+				{
+					t->attr->baseType=1;
+					break;
+				}
+
 			}
 		}
 		else
 		{
-			semAction(t);
-			checkSemRules(t->child);
-			astnode* rt=t->child->right;
-			while(rt!=NULL)
+			//moduleDef
+			switch(t->data->nonterm->data->t_item->index)
 			{
-				checkSemRules(rt);
-				rt=rt->right;
+				case 68://module
+				{
+					if(ht_search(current->symbol_table, t->child->data->token->lexeme)==NULL)
+						ht_insert_func_item(current->symbol_table, t->child->data->token->lexeme, 1);
+
+					else if(ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef==1)
+						printf("Redefinition of function found at LINE NUMBER =  %d  LEXEME = %s",t->child->data->token->LN, t->child->data->token->lexeme);
+					else
+						ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef=1;
+
+					current= insert_as_symchild(current,create_new_symnode());
+
+					astnode* rt=t->child->right;
+
+					while(rt!=NULL)
+					{
+						current=checkSemRules(rt,current);
+						rt=rt->right;
+					}
+					
+					current=current->parent;
+					break;					
+				}
+
+				case 67://driverModule
+				{
+					current= insert_as_symchild(current,create_new_symnode());
+					
+					if(t->child!=NULL)
+						current=checkSemRules(t->child,current);
+					
+					current=current->parent;
+					
+					break;
+				}
+				case 65://moduleDeclaration:
+				{
+					if(ht_search(current->symbol_table, t->child->data->token->lexeme)==NULL)
+						ht_insert_func_item(current->symbol_table, t->child->data->token->lexeme, 0);
+					else
+						printf("Redeclaraton of function found at LINE NUMBER =  %d  LEXEME = %s",t->child->data->token->LN, t->child->data->token->lexeme);
+					break;				
+				}
+				case 74://dataType
+				{
+					current=checkSemRules(t->child->right,current);
+					t->attr->baseType=3;
+					t->attr->eleType=t->child->right->attr->baseType;
+
+				}
+				
+				case 112://DeclareStmt:
+				{
+					current=checkSemRules(t->child->right,current);
+					t->child->attr->baseType=t->child->right->attr->eleType;
+					t->child->attr->eleType=t->child->right->attr->baseType;
+					current=checkSemRules(t->child,current);
+					break;
+				}
+
+				case 93://idList:
+				{
+					if(t->parent->data->nonterm->data->t_item->index==ht_search(mapping_table,"declareStmt")->data->t_item->index)
+					{
+						if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL)
+							ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,0, t->attr->baseType, t->attr->eleType);
+						else
+							printf("Redeclaraton of Variable found at LINE NUMBER =  %d  LEXEME = %s",t->child->data->token->LN, t->child->data->token->lexeme);
+					
+						if(t->child->right!=NULL)
+						{
+							t->child->right->attr->baseType=t->attr->eleType;
+							t->child->right->attr->eleType=t->attr->baseType;
+							t->child->right->attr->typeCheckReq=1;
+							current=checkSemRules(t->child->right,current);
+						}
+					}
+					
+					break;
+				}
+				
+				case 94://N3:
+				{
+					if(t->attr->typeCheckReq==1)
+					{
+						if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL)
+							ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,0, t->attr->baseType, t->attr->eleType);
+						else
+							printf("Redeclaraton of Variable found at LINE NUMBER =  %d  LEXEME = %s",t->child->data->token->LN, t->child->data->token->lexeme);
+						if(t->child->right!=NULL)
+						{
+							t->child->right->attr->baseType=t->attr->eleType;
+							t->child->right->attr->eleType=t->attr->baseType;
+							t->child->right->attr->typeCheckReq=1;
+							current=checkSemRules(t->child->right,current);
+						}
+					}
+					break;					
+				}
+
+				case 63://program
+				{
+					current= insert_as_symchild(current,create_new_symnode());
+				}
+
+				default:
+				{
+					current=checkSemRules(t->child,current);
+
+					astnode* rt=t->child->right;
+
+					while(rt!=NULL)
+					{
+						current=checkSemRules(rt,current);
+						rt=rt->right;
+					}
+				}
 			}
 		}
 	}
+	return current;
 }
-void semAction(astnode *t)			// All semantic rules to be written here w.r.t "t->data->nonterm" specifications.
+
+/*
+symnode* semAction(astnode *t,symnode* current)			// All semantic rules to be written here w.r.t "t->data->nonterm" specifications.
 {
 	switch(t->data->nonterm->data->t_item->index)
 	{
+
+		
 		case 68:		// module
 		{
-			ht_item *x = ht_insert_func_item(func_table, t->child->data->token->lexeme, 0);
-			break;
+
 		}
 		case 77:		// moduleDef
 		{
-			scopelist* n = malloc(sizeof(scopelist));
-			n->prev = var;
-			n->top = ht_new();
-			var = n;
-			break;
 		}
 		case 80:		//ioStmt
 		{
@@ -88,4 +219,4 @@ void semAction(astnode *t)			// All semantic rules to be written here w.r.t "t->
 	}
 }
 
-
+*/

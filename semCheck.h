@@ -8,5 +8,5 @@ GROUP NO. = 46
 */
 
 
-void checkSemRules(astnode *t);
-void semAction(astnode *t);
+symnode* checkSemRules(astnode *t,symnode* current);
+symnode* semAction(astnode *t);

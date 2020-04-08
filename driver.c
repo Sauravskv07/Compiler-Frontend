@@ -19,6 +19,7 @@ GROUP NO. = 46
 #include "adt.h"
 #include "ast.h"
 #include "parser.h"
+#include "symbol_table.h"
 #include "semCheck.h"
 
 
@@ -32,8 +33,6 @@ int main(int argc,char** argv)
 	mapping_table= ht_new();
 	
 	keyword_table= ht_new();
-
-	func_table= ht_new();
 
 	int i=0;
 	char line[40];
@@ -261,7 +260,7 @@ int main(int argc,char** argv)
 
 						printf("\n");
 					
-					checkSemRules(xp);
+					checkSemRules(xp,NULL);
 
 					end_time = clock();
 

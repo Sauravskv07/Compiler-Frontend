@@ -27,10 +27,10 @@ ht_item* ht_insert_term_item(ht_hash_table* ht, const char* key, int index, Type
     return ht_insert(ht,j);
 }
 
-ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int rootNode) {
+ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int isDef) {
 
     func_item* i = (func_item *)malloc(sizeof(func_item));
-    i->rootNode=rootNode;
+    i->isDef=isDef;
     ht_item* j = (ht_item *)malloc(sizeof(ht_item));
     j->key = strdup(key);
     ht_data* k = (ht_data *)malloc(sizeof(ht_data));
@@ -40,12 +40,12 @@ ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int rootNode) {
     return ht_insert(ht,j);
 }
 
-ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int rootNode, VarType type, bool ifArr) {
+ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int offset, VarType baseType, VarType eleType) {
 
     var_item* i = (var_item *)malloc(sizeof(var_item));
-    i->rootNode=rootNode;
-    i->type=type;
-    i->ifArr=ifArr;
+    i->offset=offset;
+    i->baseType=baseType;
+    i->eleType=eleType;
     ht_item* j = (ht_item *)malloc(sizeof(ht_item));
     j->key = strdup(key);
     ht_data* k = (ht_data *)malloc(sizeof(ht_data));

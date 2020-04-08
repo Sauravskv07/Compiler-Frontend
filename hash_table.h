@@ -19,15 +19,15 @@ typedef struct {
 } term_item;
 
 typedef struct {
-    int rootNode;		// Add other function attributes also accordingly here.
+    int isDef;		// Add other function attributes also accordingly here.
 } func_item;
 
-typedef enum{INTEGER,REAL,BOOLEAN} VarType;
+typedef enum{INTEGER,REAL,BOOLEAN,ARRAY} VarType;
 
 typedef struct {
-    int rootNode;		// Add other variables attributes also accordingly here.
-    VarType type;
-    bool ifArr;
+    int offset;		// Add other variables attributes also accordingly here.
+    VarType eleType;
+    VarType baseType;
 } var_item;
 
 typedef union {
@@ -56,17 +56,10 @@ int num_nonterminals;
 
 ht_hash_table* mapping_table;
 ht_hash_table* keyword_table;
-ht_hash_table* func_table;
-typedef struct scopelist{
-    ht_hash_table* top;
-    struct scopelist* prev;
-} scopelist;
-
-scopelist *var;
 
 ht_item* ht_insert_term_item(ht_hash_table* ht, const char* key, int index, Type tag);
-ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int rootNode);
-ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int rootNode, VarType type, bool ifArr);
+ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int isDef);
+ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int offset, VarType baseType, VarType eleType);
 ht_item* ht_insert(ht_hash_table* ht, ht_item *item);
 ht_item* ht_search(ht_hash_table* ht, const char* key);
 ht_hash_table* ht_new();

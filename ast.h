@@ -7,15 +7,20 @@ GROUP NO. = 46
 2017A7PS0275P SREYAS RAVICHANDRAN
 */
 
-
+typedef struct attributes{
+	VarType baseType;
+	VarType eleType;
+	bool typeCheckReq;
+} attributes;
 typedef struct astnode
 {
 	node *data;
+	attributes* attr;
 	struct astnode *child;
 	struct astnode *right;
 	struct astnode *parent;
 	Type tag;
-}astnode;
+} astnode;
 
 
 astnode* createAST(treenode* root);
