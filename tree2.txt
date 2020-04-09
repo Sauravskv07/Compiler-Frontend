@@ -1,65 +1,81 @@
 lexeme		lineno		tokenName		valueIfNumber		parentNodeSymbol	isLeafNode(yes/no)	NodeSymbol
-v_1_2_3		5		ID				0		idList		YES
-----										declareStmt			NO		idList
-----										statements			NO		declareStmt
-integer		5		INTEGER				0		declareStmt		YES
-----										moduleDef			NO		statements
-A		6		ID				0		idList		YES
-----										declareStmt			NO		idList
-A		6		ID				0		N3		YES
-----										idList			NO		N3
-----										statements			NO		declareStmt
-1		6		NUM				1		range_arrays		YES
-----										dataType			NO		range_arrays
-15		6		NUM				15		range_arrays		YES
-----										declareStmt			NO		dataType
-real		6		REAL				0		dataType		YES
-----										statements			NO		statements
-v_1_2_3		7		ID				0		ioStmt		YES
-----										statements			NO		ioStmt
-----										statements			NO		statements
-result_		8		ID				0		idList		YES
-----										declareStmt			NO		idList
-----										statements			NO		declareStmt
-integer		8		INTEGER				0		declareStmt		YES
-----										statements			NO		statements
-result_		9		ID				0		idList		YES
-----										optional			NO		idList
-----										moduleReuseStmt			NO		optional
-----										statements			NO		moduleReuseStmt
-square		9		ID				0		moduleReuseStmt		YES
-v_1_2_3		9		ID				0		idList		YES
-----										moduleReuseStmt			NO		idList
-----										statements			NO		statements
-result		10		ID				0		var_id_num		YES
-----										ioStmt			NO		var_id_num
-----										statements			NO		ioStmt
-----										statements			NO		statements
-----										driverModule			NO		moduleDef
-----										program			NO		driverModule
 ----										ROOT			NO		program
-square		13		ID				0		module		YES
-----										otherModules			NO		module
-x		14		ID				0		input_plist		YES
-----										module			NO		input_plist
-integer		14		INTEGER				0		input_plist		YES
-value		15		ID				0		output_plist		YES
-----										ret			NO		output_plist
-integer		15		INTEGER				0		output_plist		YES
-----										module			NO		ret
-value		17		ID				0		assignmentStmt		YES
-----										statements			NO		assignmentStmt
-x		17		ID				0		var_id_num		YES
-----										term			NO		var_id_num
-----										arithmeticExpr			NO		term
-*		17		MUL				0		N5		YES
-----										term			NO		N5
-x		17		ID				0		var_id_num		YES
-----										N5			NO		var_id_num
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										assignmentStmt			NO		lvalueIDStmt
+----										program			NO		driverModule
+----										driverModule			NO		moduleDef
 ----										moduleDef			NO		statements
-----										module			NO		moduleDef
-----										program			NO		otherModules
+----										statements			NO		declareStmt
+----										declareStmt			NO		idList
+v1		5		ID				0		idList		YES
+----										idList			NO		N3
+v2		5		ID				0		N3		YES
+----										N3			NO		N3
+v3		5		ID				0		N3		YES
+integer		5		INTEGER				0		declareStmt		YES
+----										statements			NO		statements
+----										statements			NO		declareStmt
+----										declareStmt			NO		idList
+v4		6		ID				0		idList		YES
+real		6		REAL				0		declareStmt		YES
+----										statements			NO		statements
+----										statements			NO		assignmentStmt
+v4		7		ID				0		assignmentStmt		YES
+----										assignmentStmt			NO		lvalueIDStmt
+----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
+----										arithmeticOrBooleanExpr			NO		AnyTerm
+----										AnyTerm			NO		arithmeticExpr
+----										arithmeticExpr			NO		term
+----										term			NO		var_id_num
+v5		7		ID				0		var_id_num		YES
+----										statements			NO		statements
+----										statements			NO		assignmentStmt
+v2		8		ID				0		assignmentStmt		YES
+----										assignmentStmt			NO		lvalueIDStmt
+----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
+----										arithmeticOrBooleanExpr			NO		AnyTerm
+----										AnyTerm			NO		arithmeticExpr
+----										arithmeticExpr			NO		term
+0.4		8		RNUM				1053609165		term		YES
+----										statements			NO		statements
+----										statements			NO		declareStmt
+----										declareStmt			NO		idList
+A		9		ID				0		idList		YES
+----										declareStmt			NO		dataType
+----										dataType			NO		range_arrays
+1		9		NUM				1		range_arrays		YES
+15		9		NUM				15		range_arrays		YES
+real		9		REAL				0		dataType		YES
+----										statements			NO		statements
+----										statements			NO		assignmentStmt
+v3		10		ID				0		assignmentStmt		YES
+----										assignmentStmt			NO		lvalueIDStmt
+----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
+----										arithmeticOrBooleanExpr			NO		AnyTerm
+----										AnyTerm			NO		arithmeticExpr
+----										arithmeticExpr			NO		term
+----										term			NO		var_id_num
+A		10		ID				0		var_id_num		YES
+----										arithmeticExpr			NO		N4
++		10		PLUS				0		N4		YES
+----										N4			NO		term
+----										term			NO		var_id_num
+v2		10		ID				0		var_id_num		YES
+----										statements			NO		statements
+----										statements			NO		ioStmt
+v_1_2_3		11		ID				0		ioStmt		YES
+----										statements			NO		statements
+----										statements			NO		declareStmt
+----										declareStmt			NO		idList
+result_		12		ID				0		idList		YES
+integer		12		INTEGER				0		declareStmt		YES
+----										statements			NO		statements
+----										statements			NO		moduleReuseStmt
+----										moduleReuseStmt			NO		optional
+----										optional			NO		idList
+result_		13		ID				0		idList		YES
+square		13		ID				0		moduleReuseStmt		YES
+----										moduleReuseStmt			NO		idList
+v_1_2_3		13		ID				0		idList		YES
+----										statements			NO		statements
+----										statements			NO		ioStmt
+----										ioStmt			NO		var_id_num
+result		14		ID				0		var_id_num		YES

@@ -165,26 +165,25 @@ void printTraversalAst(astnode *t,FILE* fp)
 		{
 			if(t->tag==1)
 			{
-				printf(" %d ",t->data->token->index);
+			//	printf(" %d ",t->data->token->index);
 				fprintf(fp,"%s\t\t%d\t\t%s\t\t\t\t%d\t\t%s\t\tYES\n",t->data->token->lexeme,t->data->token->LN,tokensList[t->data->token->index]->key,t->data->token->val.i_val,t->parent->data->nonterm->key);
 			}
 			else
 			{
-				printf(" %s ",t->data->nonterm->key);
+			//	printf(" %s ",t->data->nonterm->key);
 				fprintf(fp,"%s\t\t\t\tEPSILON\t\t\t\t\t\t%s\t\tYES\t\n",t->data->nonterm->key,t->parent->data->nonterm->key);
 			}
 		}
 		else
 		{
-			printTraversalAst(t->child,fp);
-			printf("%s --",t->data->nonterm->key);
-			
+
 			if(t->parent!=NULL)
 				fprintf(fp,"----\t\t\t\t\t\t\t\t\t\t%s\t\t\tNO\t\t%s\n",t->parent->data->nonterm->key,t->data->nonterm->key);
 			else
 				fprintf(fp,"----\t\t\t\t\t\t\t\t\t\tROOT\t\t\tNO\t\t%s\n",t->data->nonterm->key);
 
-
+			printTraversalAst(t->child,fp);
+			//printf("%s --",t->data->nonterm->key);
 			astnode* rt=t->child->right;
 			while(rt!=NULL)
 			{

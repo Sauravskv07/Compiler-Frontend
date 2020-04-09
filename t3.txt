@@ -2,14 +2,22 @@
 
 <<<driver program>>>
 start
-	declare v_1_2_3:integer;
-	declare A,A:array[1..15] of real;
+	declare v1,v2,v3:integer;
+	declare v4:real;
+	v4:=v5;
+	v2:=0.4;
+	declare A:array[1..15] of real;
+	v3:=A+v2;
 	get_value(v_1_2_3);
 	declare result_:integer;
 	[result_]:=use module square with parameters v_1_2_3;
 	print(result);
 end
 
+
+
+
+**
 <<module square>>
 takes input [x:integer];
 returns [value:integer];
@@ -17,8 +25,7 @@ start
 	value:= x*x;
 end
 
-
-**notice that this test case does not declare the module before the driver module, still it is syntactically correct as moduleDeclarations is optional. Testing whether a module is declared before its use is a matter of semantic analysis**
+notice that this test case does not declare the module before the driver module, still it is syntactically correct as moduleDeclarations is optional. Testing whether a module is declared before its use is a matter of semantic analysis**
 
 ** test the correctness of all lexemes and parse tree created
 and print the following message on successful compilation on the console

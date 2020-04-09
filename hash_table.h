@@ -22,7 +22,7 @@ typedef struct {
     int isDef;		// Add other function attributes also accordingly here.
 } func_item;
 
-typedef enum{INTEGER,REAL,BOOLEAN,ARRAY} VarType;
+typedef enum{INTEGER,REAL,BOOLEAN,ARRAY,UNDEFINED} VarType;
 
 typedef struct {
     int offset;		// Add other variables attributes also accordingly here.
