@@ -79,3 +79,36 @@ v_1_2_3		13		ID				0		idList		YES
 ----										statements			NO		ioStmt
 ----										ioStmt			NO		var_id_num
 result		14		ID				0		var_id_num		YES
+----										program			NO		otherModules
+----										otherModules			NO		module
+square		17		ID				0		module		YES
+----										module			NO		input_plist
+x		18		ID				0		input_plist		YES
+integer		18		INTEGER				0		input_plist		YES
+----										module			NO		ret
+----										ret			NO		output_plist
+value		19		ID				0		output_plist		YES
+integer		19		INTEGER				0		output_plist		YES
+----										module			NO		moduleDef
+----										moduleDef			NO		statements
+----										statements			NO		assignmentStmt
+value		21		ID				0		assignmentStmt		YES
+----										assignmentStmt			NO		lvalueIDStmt
+----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
+----										arithmeticOrBooleanExpr			NO		AnyTerm
+----										AnyTerm			NO		arithmeticExpr
+----										arithmeticExpr			NO		term
+----										term			NO		var_id_num
+x		21		ID				0		var_id_num		YES
+----										term			NO		N5
+*		21		MUL				0		N5		YES
+----										N5			NO		var_id_num
+x		21		ID				0		var_id_num		YES
+----										statements			NO		statements
+----										statements			NO		moduleReuseStmt
+----										moduleReuseStmt			NO		optional
+----										optional			NO		idList
+value		22		ID				0		idList		YES
+square		22		ID				0		moduleReuseStmt		YES
+----										moduleReuseStmt			NO		idList
+v_1_2_3		22		ID				0		idList		YES

@@ -164,7 +164,7 @@ symnode* checkSemRules(astnode *t,symnode* current)
 			switch(t->data->nonterm->data->t_item->index)
 			{
 				case 68://module
-				{
+				{	
 					temp = ht_search(current->symbol_table, t->child->data->token->lexeme);
 
 					if(temp==NULL)
@@ -176,6 +176,7 @@ symnode* checkSemRules(astnode *t,symnode* current)
 						temp->data->f_item->isDef=1;
 
 					current= insert_as_symchild(current,create_new_symnode());
+					strcpy(current->module_name, t->child->data->token->lexeme);
 
 					astnode* rt=t->child->right;
 
@@ -403,6 +404,30 @@ symnode* checkSemRules(astnode *t,symnode* current)
 		
 					break;
 				}
+				case 91://moduleReuseStmt:
+				{
+
+					//printf("HOLA %s\n",current->module_name);
+					if(t->child->tag==1)
+					{
+						if(strcmp(t->child->data->token->lexeme,current->module_name)==0)
+						{
+							printf("Recursive Call at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							break;	
+						}
+					}
+					else
+					{
+						//printf("child%s\n",t->child->right->data->token->lexeme);
+						if(strcmp(t->child->right->data->token->lexeme,current->module_name)==0)
+						{
+							printf("Recursive Call at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->right->data->token->lexeme);
+							break;	
+						}
+					}
+					break;
+
+				}								
 
 				case 63://program
 				{
