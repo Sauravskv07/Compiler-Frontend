@@ -260,7 +260,7 @@ int main(int argc,char** argv)
 
 						printf("\n");
 					
-					checkSemRules(xp,NULL);
+					semCheck(xp);
 
 					end_time = clock();
 

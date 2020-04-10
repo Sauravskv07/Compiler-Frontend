@@ -13,13 +13,28 @@ GROUP NO. = 46
 
 typedef enum{TERM,FUNC,VAR} Category;
 
+typedef struct{
+	int eleType;
+	int baseType;
+}dataType;
+
+typedef struct{
+	struct ht_hash_table *input_list;
+	struct ht_hash_table *output_list;
+	int num_inputs;
+	int num_outputs;
+	dataType input_types[MAX_SIZE_MAPPING_TABLE];
+	int output_types[MAX_SIZE_MAPPING_TABLE];
+}parameters;
+
 typedef struct {
     int index;
     Type tag;
 } term_item;
 
 typedef struct {
-    int isDef;		// Add other function attributes also accordingly here.
+	int isDef;		// Add other function attributes also accordingly here.
+	parameters *pr;  
 } func_item;
 
 typedef enum{INTEGER,REAL,BOOLEAN,ARRAY,UNDEFINED} VarType;

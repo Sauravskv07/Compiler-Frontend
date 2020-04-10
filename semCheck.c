@@ -19,6 +19,89 @@ GROUP NO. = 46
 #include "symbol_table.h"
 #include "semCheck.h"
 
+void getID(astnode *t,symnode *current)
+{
+	symnode* temp2=current;
+	ht_item *temp;	
+	if(current==NULL)
+		printf("Symbol Table Error\n");
+	do
+	{
+		temp=ht_search(temp2->symbol_table, t->data->token->lexeme);
+		temp2=temp2->parent;
+	
+	}while(temp == NULL && temp2!=NULL);
+
+	if(temp==NULL)
+	{	
+		printf("Undeclared Variable Found at LINE NUMBER =  %d  LEXEME = %s\n",t->data->token->LN, t->child->data->token->lexeme);
+		t->attr->baseType=4;
+	}
+	t->attr->baseType = temp->data->v_item->baseType;
+	t->attr->eleType = temp->data->v_item->eleType;
+}
+
+void checkOutputList(astnode *t,symnode *current,parameters *pr)
+{
+	astnode *st=t;
+	ht_item* temp = NULL;
+	int cnt=0;
+
+	while(t!=NULL)
+	{
+		if(cnt>=pr->num_outputs)
+		{
+			printf("Number Mismatch with Output Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+			break;
+		}
+		getID(t->child,current);
+		if(t->child->attr->baseType==4)
+		{
+			break;
+		}
+		if(t->child->attr->baseType!=pr->output_types[cnt])
+		{
+			printf("Type Mismatch with Output Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+			break;
+		}
+		cnt++;
+		t=t->child->right;		
+	}
+	if(cnt<pr->num_outputs)
+		printf("Number Mismatch with Output Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",st->child->data->token->LN, st->child->data->token->lexeme);		
+}
+
+void checkInputList(astnode *t,symnode *current,parameters *pr)
+{
+	astnode *st=t;
+	ht_item* temp = NULL;
+	int cnt=0;
+
+	while(t!=NULL)
+	{
+		if(cnt>=pr->num_inputs)
+		{
+			printf("Number Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+			break;
+		}
+		getID(t->child,current);
+		if(t->child->attr->baseType==4)
+		{
+			break;
+		}
+		if(t->child->attr->baseType!=pr->input_types[cnt].baseType ||(t->child->attr->baseType==3 && t->child->attr->eleType!=pr->input_types[cnt].eleType))
+		{
+			printf("Type Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+			break;
+		}
+		cnt++;
+		t=t->child->right;		
+	}
+	if(cnt<pr->num_inputs)
+		printf("Number Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",st->child->data->token->LN, st->child->data->token->lexeme);		
+}
+
+
 VarType typeCheck(astnode *op,astnode *first,astnode *second)
 {
 
@@ -90,7 +173,7 @@ VarType typeCheck(astnode *op,astnode *first,astnode *second)
 	return r_type;
 }
 
-symnode* checkSemRules(astnode *t,symnode* current)
+void checkSemRules(astnode *t,symnode* current)
 {
 
 	ht_item* temp = NULL;
@@ -105,55 +188,45 @@ symnode* checkSemRules(astnode *t,symnode* current)
 				case 5://INTEGER
 				{
 					t->attr->baseType=0;
+					t->attr->eleType=4;
 					break;
 				}
 
 				case 6://REAL
 				{
 					t->attr->baseType=1;
+					t->attr->eleType=4;
 					break;
 				}
 
 				case 7://BOOLEAN
 				{
 					t->attr->baseType=2;
+					t->attr->eleType=4;
 					break;
 				}
 				case 3://RNUM
 				{
 					t->attr->baseType=1;
+					t->attr->eleType=4;
 					break;
 				}
 				case 2://NUM	
 				{
 					t->attr->baseType=0;
+					t->attr->eleType=4;
 					break;
 				}
 				case 4://ID
 				{
-					symnode* temp2=current;
-					if(current==NULL)
-						printf("Symbol Table Error\n");
-					do
-					{
-						temp=ht_search(temp2->symbol_table, t->data->token->lexeme);
-						temp2=temp2->parent;
-	
-					}while(temp == NULL && temp2!=NULL);
-
-					if(temp==NULL)
-					{
-						t->attr->baseType=4;
-						return current;
-					}
-					t->attr->baseType = temp->data->v_item->baseType;
-					t->attr->eleType = temp->data->v_item->eleType;
+					getID(t,current);
 					break;
 				}
 				case 8://TRUE
 				case 9://FALSE
 				{
 					t->attr->baseType=2;
+					t->attr->eleType=4;
 					break;
 				}
 			}
@@ -163,26 +236,33 @@ symnode* checkSemRules(astnode *t,symnode* current)
 			//moduleDef
 			switch(t->data->nonterm->data->t_item->index)
 			{
+				case 65://moduleDeclaration:
+				{
+					ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef=-1;
+					break;
+				}
 				case 68://module
 				{	
 					temp = ht_search(current->symbol_table, t->child->data->token->lexeme);
 
-					if(temp==NULL)
-						ht_insert_func_item(current->symbol_table, t->child->data->token->lexeme, 1);
-
-					else if(temp->data->f_item->isDef==1)
-						printf("Redefinition of function found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+					if(temp->data->f_item->isDef<=-2)
+					{	
+						break;
+					}
+					else if(temp->data->f_item->isDef==-1)
+						temp->data->f_item->isDef=-3;
 					else
-						temp->data->f_item->isDef=1;
+						temp->data->f_item->isDef=-2;
 
 					current= insert_as_symchild(current,create_new_symnode());
 					strcpy(current->module_name, t->child->data->token->lexeme);
+					current->isModuleScope=1;
 
 					astnode* rt=t->child->right;
 
 					while(rt!=NULL)
 					{
-						current=checkSemRules(rt,current);
+						checkSemRules(rt,current);
 						rt=rt->right;
 					}
 					
@@ -190,61 +270,54 @@ symnode* checkSemRules(astnode *t,symnode* current)
 					break;					
 				}
 
+				case 70://input_plist
+				case 69://ret
+					break;
+
 				case 67://driverModule
 				{
 					current= insert_as_symchild(current,create_new_symnode());
 					
 					if(t->child!=NULL)
-						current=checkSemRules(t->child,current);
+						checkSemRules(t->child,current);
 					
 					current=current->parent;
 					
 					break;
 				}
-				case 65://moduleDeclaration:
-				{
-					if(ht_search(current->symbol_table, t->child->data->token->lexeme)==NULL)
-						ht_insert_func_item(current->symbol_table, t->child->data->token->lexeme, 0);
-					else
-						printf("Redeclaraton of function found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-					break;				
-				}
+
 				case 74://dataType
 				{
-					current=checkSemRules(t->child->right,current);
+					checkSemRules(t->child->right,current);
 					t->attr->baseType=3;
 					t->attr->eleType=t->child->right->attr->baseType;
-
+					break;
 				}
 				
 				case 112://DeclareStmt:
 				{
-					current=checkSemRules(t->child->right,current);
+					checkSemRules(t->child->right,current);
 					t->child->attr->baseType=t->child->right->attr->baseType;
 					t->child->attr->eleType=t->child->right->attr->eleType;
-					current=checkSemRules(t->child,current);
+					checkSemRules(t->child,current);
 					break;
 				}
 
 				case 93://idList:
 				{
-					if(t->parent->data->nonterm->data->t_item->index==ht_search(mapping_table,"declareStmt")->data->t_item->index)
-					{
-						if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL)
-						{	
-							ht_item* temp= ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,0, t->attr->baseType, t->attr->eleType);
-							//printf("KEY= %s DATATYPE= %d\n",temp->key,temp->data->v_item->baseType);
-						}
-						else
-							printf("Redeclaraton of Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+
+					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL)
+					{	
+						ht_item* temp= ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,0, t->attr->baseType, t->attr->eleType);
+					}
+					else
+						printf("Redeclaraton of Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 					
-						if(t->child->right!=NULL)
-						{
-							t->child->right->attr->baseType=t->attr->eleType;
-							t->child->right->attr->eleType=t->attr->baseType;
-							t->child->right->attr->typeCheckReq=1;
-							current=checkSemRules(t->child->right,current);
-						}
+					if(t->child->right!=NULL)
+					{
+						t->child->right->attr->baseType=t->attr->eleType;
+						t->child->right->attr->eleType=t->attr->baseType;
+						checkSemRules(t->child->right,current);
 					}
 					
 					break;
@@ -252,66 +325,63 @@ symnode* checkSemRules(astnode *t,symnode* current)
 				
 				case 94://N3:
 				{
-					if(t->attr->typeCheckReq==1)
+
+					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL)
+						ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,0, t->attr->baseType, t->attr->eleType);
+					else
+						printf("Redeclaraton of Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+					if(t->child->right!=NULL)
 					{
-						if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL)
-							ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,0, t->attr->baseType, t->attr->eleType);
-						else
-							printf("Redeclaraton of Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-						if(t->child->right!=NULL)
-						{
-							t->child->right->attr->baseType=t->attr->eleType;
-							t->child->right->attr->eleType=t->attr->baseType;
-							t->child->right->attr->typeCheckReq=1;
-							current=checkSemRules(t->child->right,current);
-						}
+						t->child->right->attr->baseType=t->attr->eleType;
+						t->child->right->attr->eleType=t->attr->baseType;
+						checkSemRules(t->child->right,current);
 					}
 					break;					
 				}
 	
 				case 86://assignmentStmt:
 				{
-					current=checkSemRules(t->child,current);
-					if(t->child->attr->baseType==4)
-						printf("Undeclared Variable Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+					checkSemRules(t->child,current);	
+					checkSemRules(t->child->right,current);
+					if(current->isForScope==1 && (strcmp(t->child->data->token->lexeme,current->for_id)==0) && (ht_search(current->symbol_table, t->child->data->token->lexeme)==NULL))
+					{
+						printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						break;
+					}
+					if(t->child->right->data->nonterm->data->t_item->index==ht_search(mapping_table,"lvalueIDStmt")->data->t_item->index)
+					{
+
+						if(t->child->attr->baseType!=t->child->right->attr->baseType)
+							printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);	
+					}
 					else
 					{
-						current=checkSemRules(t->child->right,current);
-						if(t->child->right->data->nonterm->data->t_item->index==ht_search(mapping_table,"lvalueIDStmt")->data->t_item->index)
-						{
-
-							if(t->child->attr->baseType!=t->child->right->attr->baseType)
-								printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);	
-						}
+						if(t->child->attr->baseType!=3)
+							printf("Variable not of Array Type at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 						else
 						{
-							if(t->child->attr->baseType!=3)
-								printf("Variable not of Array Type at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-							else
-							{
-								if(t->child->attr->eleType != t->child->right->attr->baseType)
-									printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-							}		
-						}
+							if(t->child->attr->eleType != t->child->right->attr->baseType)
+								printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						}		
 					}
 					break;
 				}			
 				case 82://var_id_num:
 				{
-					current=checkSemRules(t->child,current);
+					checkSemRules(t->child,current);
 
 					if(t->child->attr->baseType!=4)
 					{
 						if(t->child->right!=NULL && t->child->attr->baseType==3)
 						{
 							t->attr->baseType=t->child->attr->eleType;
-							current=checkSemRules(t->child->right,current);
+							checkSemRules(t->child->right,current);
 						}
 						else if(t->child->right!=NULL && t->child->attr->baseType!=3)
 						{
 							printf("Variable not of Array Type at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 							t->attr->baseType=4;
-							current=checkSemRules(t->child->right,current);
+							checkSemRules(t->child->right,current);
 						}
 						else
 						{
@@ -320,7 +390,6 @@ symnode* checkSemRules(astnode *t,symnode* current)
 					}
 					else
 					{
-						printf("Undeclared Variable Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 						t->attr->baseType=4;					
 					}
 
@@ -330,19 +399,19 @@ symnode* checkSemRules(astnode *t,symnode* current)
 
 				case 89://lvalueARRStmt:
 				{
-					current=checkSemRules(t->child,current);
+					checkSemRules(t->child,current);
 					if(t->child->attr->baseType!=0)
 					{
 						printf("Array of Index should be Integer at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);		
 					}
-					current=checkSemRules(t->child->right,current);
+					checkSemRules(t->child->right,current);
 					t->attr->baseType=t->child->right->attr->baseType;
 					break;
 				}
 
 				case 84://whichId:
 				{
-					current=checkSemRules(t->child,current);
+					checkSemRules(t->child,current);
 					if(t->child->attr->baseType!=0)
 					{
 						printf("Array of Index should be Integer at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);	
@@ -353,14 +422,14 @@ symnode* checkSemRules(astnode *t,symnode* current)
 				case 97://newNT:
 				case 107://factor:
 				{
-					current=checkSemRules(t->child,current);
+					checkSemRules(t->child,current);
 					t->attr->baseType=t->child->attr->baseType;
 					break;
 				}
 
 				case 96://U:
 				{
-					current=checkSemRules(t->child->right,current);
+					checkSemRules(t->child->right,current);
 					if(t->child->right->attr->baseType<=1)
 						t->attr->baseType=t->child->right->attr->baseType;
 					else
@@ -373,19 +442,19 @@ symnode* checkSemRules(astnode *t,symnode* current)
 				case 103://arithmeticExpr:
 				case 105://term:
 				{
-					current=checkSemRules(t->child,current);
+					checkSemRules(t->child,current);
 					if(t->child->right==NULL)
 						t->attr->baseType=t->child->attr->baseType;
 					else
 					{
-						current=checkSemRules(t->child->right,current);
+						checkSemRules(t->child->right,current);
 						t->attr->baseType=typeCheck(t->child->right->child,t->child,t->child->right);
 					}
 					break;
 				}
 				case 102://N8:
 				{
-					current=checkSemRules(t->child->right,current);
+					checkSemRules(t->child->right,current);
 					t->attr->baseType=t->child->right->attr->baseType;
 					break;
 				}
@@ -393,10 +462,10 @@ symnode* checkSemRules(astnode *t,symnode* current)
 				case 104://N4:
 				case 106://N5:
 				{
-					current=checkSemRules(t->child->right,current);
+					checkSemRules(t->child->right,current);
 					if(t->child->right->right!=NULL)
 					{
-						current=checkSemRules(t->child->right->right,current);
+						checkSemRules(t->child->right->right,current);
 						t->attr->baseType=typeCheck(t->child,t->child->right,t->child->right->right);
 					}
 					else
@@ -407,88 +476,337 @@ symnode* checkSemRules(astnode *t,symnode* current)
 				case 91://moduleReuseStmt:
 				{
 
-					//printf("HOLA %s\n",current->module_name);
 					if(t->child->tag==1)
 					{
+						temp=ht_search(sym_root->symbol_table, t->child->data->token->lexeme);
+						if(temp==NULL || temp->data->f_item->isDef>=0)
+						{
+							printf("Unknown Function at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							break;
+						}
+						if(temp->data->f_item->isDef==-3)
+							printf("Function with bot Def and Dec at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+
+						parameters *pr= temp->data->f_item->pr;
 						if(strcmp(t->child->data->token->lexeme,current->module_name)==0)
 						{
 							printf("Recursive Call at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 							break;	
 						}
+						
+						checkInputList(t->child->right,current,pr);
 					}
 					else
 					{
-						//printf("child%s\n",t->child->right->data->token->lexeme);
+						temp=ht_search(sym_root->symbol_table, t->child->right->data->token->lexeme);
+						if(temp==NULL || temp->data->f_item->isDef>=0)
+						{
+							printf("Unknown Function at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->data->token->lexeme);
+							break;
+						}
+						if(temp->data->f_item->isDef==-3)
+							printf("Function with bot Def and Dec at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->data->token->lexeme);
+
+						parameters *pr= temp->data->f_item->pr;
 						if(strcmp(t->child->right->data->token->lexeme,current->module_name)==0)
 						{
 							printf("Recursive Call at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->right->data->token->lexeme);
 							break;	
 						}
+						checkOutputList(t->child->child,current,pr);
+						checkInputList(t->child->right->right,current,pr);
 					}
 					break;
 
-				}								
-
-				case 63://program
+				}
+				
+				case 118://iterStmt
 				{
+					checkSemRules(t->child,current);
 					current= insert_as_symchild(current,create_new_symnode());
+					if(t->child->tag==1)
+					{
+						current->isForScope=1;
+						strcpy(current->for_id,t->child->data->token->lexeme);
+						checkSemRules(t->child->right,current);
+						checkSemRules(t->child->right->right,current);
+					}
+					else
+					{
+						checkSemRules(t->child->right,current);
+					}
+
+					current=current->parent;
+
+					break;
 				}
 
+				case 119://range
+				{
+					checkSemRules(t->child,current);
+					checkSemRules(t->child->right,current);
+					if(t->child->data->token->val.i_val>t->child->right->data->token->val.i_val)
+						printf("Error in Ranges Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+					break;
+				}
+				case 113://conditionalStmt	
+				{
+					checkSemRules(t->child,current);
+					if(t->child->attr->baseType==0)
+						current->switchStatus=0;
+					else if(t->child->attr->baseType==2)
+						current->switchStatus=2;
+					else
+					{
+						printf("Incompatible Variable for Switch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						break;
+					}
+					
+					checkSemRules(t->child->right,current);
+					
+					if(t->child->right->right==NULL && current->switchStatus==0)
+					{
+						printf("INT Switch without Default at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+					}
+					else if(t->child->right->right!=NULL && current->switchStatus==2)
+					{
+						printf("BOOL Switch with Default at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+					}
+					
+					checkSemRules(t->child->right->right,current);
+					return;						
+				}
+			
+				case 115://N9
+				case 114://caseStmts
+				{
+					checkSemRules(t->child,current);
+					if(t->child->attr->baseType!=current->switchStatus)
+						printf("Invalid Case Value at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+					if(t->child->right!=NULL && t->child->right->data->nonterm->data->t_item->index==ht_search(mapping_table,"statements")->data->t_item->index)
+					{
+						current= insert_as_symchild(current,create_new_symnode());
+						checkSemRules(t->child->right,current);
+						current=current->parent;
+					}
+					if(t->child->right!=NULL)
+						checkSemRules(t->child->right->right,current);
+					
+					break;
+					
+				}
+				
+				case 117://default
+				{
+
+					current= insert_as_symchild(current,create_new_symnode());
+					checkSemRules(t->child,current);
+					current=current->parent;
+				}
+				
 				default:
 				{
-					current=checkSemRules(t->child,current);
+					checkSemRules(t->child,current);
 
 					astnode* rt=t->child->right;
 
 					while(rt!=NULL)
 					{
-						current=checkSemRules(rt,current);
+						checkSemRules(rt,current);
 						rt=rt->right;
 					}
 				}
 			}
 		}
 	}
-	return current;
 }
 
-/*
-symnode* semAction(astnode *t,symnode* current)			// All semantic rules to be written here w.r.t "t->data->nonterm" specifications.
+void fillTheParams(astnode* t,parameters *pr)
 {
-	switch(t->data->nonterm->data->t_item->index)
+	ht_item* temp = NULL;
+
+	if(t!=NULL)
 	{
-
-		
-		case 77:		// moduleDef
+		if(t->tag==1)
 		{
-		}
-		case 80:		//ioStmt
-		{
-			if(t->child->child!=NULL)
+			//printf("here at this %s with index no. = %d\n",t->data->token->lexeme,t->data->token->index);
+			switch(t->data->token->index)
 			{
-				scopelist* n = var;
-				while(n!=NULL && ht_search(n->top,t->child->child->data->token->lexeme)==NULL)
+				case 5://INTEGER
 				{
-					n = n->prev;
+					t->attr->baseType=0;
+					t->attr->eleType=4;
+					break;
 				}
-				if(n==NULL)
-				{printf("Variable %s not defined.\n",t->child->child->data->token->lexeme);}	// Add it in the error linked list. 
-			}
-			break;
-		}
-		case 91:		//moduleReuseStmt
-		{
-			if(ht_search(func_table,t->child->right->data->token->lexeme)==NULL)
-			{printf("Function %s not defined.\n",t->child->right->data->token->lexeme);}	// Add it in the error linked list. 
-			break;
-		}
-		case 112:		// declareStmt
-		{
-			ht_item *x = ht_insert_var_item(var->top, t->child->child->data->token->lexeme, 0, INTEGER, false);
-			break;
-		}
 
+				case 6://REAL
+				{
+					t->attr->baseType=1;
+					t->attr->eleType=4;
+					break;
+				}
+
+				case 7://BOOLEAN
+				{
+					t->attr->baseType=2;
+					t->attr->eleType=4;
+					break;
+				}
+				case 3://RNUM
+				{
+					t->attr->baseType=1;
+					t->attr->eleType=4;
+					break;
+				}
+				case 2://NUM	
+				{
+					t->attr->baseType=0;
+					t->attr->eleType=4;
+					break;
+				}
+				case 4://ID
+					break;
+				case 8://TRUE
+				case 9://FALSE
+				{
+					t->attr->baseType=2;
+					t->attr->eleType=4;
+					break;
+				}
+			}
+		}	
+		else
+		{
+			switch(t->data->nonterm->data->t_item->index)
+			{
+				case 74://dataType
+				{
+					fillTheParams(t->child->right,pr);
+					t->attr->baseType=3;
+					t->attr->eleType=t->child->right->attr->baseType;
+					break;
+				}
+
+				case 71://N1
+				case 70://input_plist
+				{
+					fillTheParams(t->child->right,pr);
+					ht_insert_var_item(pr->input_list,t->child->data->token->lexeme ,0, t->child->right->attr->baseType, t->child->right->attr->eleType);
+					pr->input_types[pr->num_inputs].eleType=t->child->right->attr->eleType;
+					pr->input_types[pr->num_inputs].baseType=t->child->right->attr->baseType;
+					pr->num_inputs++;
+					if(t->child->right->right!=NULL)
+						fillTheParams(t->child->right->right,pr);
+
+					break;
+				}
+				case 69://ret
+				{
+					fillTheParams(t->child,pr);
+					break;
+				}
+				case 73://N2
+				case 72://output_plist
+				{
+					fillTheParams(t->child->right,pr);
+					ht_insert_var_item(pr->output_list,t->child->data->token->lexeme ,0, t->child->right->attr->baseType, t->child->right->attr->eleType);
+					pr->output_types[pr->num_outputs]=t->child->right->attr->baseType;
+					pr->num_outputs++;
+					if(t->child->right->right!=NULL)
+						fillTheParams(t->child->right->right,pr);
+
+					break;
+				}				
+				default:
+					break;
+			
+			}
+		}
 	}
 }
 
-*/
+symnode* modulesParHamla(astnode *t,symnode* root)
+{
+	ht_item* temp = NULL;
+
+	if(t!=NULL)
+	{
+		if(t->tag==1)
+		{
+
+		}
+		else
+		{
+			switch(t->data->nonterm->data->t_item->index)
+			{
+				case 63://program
+				{
+						root= insert_as_symchild(root,create_new_symnode());
+				}
+				case 64://moduleDeclarations
+				case 66://otherModules
+				{
+					modulesParHamla(t->child,root);
+
+					astnode*rt= t->child->right;
+
+					while(rt!=NULL)
+					{
+						modulesParHamla(rt,root);
+						rt=rt->right;
+					}
+				}
+				case 68://module
+				{	
+					temp = ht_search(root->symbol_table, t->child->data->token->lexeme);
+
+					if(temp==NULL)
+						temp=ht_insert_func_item(root->symbol_table, t->child->data->token->lexeme, 2);
+
+					else if(temp->data->f_item->isDef==2)
+					{	printf("Redefinition of function found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						break;
+					}
+					else
+						temp->data->f_item->isDef=2;
+
+					temp->data->f_item->pr=(parameters*)malloc(sizeof(parameters));
+					temp->data->f_item->pr->num_inputs=0;
+					temp->data->f_item->pr->num_outputs=0;
+					temp->data->f_item->pr->input_list=ht_new();
+					temp->data->f_item->pr->output_list=ht_new();
+
+					astnode* rt=t->child->right;
+
+					while(rt!=NULL)
+					{
+						fillTheParams(rt,temp->data->f_item->pr);
+						rt=rt->right;
+					}
+					break;				
+				}
+
+				case 65://moduleDeclaration:
+				{
+					if(ht_search(root->symbol_table, t->child->data->token->lexeme)==NULL)
+						ht_insert_func_item(root->symbol_table, t->child->data->token->lexeme, 1);
+					else
+						printf("Redeclaraton of function found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+					break;				
+				}
+
+				default: break;
+			
+			}
+		}
+	}
+	return root;
+}
+
+symnode* semCheck(astnode* t)
+{
+	symnode* root=NULL;
+	root=modulesParHamla(t,NULL);
+	checkSemRules(t,root);
+}
+

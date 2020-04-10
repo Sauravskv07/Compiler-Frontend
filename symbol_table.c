@@ -12,6 +12,9 @@
 symnode* create_new_symnode(){
 	symnode* temp=malloc(sizeof(symnode));
 	temp->symbol_table=ht_new();
+	temp->isModuleScope=0;
+	temp->isForScope=0;
+	temp->switchStatus=-1;
 	temp->child=NULL;
 	temp->parent=NULL;
 	temp->right=NULL;

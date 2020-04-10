@@ -10,8 +10,6 @@ GROUP NO. = 46
 typedef struct attributes{
 	VarType baseType;
 	VarType eleType;
-	Token *module_name;
-	bool typeCheckReq;
 } attributes;
 typedef struct astnode
 {
