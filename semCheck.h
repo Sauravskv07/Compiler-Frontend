@@ -10,7 +10,7 @@ GROUP NO. = 46
 
 void checkSemRules(astnode *t,symnode* current);
 symnode* modulesParHamla(astnode *t,symnode* root);
-void fillTheParams(astnode* t,parameters *pr);
+void fillTheParams(astnode* t,parameters *pr,int current_offset);
 VarType typeCheck(astnode *op,astnode *first,astnode *second);
 symnode* semCheck(astnode *t);
 void getID(astnode *t,symnode *current);

@@ -1,7 +1,8 @@
 typedef struct symnode
 {
 	ht_hash_table* symbol_table;
-	char module_name[21];
+	int current_offset;
+	char *module_name;
 	bool isModuleScope;
 	bool isForScope;
 	char for_id[21];

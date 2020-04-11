@@ -71,6 +71,8 @@ astnode* makeleaf(Token *tk)
 	an->attr=malloc(sizeof(attributes));
 	an->attr->baseType=0;
 	an->attr->eleType=0;
+	an->attr->low=-1;
+	an->attr->high=-1;
 	an->data = d;
 	an->child = NULL;
 	an->right = NULL;
@@ -86,6 +88,8 @@ astnode* makeastnode(ht_item *t)
 	an->attr=malloc(sizeof(attributes));
 	an->attr->baseType=0;
 	an->attr->eleType=0;
+	an->attr->low=-1;
+	an->attr->high=-1;
 	an->data = d;
 	an->child = NULL;
 	an->right = NULL;

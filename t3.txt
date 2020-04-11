@@ -5,22 +5,20 @@ takes input [x:integer];
 returns [value:integer];
 start
 	value:= x*x;
-	[value]:=use module square with parameters v_1_2_3;
 end
 
 
 <<<driver program>>>
 start
-	declare v1,v2,v3:integer;
-	declare v4:real;
-	v4:=v5;
+	declare v1,v3,v_1_2_3:integer;
+	declare v2,v4:real;
 	v2:=0.4;
-	declare A:array[1..15] of real;
-	v3:=A+v2;
+	declare A:array[2..14] of real;
+	v4:=A[12]*v4;
 	get_value(v_1_2_3);
 	declare result_:integer;
-	[result_]:=use module square with parameters v_1_2_3;
-	print(result);
+	[result_]:=use module square with parameters v1;
+	print(result_);
 end
 
 

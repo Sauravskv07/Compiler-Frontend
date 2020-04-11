@@ -16,6 +16,8 @@ typedef enum{TERM,FUNC,VAR} Category;
 typedef struct{
 	int eleType;
 	int baseType;
+	int low;
+	int high;
 }dataType;
 
 typedef struct{
@@ -40,9 +42,11 @@ typedef struct {
 typedef enum{INTEGER,REAL,BOOLEAN,ARRAY,UNDEFINED} VarType;
 
 typedef struct {
-    int offset;		// Add other variables attributes also accordingly here.
-    VarType eleType;
-    VarType baseType;
+	int offset;		// Add other variables attributes also accordingly here.
+	int low;
+	int high;
+	VarType eleType;
+	VarType baseType;
 } var_item;
 
 typedef union {
@@ -74,7 +78,7 @@ ht_hash_table* keyword_table;
 
 ht_item* ht_insert_term_item(ht_hash_table* ht, const char* key, int index, Type tag);
 ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int isDef);
-ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int offset, VarType baseType, VarType eleType);
+ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int offset, VarType baseType, VarType eleType,int low,int high);
 ht_item* ht_insert(ht_hash_table* ht, ht_item *item);
 ht_item* ht_search(ht_hash_table* ht, const char* key);
 ht_hash_table* ht_new();

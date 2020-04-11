@@ -12,7 +12,9 @@
 symnode* create_new_symnode(){
 	symnode* temp=malloc(sizeof(symnode));
 	temp->symbol_table=ht_new();
+	temp->current_offset=0;
 	temp->isModuleScope=0;
+	temp->module_name=NULL;
 	temp->isForScope=0;
 	temp->switchStatus=-1;
 	temp->child=NULL;
@@ -29,7 +31,8 @@ symnode* insert_as_symchild(symnode* parent,symnode* child){
 
 	else
 	{
-		strcpy(child->module_name,parent->module_name);
+		if(parent->module_name!=NULL)
+			strcpy(child->module_name,parent->module_name);
 		symnode* prev=parent->child;
 		if(prev==NULL)
 		{

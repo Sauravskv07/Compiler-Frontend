@@ -40,19 +40,21 @@ ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int isDef) {
     return ht_insert(ht,j);
 }
 
-ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int offset, VarType baseType, VarType eleType) {
+ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int offset, VarType baseType, VarType eleType,int low,int high) {
 
-    var_item* i = (var_item *)malloc(sizeof(var_item));
-    i->offset=offset;
-    i->baseType=baseType;
-    i->eleType=eleType;
-    ht_item* j = (ht_item *)malloc(sizeof(ht_item));
-    j->key = strdup(key);
-    ht_data* k = (ht_data *)malloc(sizeof(ht_data));
-    k->v_item = i;
-    j->data = k;
-    j->ct = 2;
-    return ht_insert(ht,j);
+	var_item* i = (var_item *)malloc(sizeof(var_item));
+	i->offset=offset;
+	i->baseType=baseType;
+	i->eleType=eleType;
+	i->low=low;
+	i->high=high;
+	ht_item* j = (ht_item *)malloc(sizeof(ht_item));
+	j->key = strdup(key);
+	ht_data* k = (ht_data *)malloc(sizeof(ht_data));
+	k->v_item = i;
+	j->data = k;
+	j->ct = 2;
+	return ht_insert(ht,j);
 }
 
 
