@@ -279,6 +279,7 @@ void checkSemRules(astnode *t,symnode* current)
 					ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef=-1;
 					break;
 				}
+	
 				case 68://module
 				{	
 					printf("module");
@@ -425,6 +426,7 @@ void checkSemRules(astnode *t,symnode* current)
 					}
 					break;
 				}
+
 				case 88://lvalueIDStmt:
 				case 97://newNT:
 				case 107://factor:
@@ -462,6 +464,7 @@ void checkSemRules(astnode *t,symnode* current)
 					}
 					break;
 				}
+
 				case 102://N8:
 				{
 					printf("N8\n");
@@ -469,6 +472,7 @@ void checkSemRules(astnode *t,symnode* current)
 					t->attr->baseType=t->child->right->attr->baseType;
 					break;
 				}
+
 				case 101://N7:
 				case 104://N4:
 				case 106://N5:
@@ -485,6 +489,7 @@ void checkSemRules(astnode *t,symnode* current)
 		
 					break;
 				}
+
 				case 91://moduleReuseStmt:
 				{
 					printf("moduleReuseStmt\n");
@@ -568,6 +573,7 @@ void checkSemRules(astnode *t,symnode* current)
 						printf("Error in Ranges Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 					break;
 				}
+
 				case 113://conditionalStmt	
 				{
 					printf("conditionalStmt\n");
@@ -653,6 +659,7 @@ void checkSemRules(astnode *t,symnode* current)
 					}
 					break;
 				}
+
 				case 74://dataType
 				{
 					printf("dataType\n");
@@ -732,6 +739,7 @@ void checkSemRules(astnode *t,symnode* current)
 					current= insert_as_symchild(current,new_node);
 					checkSemRules(t->child,current);
 					current=current->parent;
+					break;
 				}
 				
 				default:
