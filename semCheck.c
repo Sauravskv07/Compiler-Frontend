@@ -19,6 +19,30 @@ GROUP NO. = 46
 #include "symbol_table.h"
 #include "semCheck.h"
 
+int isRedefined(astnode *t,symnode *current)
+{
+	symnode* temp2=current;
+	ht_item *temp;
+
+	if(current==NULL)
+		printf("Symbol Table Error\n");
+
+	do
+	{
+		temp=ht_search(temp2->symbol_table, t->data->token->lexeme);
+		
+		if(temp!=NULL)
+			break;
+		else if(temp2->isForScope==1 && strcmp(t->data->token->lexeme,temp2->for_id)==0)
+			return 1;
+
+		temp2=temp2->parent;
+	
+	}while(temp == NULL && temp2!=sym_root);
+
+	return 0;
+
+}
 
 int incrementOffset(int current_offset,VarType type)
 {
@@ -337,16 +361,21 @@ void checkSemRules(astnode *t,symnode* current)
 
 					checkSemRules(t->child,current);	
 					checkSemRules(t->child->right,current);
-					if(current->isForScope==1 && (strcmp(t->child->data->token->lexeme,current->for_id)==0) && (ht_search(current->symbol_table, t->child->data->token->lexeme)==NULL))
-					{
+					if(isRedefined(t->child,current)==1)
 						printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-						break;
-					}
-					if(t->child->right->data->nonterm->data->t_item->index==ht_search(mapping_table,"lvalueIDStmt")->data->t_item->index)
+					else if(t->child->right->data->nonterm->data->t_item->index==ht_search(mapping_table,"lvalueIDStmt")->data->t_item->index)
 					{
 
 						if(t->child->attr->baseType!=t->child->right->attr->baseType)
-							printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);	
+							printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						else if(t->child->attr->baseType==3)
+						{
+							if((t->child->attr->eleType!=t->child->right->attr->eleType) ||(t->child->attr->low!=-1 && t->child->right->attr->low!=-1 && t->child->attr->low!=t->child->right->attr->low) || (t->child->attr->high!=-1 && t->child->right->attr->high!=-1 && t->child->attr->high!=t->child->right->attr->high))
+							printf("Array Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+
+						} 
+							
+						
 					}
 					else
 					{
@@ -354,6 +383,16 @@ void checkSemRules(astnode *t,symnode* current)
 							printf("Variable not of Array Type at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 						else
 						{
+							if(t->child->right->child->data->token->index==2)
+							{
+								if(t->child->attr->low!=-1 && t->child->attr->low > t->child->right->child->data->token->val.i_val)
+									printf("Index smaller than lower Bound at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->child->data->token->LN, t->child->right->child->data->token->lexeme);
+
+								if(t->child->attr->high!=-1 && t->child->attr->high < t->child->right->child->data->token->val.i_val)
+									printf("Index greater than upper Bound at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->child->data->token->LN, t->child->right->child->data->token->lexeme);
+							}
+
+					
 							if(t->child->attr->eleType != t->child->right->attr->baseType)
 								printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 						}		
@@ -392,6 +431,9 @@ void checkSemRules(astnode *t,symnode* current)
 						else
 						{
 							t->attr->baseType=t->child->attr->baseType;
+							t->attr->eleType=t->child->attr->eleType;
+							t->attr->low=t->child->attr->low;
+							t->attr->high=t->child->attr->high;
 						}
 					}
 					else
@@ -433,7 +475,11 @@ void checkSemRules(astnode *t,symnode* current)
 				{
 					printf("factor | lvalueIDStmt | newNT \n");
 					checkSemRules(t->child,current);
+					
 					t->attr->baseType=t->child->attr->baseType;
+					t->attr->eleType=t->child->attr->eleType;
+					t->attr->low=t->child->attr->low;
+					t->attr->high=t->child->attr->high;
 					break;
 				}
 
@@ -456,7 +502,12 @@ void checkSemRules(astnode *t,symnode* current)
 					printf("term | arithmeticOrBooleanExpr | arithmeticExpr | AnyTerm\n");
 					checkSemRules(t->child,current);
 					if(t->child->right==NULL)
+					{
 						t->attr->baseType=t->child->attr->baseType;
+						t->attr->eleType=t->child->attr->eleType;
+						t->attr->low=t->child->attr->low;
+						t->attr->high=t->child->attr->high;
+					}
 					else
 					{
 						checkSemRules(t->child->right,current);
@@ -740,6 +791,15 @@ void checkSemRules(astnode *t,symnode* current)
 					checkSemRules(t->child,current);
 					current=current->parent;
 					break;
+				}
+
+				case 80://ioStmt
+				{
+					if(t->child->tag==1 && t->child->data->token->index==4)
+					{
+						if(isRedefined(t->child,current)==1)
+							printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+					}
 				}
 				
 				default:

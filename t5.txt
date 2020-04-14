@@ -28,7 +28,9 @@ end
 start
 	declare A:array[1..15] of real;
 	declare k:integer;
+	declare B:array[k..15] of real;
 	declare s:real;
+	A[15]:=B[15];
 	get_value(k);
 	use module readArr with parameters A,k;
 	[s]:= use module arraySum with parameters A,k;
