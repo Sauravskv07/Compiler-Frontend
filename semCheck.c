@@ -300,7 +300,8 @@ void checkSemRules(astnode *t,symnode* current)
 				case 65://moduleDeclaration:
 				{
 					printf("moduleDeclaration\n");
-					ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef=-1;
+					if(ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef!=1)
+						ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef=-1;
 					break;
 				}
 	

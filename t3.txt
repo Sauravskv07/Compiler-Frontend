@@ -1,8 +1,8 @@
 ** This testcase demonstrates correctness of module structure with declaration and simple statements**
-
-<<module square>>
-takes input [x:integer];
-returns [value:integer];
+declare module square;
+<<module compute>>
+takes input [x:integer,y:integer];
+returns [value:integer,f:integer];
 start
 	value:= x*x;
 end
