@@ -19,6 +19,38 @@ GROUP NO. = 46
 #include "symbol_table.h"
 #include "semCheck.h"
 
+void setOutput(astnode *t, symnode *current)
+{
+	symnode* temp2=current;
+	ht_item *temp;
+
+	if(current==NULL)
+		printf("Symbol Table Error\n");
+
+	do
+	{
+		if(temp2->isModuleScope==1)
+		{
+			//printf("module name = %s\n",current->module_name);
+			temp=ht_search(ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->output_list, t->data->token->lexeme);
+			//printf("module name = %s\n",current->module_name);
+			if(temp!= NULL && temp->data->v_item->low!=1)
+			{
+				temp->data->v_item->low=1;
+				current->num_output_defined++;
+			}			
+		}
+
+		temp=ht_search(temp2->symbol_table, t->data->token->lexeme);
+	
+		temp2=temp2->parent;
+	
+	}while(temp == NULL && temp2!=sym_root);
+
+}
+
+
+
 int isRedefined(astnode *t,symnode *current)
 {
 	symnode* temp2=current;
@@ -105,6 +137,11 @@ void checkOutputList(astnode *t,symnode *current,parameters *pr)
 			break;
 		}
 		getID(t->child,current);
+		if(isRedefined(t->child,current)==1)
+			printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+		
+		setOutput(t->child,current);
+
 		if(t->child->attr->baseType==4)
 		{
 			break;
@@ -112,7 +149,7 @@ void checkOutputList(astnode *t,symnode *current,parameters *pr)
 		if(t->child->attr->baseType!=pr->output_types[cnt])
 		{
 			printf("Type Mismatch with Output Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-			break;
+			//break;
 		}
 		cnt++;
 		t=t->child->right;		
@@ -333,6 +370,10 @@ void checkSemRules(astnode *t,symnode* current)
 						rt=rt->right;
 					}
 					
+					if(current->num_output_defined!=ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->num_outputs)
+						printf("Certain Output Variables are Undefined for Function at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+				
+
 					current=current->parent;
 					break;					
 				}
@@ -362,11 +403,14 @@ void checkSemRules(astnode *t,symnode* current)
 
 					checkSemRules(t->child,current);	
 					checkSemRules(t->child->right,current);
+					
 					if(isRedefined(t->child,current)==1)
 						printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 					else if(t->child->right->data->nonterm->data->t_item->index==ht_search(mapping_table,"lvalueIDStmt")->data->t_item->index)
 					{
-
+						printf("here\n");
+						setOutput(t->child,current);
+						printf("here too\n");
 						if(t->child->attr->baseType!=t->child->right->attr->baseType)
 							printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 						else if(t->child->attr->baseType==3)
@@ -740,7 +784,7 @@ void checkSemRules(astnode *t,symnode* current)
 				{
 					printf("idList\n");
 
-					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL)
+					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL && !(current->isModuleScope==1 && ht_search(ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->output_list, t->child->data->token->lexeme)!=NULL))
 					{	
 						ht_item* temp= ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,current->current_offset, t->attr->baseType, t->attr->eleType, t->attr->low, t->attr->high);
 						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType);
@@ -765,7 +809,7 @@ void checkSemRules(astnode *t,symnode* current)
 				{
 					printf("N3\n");
 
-					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL)
+					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL && !(current->isModuleScope==1 && ht_search(ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->output_list, t->child->data->token->lexeme)!=NULL))
 					{
 						ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,current->current_offset, t->attr->baseType, t->attr->eleType, t->attr->low, t->attr->high);
 						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType);
@@ -800,6 +844,7 @@ void checkSemRules(astnode *t,symnode* current)
 					{
 						if(isRedefined(t->child,current)==1)
 							printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						setOutput(t->child,current);
 					}
 				}
 				

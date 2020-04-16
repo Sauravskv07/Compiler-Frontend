@@ -4,6 +4,7 @@ declare module square;
 takes input [x:integer,y:integer];
 returns [value:integer,f:integer];
 start
+	f:=4;
 	value:= x*x;
 end
 
