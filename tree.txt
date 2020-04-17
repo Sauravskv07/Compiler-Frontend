@@ -2,129 +2,75 @@ lexeme		lineno		tokenName		valueIfNumber		parentNodeSymbol	isLeafNode(yes/no)	No
 e				EPSILON						moduleDeclarations		YES	
 ----										program			NO		moduleDeclarations
 ----										ROOT			NO		program
-e				EPSILON						otherModules		YES	
-----										program			NO		otherModules
-<<<		2		DRIVERDEF				0		driverModule		YES
-----										program			NO		driverModule
-driver		2		DRIVER				0		driverModule		YES
-program		2		PROGRAM				0		driverModule		YES
->>>		2		DRIVERENDDEF				0		driverModule		YES
-start		3		START				0		moduleDef		YES
-----										driverModule			NO		moduleDef
-declare		4		DECLARE				0		declareStmt		YES
+<<		3		DEF				0		module		YES
+----										otherModules			NO		module
+module		3		MODULE				0		module		YES
+compute		3		ID				0		module		YES
+>>		3		ENDDEF				0		module		YES
+takes		4		TAKES				0		module		YES
+input		4		INPUT				0		module		YES
+[		4		SQBO				0		module		YES
+x		4		ID				0		input_plist		YES
+----										module			NO		input_plist
+:		4		COLON				0		input_plist		YES
+integer		4		INTEGER				0		dataType		YES
+----										input_plist			NO		dataType
+,		4		COMMA				0		N1		YES
+----										input_plist			NO		N1
+y		4		ID				0		N1		YES
+:		4		COLON				0		N1		YES
+integer		4		INTEGER				0		dataType		YES
+----										N1			NO		dataType
+e				EPSILON						N1		YES	
+----										N1			NO		N1
+]		4		SQBC				0		module		YES
+;		4		SEMICOL				0		module		YES
+returns		5		RETURNS				0		ret		YES
+----										module			NO		ret
+[		5		SQBO				0		ret		YES
+value		5		ID				0		output_plist		YES
+----										ret			NO		output_plist
+:		5		COLON				0		output_plist		YES
+integer		5		INTEGER				0		type		YES
+----										output_plist			NO		type
+,		5		COMMA				0		N2		YES
+----										output_plist			NO		N2
+f		5		ID				0		N2		YES
+:		5		COLON				0		N2		YES
+integer		5		INTEGER				0		type		YES
+----										N2			NO		type
+e				EPSILON						N2		YES	
+----										N2			NO		N2
+]		5		SQBC				0		ret		YES
+;		5		SEMICOL				0		ret		YES
+start		6		START				0		moduleDef		YES
+----										module			NO		moduleDef
+declare		7		DECLARE				0		declareStmt		YES
 ----										statement			NO		declareStmt
-v_1_2_3		4		ID				0		idList		YES
+v1		7		ID				0		idList		YES
 ----										declareStmt			NO		idList
 e				EPSILON						N3		YES	
 ----										idList			NO		N3
-:		4		COLON				0		declareStmt		YES
-integer		4		INTEGER				0		dataType		YES
+:		7		COLON				0		declareStmt		YES
+integer		7		INTEGER				0		dataType		YES
 ----										declareStmt			NO		dataType
-;		4		SEMICOL				0		declareStmt		YES
+;		7		SEMICOL				0		declareStmt		YES
 ----										statements			NO		statement
 ----										moduleDef			NO		statements
-get_value		5		GET_VALUE				0		ioStmt		YES
-----										statement			NO		ioStmt
-(		5		BO				0		ioStmt		YES
-v_1_2_3		5		ID				0		ioStmt		YES
-)		5		BC				0		ioStmt		YES
-;		5		SEMICOL				0		ioStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-declare		6		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-result_		6		ID				0		idList		YES
-----										declareStmt			NO		idList
-e				EPSILON						N3		YES	
-----										idList			NO		N3
-:		6		COLON				0		declareStmt		YES
-integer		6		INTEGER				0		dataType		YES
-----										declareStmt			NO		dataType
-;		6		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-[		7		SQBO				0		optional		YES
-----										moduleReuseStmt			NO		optional
-result_		7		ID				0		idList		YES
-----										optional			NO		idList
-e				EPSILON						N3		YES	
-----										idList			NO		N3
-]		7		SQBC				0		optional		YES
-:=		7		ASSIGNOP				0		optional		YES
-----										simpleStmt			NO		moduleReuseStmt
-use		7		USE				0		moduleReuseStmt		YES
-module		7		MODULE				0		moduleReuseStmt		YES
-square		7		ID				0		moduleReuseStmt		YES
-with		7		WITH				0		moduleReuseStmt		YES
-parameters		7		PARAMETERS				0		moduleReuseStmt		YES
-v_1_2_3		7		ID				0		idList		YES
-----										moduleReuseStmt			NO		idList
-e				EPSILON						N3		YES	
-----										idList			NO		N3
-;		7		SEMICOL				0		moduleReuseStmt		YES
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-print		8		PRINT				0		ioStmt		YES
-----										statement			NO		ioStmt
-(		8		BO				0		ioStmt		YES
-result		8		ID				0		var_id_num		YES
-----										var			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										ioStmt			NO		var
-)		8		BC				0		ioStmt		YES
-;		8		SEMICOL				0		ioStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-e				EPSILON						statements		YES	
-----										statements			NO		statements
-end		9		END				0		moduleDef		YES
-<<		11		DEF				0		module		YES
-----										otherModules			NO		module
-module		11		MODULE				0		module		YES
-square		11		ID				0		module		YES
->>		11		ENDDEF				0		module		YES
-takes		12		TAKES				0		module		YES
-input		12		INPUT				0		module		YES
-[		12		SQBO				0		module		YES
-x		12		ID				0		input_plist		YES
-----										module			NO		input_plist
-:		12		COLON				0		input_plist		YES
-integer		12		INTEGER				0		dataType		YES
-----										input_plist			NO		dataType
-e				EPSILON						N1		YES	
-----										input_plist			NO		N1
-]		12		SQBC				0		module		YES
-;		12		SEMICOL				0		module		YES
-returns		13		RETURNS				0		ret		YES
-----										module			NO		ret
-[		13		SQBO				0		ret		YES
-value		13		ID				0		output_plist		YES
-----										ret			NO		output_plist
-:		13		COLON				0		output_plist		YES
-integer		13		INTEGER				0		type		YES
-----										output_plist			NO		type
-e				EPSILON						N2		YES	
-----										output_plist			NO		N2
-]		13		SQBC				0		ret		YES
-;		13		SEMICOL				0		ret		YES
-start		14		START				0		moduleDef		YES
-----										module			NO		moduleDef
-value		15		ID				0		assignmentStmt		YES
+v1		8		ID				0		assignmentStmt		YES
 ----										simpleStmt			NO		assignmentStmt
-:=		15		ASSIGNOP				0		lvalueIDStmt		YES
+:=		8		ASSIGNOP				0		lvalueIDStmt		YES
 ----										whichStmt			NO		lvalueIDStmt
-x		15		ID				0		var_id_num		YES
+v1		8		ID				0		var_id_num		YES
 ----										factor			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
 ----										term			NO		factor
 ----										arithmeticExpr			NO		term
-*		15		MUL				0		op2		YES
+*		8		MUL				0		op2		YES
 ----										N5			NO		op2
 ----										term			NO		N5
-x		15		ID				0		var_id_num		YES
+f		8		ID				0		var_id_num		YES
 ----										factor			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
@@ -141,14 +87,144 @@ e				EPSILON						N8		YES
 e				EPSILON						N7		YES	
 ----										arithmeticOrBooleanExpr			NO		N7
 ----										lvalueIDStmt			NO		expression
-;		15		SEMICOL				0		lvalueIDStmt		YES
+;		8		SEMICOL				0		lvalueIDStmt		YES
 ----										assignmentStmt			NO		whichStmt
 ----										statement			NO		simpleStmt
 ----										statements			NO		statement
-----										moduleDef			NO		statements
+----										statements			NO		statements
 e				EPSILON						statements		YES	
 ----										statements			NO		statements
-end		16		END				0		moduleDef		YES
+end		30		END				0		moduleDef		YES
 ----										program			NO		otherModules
 e				EPSILON						otherModules		YES	
 ----										otherModules			NO		otherModules
+<<<		33		DRIVERDEF				0		driverModule		YES
+----										program			NO		driverModule
+driver		33		DRIVER				0		driverModule		YES
+program		33		PROGRAM				0		driverModule		YES
+>>>		33		DRIVERENDDEF				0		driverModule		YES
+start		34		START				0		moduleDef		YES
+----										driverModule			NO		moduleDef
+declare		35		DECLARE				0		declareStmt		YES
+----										statement			NO		declareStmt
+v1		35		ID				0		idList		YES
+----										declareStmt			NO		idList
+,		35		COMMA				0		N3		YES
+----										idList			NO		N3
+v3		35		ID				0		N3		YES
+,		35		COMMA				0		N3		YES
+----										N3			NO		N3
+v_1_2_3		35		ID				0		N3		YES
+e				EPSILON						N3		YES	
+----										N3			NO		N3
+:		35		COLON				0		declareStmt		YES
+integer		35		INTEGER				0		dataType		YES
+----										declareStmt			NO		dataType
+;		35		SEMICOL				0		declareStmt		YES
+----										statements			NO		statement
+----										moduleDef			NO		statements
+declare		36		DECLARE				0		declareStmt		YES
+----										statement			NO		declareStmt
+v2		36		ID				0		idList		YES
+----										declareStmt			NO		idList
+,		36		COMMA				0		N3		YES
+----										idList			NO		N3
+v4		36		ID				0		N3		YES
+e				EPSILON						N3		YES	
+----										N3			NO		N3
+:		36		COLON				0		declareStmt		YES
+real		36		REAL				0		dataType		YES
+----										declareStmt			NO		dataType
+;		36		SEMICOL				0		declareStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+declare		37		DECLARE				0		declareStmt		YES
+----										statement			NO		declareStmt
+x1		37		ID				0		idList		YES
+----										declareStmt			NO		idList
+e				EPSILON						N3		YES	
+----										idList			NO		N3
+:		37		COLON				0		declareStmt		YES
+boolean		37		BOOLEAN				0		dataType		YES
+----										declareStmt			NO		dataType
+;		37		SEMICOL				0		declareStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+declare		38		DECLARE				0		declareStmt		YES
+----										statement			NO		declareStmt
+A		38		ID				0		idList		YES
+----										declareStmt			NO		idList
+e				EPSILON						N3		YES	
+----										idList			NO		N3
+:		38		COLON				0		declareStmt		YES
+array		38		ARRAY				0		dataType		YES
+----										declareStmt			NO		dataType
+[		38		SQBO				0		dataType		YES
+2		38		NUM				2		index		YES
+----										range_arrays			NO		index
+----										dataType			NO		range_arrays
+..		38		RANGEOP				0		range_arrays		YES
+14		38		NUM				14		index		YES
+----										range_arrays			NO		index
+]		38		SQBC				0		dataType		YES
+of		38		OF				0		dataType		YES
+real		38		REAL				0		type		YES
+----										dataType			NO		type
+;		38		SEMICOL				0		declareStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+v4		39		ID				0		assignmentStmt		YES
+----										simpleStmt			NO		assignmentStmt
+:=		39		ASSIGNOP				0		lvalueIDStmt		YES
+----										whichStmt			NO		lvalueIDStmt
++		39		PLUS				0		unary_op		YES
+----										U			NO		unary_op
+----										expression			NO		U
+(		39		BO				0		new_NT		YES
+----										U			NO		new_NT
+(		39		BO				0		factor		YES
+----										term			NO		factor
+5.0	39		RNUM				5.000000	var_id_num		YES
+----										factor			NO		var_id_num
+----										term			NO		factor
+----										arithmeticExpr			NO		term
+e				EPSILON						N5		YES	
+----										term			NO		N5
+----										AnyTerm			NO		arithmeticExpr
+e				EPSILON						N4		YES	
+----										arithmeticExpr			NO		N4
+----										arithmeticOrBooleanExpr			NO		AnyTerm
+e				EPSILON						N8		YES	
+----										AnyTerm			NO		N8
+----										factor			NO		arithmeticOrBooleanExpr
+e				EPSILON						N7		YES	
+----										arithmeticOrBooleanExpr			NO		N7
+)		39		BC				0		factor		YES
+----										arithmeticExpr			NO		term
+e				EPSILON						N5		YES	
+----										term			NO		N5
+----										new_NT			NO		arithmeticExpr
+e				EPSILON						N4		YES	
+----										arithmeticExpr			NO		N4
+)		39		BC				0		new_NT		YES
+----										lvalueIDStmt			NO		expression
+;		39		SEMICOL				0		lvalueIDStmt		YES
+----										assignmentStmt			NO		whichStmt
+----										statement			NO		simpleStmt
+----										statements			NO		statement
+----										statements			NO		statements
+print		53		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		53		BO				0		ioStmt		YES
+5		53		NUM				5		var_id_num		YES
+----										var			NO		var_id_num
+----										ioStmt			NO		var
+)		53		BC				0		ioStmt		YES
+;		53		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+e				EPSILON						statements		YES	
+----										statements			NO		statements
+end		55		END				0		moduleDef		YES
+e				EPSILON						otherModules		YES	
+----										program			NO		otherModules

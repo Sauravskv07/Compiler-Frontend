@@ -25,6 +25,7 @@ typedef struct astnode
 
 
 astnode* createAST(treenode* root);
+astnode* createpAST(treenode* root);
 astnode *insertChildInAst(astnode *parent, astnode *child);
 astnode *insertNextRightSiblingInAst(astnode *child, astnode *right);
 astnode* getRootInAst(astnode *child);

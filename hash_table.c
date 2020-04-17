@@ -39,6 +39,18 @@ ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int isDef) {
     j->ct = 1;
     return ht_insert(ht,j);
 }
+ht_item* ht_insert_label_item(ht_hash_table* ht, const char* key, bool def) {
+
+    label_item* i = (label_item *)malloc(sizeof(label_item));
+    i->def=def;
+    ht_item* j = (ht_item *)malloc(sizeof(ht_item));
+    j->key = strdup(key);
+    ht_data* k = (ht_data *)malloc(sizeof(ht_data));
+    k->f_item = i;
+    j->data = k;
+    j->ct = 1;
+    return ht_insert(ht,j);
+}
 
 ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int offset, VarType baseType, VarType eleType,int low,int high) {
 
