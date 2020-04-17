@@ -1,11 +1,10 @@
 ** This testcase demonstrates correctness of module structure with declaration and simple statements**
 declare module square;
 <<module compute>>
-takes input [x:integer,y:integer];
-returns [value:integer,f:integer];
+takes input [x:array[a..b] of real,y:integer];
+returns [value:real];
 start
-	f:=4;
-	value:= x*x;
+	value:= x[1]*x[1];
 end
 
 
@@ -17,8 +16,8 @@ start
 	declare A:array[2..14] of real;
 	v4:=A[12]*v4;
 	get_value(v_1_2_3);
-	declare result_:integer;
-	[result_]:=use module square with parameters v1;
+	declare result_:real;
+	[result_]:=use module compute with parameters A,v1;
 	print(result_);
 end
 

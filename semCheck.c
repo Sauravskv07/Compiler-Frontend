@@ -409,9 +409,9 @@ void checkSemRules(astnode *t,symnode* current)
 						printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 					else if(t->child->right->data->nonterm->data->t_item->index==ht_search(mapping_table,"lvalueIDStmt")->data->t_item->index)
 					{
-						printf("here\n");
+						//printf("here\n");
 						setOutput(t->child,current);
-						printf("here too\n");
+						//printf("here too\n");
 						if(t->child->attr->baseType!=t->child->right->attr->baseType)
 							printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 						else if(t->child->attr->baseType==3)
@@ -677,6 +677,11 @@ void checkSemRules(astnode *t,symnode* current)
 					printf("conditionalStmt\n");
 
 					checkSemRules(t->child,current);
+
+					new_node=create_new_symnode();
+					new_node->module_name=(char *)malloc(sizeof(char)*21);	
+					current= insert_as_symchild(current,new_node);
+
 					if(t->child->attr->baseType==0)
 						current->switchStatus=0;
 					else if(t->child->attr->baseType==2)
@@ -687,7 +692,7 @@ void checkSemRules(astnode *t,symnode* current)
 						break;
 					}
 					
-					checkSemRules(t->child->right,current);
+					checkSemRules(t->child->right,current);//check case Stmts
 					
 					if(t->child->right->right==NULL && current->switchStatus==0)
 					{
@@ -699,6 +704,9 @@ void checkSemRules(astnode *t,symnode* current)
 					}
 					
 					checkSemRules(t->child->right->right,current);
+
+					current=current->parent;
+
 					return;						
 				}
 			
@@ -710,15 +718,9 @@ void checkSemRules(astnode *t,symnode* current)
 					checkSemRules(t->child,current);
 					if(t->child->attr->baseType!=current->switchStatus)
 						printf("Invalid Case Value at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-					if(t->child->right!=NULL && t->child->right->data->nonterm->data->t_item->index==ht_search(mapping_table,"statements")->data->t_item->index)
-					{
-						new_node=create_new_symnode();
-						new_node->module_name=(char *)malloc(sizeof(char)*21);	
-						current= insert_as_symchild(current,new_node);
-						checkSemRules(t->child->right,current);
-						current=current->parent;
-					}
-					if(t->child->right!=NULL)
+					checkSemRules(t->child->right,current);//can be statements or N9
+
+					if(t->child->right!=NULL)//means there exists statement or N9
 						checkSemRules(t->child->right->right,current);
 					
 					break;
