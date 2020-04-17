@@ -184,10 +184,10 @@ void checkInputList(astnode *t,symnode *current,parameters *pr)
 			if(t->child->attr->eleType!=pr->input_types[cnt].eleType)
 				printf("Type Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 
-			if(t->child->attr->low !=-1 && t->child->attr->low!=pr->input_types[cnt].low)
+			if(t->child->attr->low !=-1 && pr->input_types[cnt].low !=-1 && t->child->attr->low!=pr->input_types[cnt].low)
 				printf("Bound Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 
-			if(t->child->attr->high !=-1 && t->child->attr->high!=pr->input_types[cnt].high)
+			if(t->child->attr->high !=-1 && pr->input_types[cnt].high !=-1 && t->child->attr->high!=pr->input_types[cnt].high)
 				printf("Bound Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 
 		}
@@ -208,7 +208,7 @@ VarType typeCheck(astnode *op,astnode *first,astnode *second)
 
 	if(f_type==4 || s_type==4)
 	{
-		printf("Operand Type is Undefined at LINE NUMBER =  %d  LEXEME = %s\n",op->data->token->LN, op->data->token->lexeme);		
+		//printf("Operand Type is Undefined at LINE NUMBER =  %d  LEXEME = %s\n",op->data->token->LN, op->data->token->lexeme);		
 		return r_type;
 	}
 
@@ -347,12 +347,13 @@ void checkSemRules(astnode *t,symnode* current)
 					printf("module");
 					temp = ht_search(current->symbol_table, t->child->data->token->lexeme);
 
-					if(temp->data->f_item->isDef<=-2)
+					if(temp->data->f_item->isDef==-1)
+						printf("Function both declared and defined before use at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+
+					if(temp->data->f_item->isDef==-2)
 					{	
 						break;
 					}
-					else if(temp->data->f_item->isDef==-1)
-						temp->data->f_item->isDef=-3;
 					else
 						temp->data->f_item->isDef=-2;
 
@@ -598,8 +599,8 @@ void checkSemRules(astnode *t,symnode* current)
 							printf("Unknown Function at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 							break;
 						}
-						if(temp->data->f_item->isDef==-3)
-							printf("Function with bot Def and Dec at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						if(temp->data->f_item->isDef==-1)
+							temp->data->f_item->isDef=-3;
 
 						parameters *pr= temp->data->f_item->pr;
 						if(current->module_name!=NULL && strcmp(t->child->data->token->lexeme,current->module_name)==0)
@@ -618,8 +619,9 @@ void checkSemRules(astnode *t,symnode* current)
 							printf("Unknown Function at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->right->data->token->lexeme);
 							break;
 						}
-						if(temp->data->f_item->isDef==-3)
-							printf("Function with bot Def and Dec at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->data->token->lexeme);
+
+						if(temp->data->f_item->isDef==-1)
+							temp->data->f_item->isDef=-3;
 
 						parameters *pr= temp->data->f_item->pr;
 						if(current->module_name!=NULL && strcmp(t->child->right->data->token->lexeme,current->module_name)==0)
@@ -929,11 +931,13 @@ void fillTheParams(astnode* t,parameters *pr,int current_offset)
 					if(t->child->data->token->index == 2)
 						t->attr->low = t->child->data->token->val.i_val;
 					else
-						printf("Undeclared Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						t->attr->low = -1;
+
 					if(t->child->right->data->token->index ==2)
 						t->attr->high = t->child->right->data->token->val.i_val;
 					else
-						printf("Undeclared Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->right->data->token->lexeme);
+						t->attr->high = -1;
+
 					if(t->child->data->token->index == 2 && t->child->right->data->token->index == 2 && t->child->right->data->token->val.i_val< t->child->data->token->val.i_val)
 					{
 						t->attr->high=-1;
