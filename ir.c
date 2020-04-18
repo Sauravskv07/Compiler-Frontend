@@ -21,6 +21,7 @@ GROUP NO. = 46
 const char *OPNames[] = {"START","END","NOP","CALL","RET","DEC","PRINT","INP","ARR_GET","ARR_ASSIGN","BRANCH", "JUMP","ASSIGN","INC","EQUATE","UNARY","PLUS","MINUS","MUL","DIV,","AND","OR","LT","LE","GT","GE","EQ","NE","PUSH","POP"};
 void printIR(quad_row *q)
 {
+	printf("\n");
 	if(q!=NULL)
 	{
 		printf("%d \t\t",q->srno);
@@ -33,7 +34,6 @@ void printIR(quad_row *q)
 			else if(q->tag[i]==3) printf("%d \t\t",q->val[i].t_item->offset);
 			else printf("\t\t");
 		}
-		printf("\n");
 		printIR(q->next);
 	}
 }

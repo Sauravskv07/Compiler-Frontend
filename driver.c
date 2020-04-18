@@ -312,6 +312,9 @@ int main(int argc,char** argv)
 						printf("\n");
 					
 					semCheck(xp);
+/*
+You may encounter a segmentation fault due to existence of some syntax/semantic error in the program file. Please run code generation on a error free program only.");
+*/
 					resetIRParams();
 					genIRTable(xp,sym_root);
 					printIR(quad_row_tail);
