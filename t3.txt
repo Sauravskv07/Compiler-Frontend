@@ -7,7 +7,7 @@ start
 	declare v1:integer;
 	v1:=v1*f;
 	f:=1;
-	value:= x*x;
+	value:= x*x + 5;
 	v1:=v1*v1;
 	while(v1<v1)
 	start

@@ -127,7 +127,7 @@ int main(int argc,char** argv)
 		
 		printf("ALL TEST CASES WORKING, ERROR RECOVERY USING FIRST SET\n");
 		
-		printf("\nENTER: \n 0: FOR EXITING \n 1: FOR COMMENT REMOVAL \n 2: FOR LEXICAL ANALYSIS \n 3: FOR LEXICAL ANALYSIS AND PARSING \n 4: FOR LEXICAL ANALYSIS , PARSING AND SEMANTIC ANALYSIS\n 5: FOR CODE GENERATION\n");
+		printf("\nENTER: \n 0: FOR EXITING \n 1: FOR COMMENT REMOVAL \n 2: FOR LEXICAL ANALYSIS \n 3: FOR LEXICAL ANALYSIS AND PARSING \n 4: FOR LEXICAL ANALYSIS , PARSING AND SEMANTIC ANALYSIS\n 5: FOR CODE GENERATION\n 6: PRINT AST\n 7:Indeterminate\n");
 		
 		scanf("%d",&choice);	
 
@@ -255,7 +255,6 @@ int main(int argc,char** argv)
 
 					FILE* fp2=fopen("tree2.txt","w");
 					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-					printTraversalAst(xp, fp2);
 					
 					fclose(fp2);
 
@@ -305,7 +304,6 @@ int main(int argc,char** argv)
 
 					FILE* fp2=fopen("tree2.txt","w");
 					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-					printTraversalAst(xp, fp2);
 					
 					fclose(fp2);
 
@@ -329,6 +327,39 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 				}
 
 			case 6:{
+				
+					forwardPointer=0;
+				
+					backPointer=0;
+
+					LN=1;
+
+					endReached=0;
+					
+					start_time = clock();
+
+					fp=(FILE*)fopen(argv[1],"r");
+	
+					fseek(fp, 0, SEEK_SET);
+
+					if(fp==NULL)
+					{
+						printf("Some error while opening the file");
+						exit(1);
+					}
+
+					fp=getStream(fp);
+
+					forwardPointer=-1;
+
+					parseTree(argv[2]);
+
+					astnode *xp = createpAST(root);
+					printAST(xp);
+					break;
+					
+				}
+			case 7:{
 				
 					printf("TOTAL CPU TIME = %f\n",total_CPU_time);
 

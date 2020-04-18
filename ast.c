@@ -63,29 +63,45 @@ astnode* createAST(treenode* root)
 	}
 }
 
-void preproc(astnode* root)
+astnode* preproc(astnode* root)
 {
+	astnode* rt = NULL;
 	if(root!=NULL)
 	{
-		if(root->child!=NULL)
+		if(root->child==NULL)
 		{
-			if(root->data->nonterm->data->t_item->index == ht_search(mapping_table, "N1")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "N2")->data->t_item->index)
+			printf("- %s ",root->data->token->lexeme);
+		}
+		else
+		{
+			if(root->data->nonterm->data->t_item->index == ht_search(mapping_table, "arithmeticOrBooleanExpr")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "AnyTerm")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "arithmeticExpr")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "term")->data->t_item->index)
 			{
-				astnode* t = root->parent->child;
-				while(t->right!=root) t = t->right;
-				astnode* t2 = root->child;
-				t->right = root->child;
-				while(t2!=NULL) {t2->parent = root->parent;t2=t2->right;}
+				astnode* t = root->child;
+				if(t!=NULL&&t->right!=NULL)
+				{
+				preproc(t->right->child);
+				preproc(root->child);
+				preproc(t->right->child->right);
+				preproc(t->right->child->right->right);
+				}
+				else {preproc(root->child);}
 			}
+			else
+			{
+			int v = root->data->nonterm->data->t_item->index;
+			if(v<65 || (v>73&&v<92) || v>114)
+			printf("- %s ",root->data->nonterm->key);
 			preproc(root->child);
-			astnode* rt = root->child;
+			rt = root->child;
 			while(rt!=NULL)
 			{
 				rt=rt->right;
 				preproc(rt);
 			}
+			}
 		}
 	}
+	return rt;
 }
 
 astnode* makeleaf(Token *tk)
@@ -158,8 +174,9 @@ astnode* makenode4(ht_item *t, astnode *n1, astnode *n2, astnode *n3, astnode *n
 }
 astnode* createpAST(treenode* root)
 {
+	printf("\nPre-order traversal of AST : \n");
 	astnode* p = createAST(root);
-	preproc(p);
+	p = preproc(p);
 	return p;
 }
 astnode *insertChildInAst(astnode *parent, astnode *child)
@@ -192,6 +209,27 @@ astnode *getRootInAst(astnode *child)
 		t=t->parent;
 	}
 	return t;
+}
+void printAST(astnode *p)
+{
+	if(p!=NULL)
+	{
+		if(p->child==NULL)
+		{
+			printf("- %s ",p->data->token->lexeme);
+		}
+		else
+		{
+			printf("- %s ",p->data->nonterm->key);
+			printAST(p->child);
+			astnode* rt = p->child;
+			while(rt!=NULL)
+			{
+				rt=rt->right;
+				printAST(rt);
+			}
+		}
+	}
 }
 void printTraversalAst(astnode *t,FILE* fp)
 {
