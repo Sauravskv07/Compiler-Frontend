@@ -111,6 +111,7 @@ void getID(astnode *t,symnode *current)
 	if(temp==NULL)
 	{	
 		printf("Undeclared Variable Found at LINE NUMBER =  %d  LEXEME = %s\n",t->data->token->LN, t->data->token->lexeme);
+		sem_num_errors++;
 		t->attr->baseType=4;
 	}
 	else{
@@ -134,11 +135,15 @@ void checkOutputList(astnode *t,symnode *current,parameters *pr)
 		if(cnt>=pr->num_outputs)
 		{
 			printf("Number Mismatch with Output Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+			sem_num_errors++;
 			break;
 		}
 		getID(t->child,current);
 		if(isRedefined(t->child,current)==1)
+		{
 			printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+			sem_num_errors++;
+		}
 		
 		setOutput(t->child,current);
 
@@ -149,13 +154,17 @@ void checkOutputList(astnode *t,symnode *current,parameters *pr)
 		if(t->child->attr->baseType!=pr->output_types[cnt])
 		{
 			printf("Type Mismatch with Output Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+			sem_num_errors++;
 			//break;
 		}
 		cnt++;
 		t=t->child->right;		
 	}
 	if(cnt<pr->num_outputs)
-		printf("Number Mismatch with Output Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",st->child->data->token->LN, st->child->data->token->lexeme);		
+	{
+		printf("Number Mismatch with Output Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",st->child->data->token->LN, st->child->data->token->lexeme);
+		sem_num_errors++;
+	}		
 }
 
 void checkInputList(astnode *t,symnode *current,parameters *pr)
@@ -169,6 +178,7 @@ void checkInputList(astnode *t,symnode *current,parameters *pr)
 		if(cnt>=pr->num_inputs)
 		{
 			printf("Number Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+			sem_num_errors++;
 			break;
 		}
 		getID(t->child,current);
@@ -177,25 +187,40 @@ void checkInputList(astnode *t,symnode *current,parameters *pr)
 			break;
 		}
 		if(t->child->attr->baseType!=pr->input_types[cnt].baseType)
+		{
 			printf("Type Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+			sem_num_errors++;
+		}
 
 		if(t->child->attr->baseType==3)
 		{
 			if(t->child->attr->eleType!=pr->input_types[cnt].eleType)
+			{
 				printf("Type Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+				sem_num_errors++;
+			}
 
 			if(t->child->attr->low !=-1 && pr->input_types[cnt].low !=-1 && t->child->attr->low!=pr->input_types[cnt].low)
+			{
 				printf("Bound Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+				sem_num_errors++;
+			}
 
 			if(t->child->attr->high !=-1 && pr->input_types[cnt].high !=-1 && t->child->attr->high!=pr->input_types[cnt].high)
+			{
 				printf("Bound Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+				sem_num_errors++;
+			}
 
 		}
 		cnt++;
 		t=t->child->right;		
 	}
 	if(cnt<pr->num_inputs)
-		printf("Number Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",st->child->data->token->LN, st->child->data->token->lexeme);		
+	{
+		printf("Number Mismatch with Input Parameters Found at LINE NUMBER =  %d  LEXEME = %s\n",st->child->data->token->LN, st->child->data->token->lexeme);
+		sem_num_errors++;
+	}		
 }
 
 
@@ -214,7 +239,8 @@ VarType typeCheck(astnode *op,astnode *first,astnode *second)
 
 	if(f_type==3 || s_type==3)
 	{
-		printf("Operand cannot be of Array Type at LINE NUMBER =  %d  LEXEME = %s\n",op->data->token->LN, op->data->token->lexeme);		
+		printf("Operand cannot be of Array Type at LINE NUMBER =  %d  LEXEME = %s\n",op->data->token->LN, op->data->token->lexeme);
+		sem_num_errors++;	
 		return r_type;	
 	}
 
@@ -232,6 +258,7 @@ VarType typeCheck(astnode *op,astnode *first,astnode *second)
 			else
 			{
 				printf("Operand Types Mismatch found at LINE NUMBER =  %d  LEXEME = %s type1=%d type2=%d\n",op->data->token->LN, op->data->token->lexeme,f_type,s_type);
+				sem_num_errors++;
 			}
 			break;
 		}
@@ -249,6 +276,7 @@ VarType typeCheck(astnode *op,astnode *first,astnode *second)
 			else
 			{
 				printf("Operand Mismatch found at LINE NUMBER =  %d  LEXEME = %s\n",op->data->token->LN, op->data->token->lexeme);
+				sem_num_errors++;			
 			}
 			break;		
 		}
@@ -262,6 +290,7 @@ VarType typeCheck(astnode *op,astnode *first,astnode *second)
 			else
 			{
 				printf("Operand Mismatch found at LINE NUMBER =  %d  LEXEME = %s\n",op->data->token->LN, op->data->token->lexeme);
+				sem_num_errors++;
 			}
 			break;	
 		}
@@ -336,7 +365,7 @@ void checkSemRules(astnode *t,symnode* current)
 			{
 				case 65://moduleDeclaration:
 				{
-					printf("moduleDeclaration\n");
+					//printf("moduleDeclaration\n");
 					if(ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef!=1)
 						ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef=-1;
 					break;
@@ -344,11 +373,14 @@ void checkSemRules(astnode *t,symnode* current)
 	
 				case 68://module
 				{	
-					printf("module");
+					//printf("module");
 					temp = ht_search(current->symbol_table, t->child->data->token->lexeme);
 
 					if(temp->data->f_item->isDef==-1)
+					{
 						printf("Function both declared and defined before use at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
+					}
 
 					if(temp->data->f_item->isDef==-2)
 					{	
@@ -372,7 +404,10 @@ void checkSemRules(astnode *t,symnode* current)
 					}
 					
 					if(current->num_output_defined!=ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->num_outputs)
+					{
 						printf("Certain Output Variables are Undefined for Function at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
+					}
 				
 
 					current=current->parent;
@@ -385,7 +420,7 @@ void checkSemRules(astnode *t,symnode* current)
 
 				case 67://driverModule
 				{
-					printf("driverModule\n");
+					//printf("driverModule\n");
 					current= insert_as_symchild(current,create_new_symnode());
 					
 					if(t->child!=NULL)
@@ -400,24 +435,33 @@ void checkSemRules(astnode *t,symnode* current)
 	
 				case 86://assignmentStmt:
 				{
-					printf("assignmentStmt\n");
+					//printf("assignmentStmt\n");
 
 					checkSemRules(t->child,current);	
 					checkSemRules(t->child->right,current);
 					
 					if(isRedefined(t->child,current)==1)
+					{
 						printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
+					}
 					else if(t->child->right->data->nonterm->data->t_item->index==ht_search(mapping_table,"lvalueIDStmt")->data->t_item->index)
 					{
 						//printf("here\n");
 						setOutput(t->child,current);
 						//printf("here too\n");
 						if(t->child->attr->baseType!=t->child->right->attr->baseType)
+						{
 							printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							sem_num_errors++;
+						}
 						else if(t->child->attr->baseType==3)
 						{
 							if((t->child->attr->eleType!=t->child->right->attr->eleType) ||(t->child->attr->low!=-1 && t->child->right->attr->low!=-1 && t->child->attr->low!=t->child->right->attr->low) || (t->child->attr->high!=-1 && t->child->right->attr->high!=-1 && t->child->attr->high!=t->child->right->attr->high))
-							printf("Array Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							{
+								printf("Array Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+								sem_num_errors++;
+							}
 
 						} 
 							
@@ -426,21 +470,33 @@ void checkSemRules(astnode *t,symnode* current)
 					else
 					{
 						if(t->child->attr->baseType!=3)
+						{
 							printf("Variable not of Array Type at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							sem_num_errors++;
+						}
 						else
 						{
 							if(t->child->right->child->data->token->index==2)
 							{
 								if(t->child->attr->low!=-1 && t->child->attr->low > t->child->right->child->data->token->val.i_val)
+								{
 									printf("Index smaller than lower Bound at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->child->data->token->LN, t->child->right->child->data->token->lexeme);
+									sem_num_errors++;
+								}
 
 								if(t->child->attr->high!=-1 && t->child->attr->high < t->child->right->child->data->token->val.i_val)
+								{
 									printf("Index greater than upper Bound at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->child->data->token->LN, t->child->right->child->data->token->lexeme);
+									sem_num_errors++;
+								}
 							}
 
 					
 							if(t->child->attr->eleType != t->child->right->attr->baseType)
+							{
 								printf("Type Mismatch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+								sem_num_errors++;
+							}
 						}		
 					}
 					break;
@@ -448,7 +504,7 @@ void checkSemRules(astnode *t,symnode* current)
  			
 				case 82://var_id_num:
 				{
-					printf("var_id_num\n");
+					//printf("var_id_num\n");
 
 					checkSemRules(t->child,current);
 
@@ -459,10 +515,16 @@ void checkSemRules(astnode *t,symnode* current)
 							if(t->child->right->child->data->token->index==2)
 							{
 								if(t->child->attr->low!=-1 && t->child->attr->low > t->child->right->child->data->token->val.i_val)
+								{
 									printf("Index smaller than lower Bound at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->child->data->token->LN, t->child->right->child->data->token->lexeme);
+									sem_num_errors++;
+								}
 
 								if(t->child->attr->high!=-1 && t->child->attr->high < t->child->right->child->data->token->val.i_val)
+								{
 									printf("Index greater than upper Bound at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->child->data->token->LN, t->child->right->child->data->token->lexeme);
+									sem_num_errors++;
+								}
 							}
 							else
 								checkSemRules(t->child->right,current);
@@ -472,6 +534,8 @@ void checkSemRules(astnode *t,symnode* current)
 						else if(t->child->right!=NULL && t->child->attr->baseType!=3)
 						{
 							printf("Variable not of Array Type at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							sem_num_errors++;
+
 							t->attr->baseType=4;
 						}
 						else
@@ -493,11 +557,12 @@ void checkSemRules(astnode *t,symnode* current)
 
 				case 89://lvalueARRStmt:
 				{
-					printf("lvalueARRStmt\n");
+					//printf("lvalueARRStmt\n");
 					checkSemRules(t->child,current);
 					if(t->child->attr->baseType!=0)
 					{
-						printf("Array of Index should be Integer at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);		
+						printf("Array of Index should be Integer at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;		
 					}
 					checkSemRules(t->child->right,current);
 					t->attr->baseType=t->child->right->attr->baseType;
@@ -506,11 +571,12 @@ void checkSemRules(astnode *t,symnode* current)
 
 				case 84://whichId:
 				{
-					printf("whichId\n");
+					//printf("whichId\n");
 					checkSemRules(t->child,current);
 					if(t->child->attr->baseType!=0)
 					{
-						printf("Array of Index should be Integer at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);	
+						printf("Array of Index should be Integer at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
 					}
 					break;
 				}
@@ -519,7 +585,7 @@ void checkSemRules(astnode *t,symnode* current)
 				case 97://newNT:
 				case 107://factor:
 				{
-					printf("factor | lvalueIDStmt | newNT \n");
+					//printf("factor | lvalueIDStmt | newNT \n");
 					checkSemRules(t->child,current);
 					
 					t->attr->baseType=t->child->attr->baseType;
@@ -531,12 +597,16 @@ void checkSemRules(astnode *t,symnode* current)
 
 				case 96://U:
 				{
-					printf("U\n");
+					//printf("U\n");
 					checkSemRules(t->child->right,current);
 					if(t->child->right->attr->baseType<=1)
 						t->attr->baseType=t->child->right->attr->baseType;
 					else
+					{
+						printf("Operand To Unary must be INT or REAL at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
 						t->attr->baseType=4;
+					}
 					break;
 				}
 
@@ -545,7 +615,7 @@ void checkSemRules(astnode *t,symnode* current)
 				case 103://arithmeticExpr:
 				case 105://term:
 				{
-					printf("term | arithmeticOrBooleanExpr | arithmeticExpr | AnyTerm\n");
+					//printf("term | arithmeticOrBooleanExpr | arithmeticExpr | AnyTerm\n");
 					checkSemRules(t->child,current);
 					if(t->child->right==NULL)
 					{
@@ -564,7 +634,7 @@ void checkSemRules(astnode *t,symnode* current)
 
 				case 102://N8:
 				{
-					printf("N8\n");
+					//printf("N8\n");
 					checkSemRules(t->child->right,current);
 					t->attr->baseType=t->child->right->attr->baseType;
 					break;
@@ -574,7 +644,7 @@ void checkSemRules(astnode *t,symnode* current)
 				case 104://N4:
 				case 106://N5:
 				{
-					printf("N4 | 5| 7\n");
+					//printf("N4 | 5| 7\n");
 					checkSemRules(t->child->right,current);
 					if(t->child->right->right!=NULL)
 					{
@@ -589,7 +659,7 @@ void checkSemRules(astnode *t,symnode* current)
 
 				case 91://moduleReuseStmt:
 				{
-					printf("moduleReuseStmt\n");
+					//printf("moduleReuseStmt\n");
 
 					if(t->child->tag==1)
 					{
@@ -597,6 +667,7 @@ void checkSemRules(astnode *t,symnode* current)
 						if(temp==NULL || temp->data->f_item->isDef>=0)
 						{
 							printf("Unknown Function at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							sem_num_errors++;
 							break;
 						}
 						if(temp->data->f_item->isDef==-1)
@@ -606,6 +677,7 @@ void checkSemRules(astnode *t,symnode* current)
 						if(current->module_name!=NULL && strcmp(t->child->data->token->lexeme,current->module_name)==0)
 						{
 							printf("Recursive Call at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							sem_num_errors++;
 							break;	
 						}
 						
@@ -617,6 +689,7 @@ void checkSemRules(astnode *t,symnode* current)
 						if(temp==NULL || temp->data->f_item->isDef>=0)
 						{
 							printf("Unknown Function at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->right->data->token->lexeme);
+							sem_num_errors++;
 							break;
 						}
 
@@ -627,6 +700,7 @@ void checkSemRules(astnode *t,symnode* current)
 						if(current->module_name!=NULL && strcmp(t->child->right->data->token->lexeme,current->module_name)==0)
 						{
 							printf("Recursive Call at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->right->data->token->lexeme);
+							sem_num_errors++;
 							break;	
 						}
 						checkOutputList(t->child->child,current,pr);
@@ -638,12 +712,14 @@ void checkSemRules(astnode *t,symnode* current)
 				
 				case 118://iterStmt
 				{
-					printf("iterStmt\n");
+					//printf("iterStmt\n");
 
 					checkSemRules(t->child,current);
 					new_node=create_new_symnode();
 					new_node->module_name=(char *)malloc(sizeof(char)*21);
+					new_node->current_offset=current->current_offset;
 					current= insert_as_symchild(current,new_node);
+
 					if(t->child->tag==1)
 					{
 						current->isForScope=1;
@@ -655,7 +731,8 @@ void checkSemRules(astnode *t,symnode* current)
 					{
 						checkSemRules(t->child->right,current);
 					}
-
+					
+					current->parent->current_offset=current->current_offset;
 					current=current->parent;
 
 					break;
@@ -663,23 +740,27 @@ void checkSemRules(astnode *t,symnode* current)
 
 				case 119://range
 				{
-					printf("range\n");
+					//printf("range\n");
 
 					checkSemRules(t->child,current);
 					checkSemRules(t->child->right,current);
 					if(t->child->data->token->val.i_val>t->child->right->data->token->val.i_val)
+					{
 						printf("Error in Ranges Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
+					}
 					break;
 				}
 
 				case 113://conditionalStmt	
 				{
-					printf("conditionalStmt\n");
+					//printf("conditionalStmt\n");
 
 					checkSemRules(t->child,current);
 
 					new_node=create_new_symnode();
-					new_node->module_name=(char *)malloc(sizeof(char)*21);	
+					new_node->module_name=(char *)malloc(sizeof(char)*21);
+					new_node->current_offset=current->current_offset;
 					current= insert_as_symchild(current,new_node);
 
 					if(t->child->attr->baseType==0)
@@ -689,6 +770,7 @@ void checkSemRules(astnode *t,symnode* current)
 					else
 					{
 						printf("Incompatible Variable for Switch Found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
 						break;
 					}
 					
@@ -697,14 +779,17 @@ void checkSemRules(astnode *t,symnode* current)
 					if(t->child->right->right==NULL && current->switchStatus==0)
 					{
 						printf("INT Switch without Default at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
 					}
 					else if(t->child->right->right!=NULL && current->switchStatus==2)
 					{
 						printf("BOOL Switch with Default at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
 					}
 					
 					checkSemRules(t->child->right->right,current);
 
+					current->parent->current_offset=current->current_offset;
 					current=current->parent;
 
 					return;						
@@ -713,11 +798,14 @@ void checkSemRules(astnode *t,symnode* current)
 				case 115://N9
 				case 114://caseStmts
 				{
-					printf("caseStmts | N9\n");
+					//printf("caseStmts | N9\n");
 
 					checkSemRules(t->child,current);
 					if(t->child->attr->baseType!=current->switchStatus)
+					{
 						printf("Invalid Case Value at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
+					}
 					checkSemRules(t->child->right,current);//can be statements or N9
 
 					if(t->child->right!=NULL)//means there exists statement or N9
@@ -737,6 +825,7 @@ void checkSemRules(astnode *t,symnode* current)
 						if(t->child->attr->baseType!=0)
 						{
 							printf("Non Integer Range Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							sem_num_errors++;
 						}
 					}
 
@@ -748,6 +837,7 @@ void checkSemRules(astnode *t,symnode* current)
 						if(t->child->right->attr->baseType!=0)
 						{
 							printf("Non Integer Range Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->right->data->token->lexeme);
+							sem_num_errors++;
 						}
 					}
 
@@ -756,13 +846,14 @@ void checkSemRules(astnode *t,symnode* current)
 						t->attr->high=-1;
 						t->attr->low=-1;
 						printf("Low > High Array Bound found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
 					}
 					break;
 				}
 
 				case 74://dataType
 				{
-					printf("dataType\n");
+					//printf("dataType\n");
 					checkSemRules(t->child,current);
 					checkSemRules(t->child->right,current);
 					t->attr->baseType=3;
@@ -774,7 +865,7 @@ void checkSemRules(astnode *t,symnode* current)
 				
 				case 112://DeclareStmt:
 				{
-					printf("DeclareStmt\n");
+					//printf("DeclareStmt\n");
 					checkSemRules(t->child->right,current);
 					t->child->attr->baseType=t->child->right->attr->baseType;
 					t->child->attr->eleType=t->child->right->attr->eleType;
@@ -786,7 +877,7 @@ void checkSemRules(astnode *t,symnode* current)
 
 				case 93://idList:
 				{
-					printf("idList\n");
+					//printf("idList\n");
 
 					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL && !(current->isModuleScope==1 && ht_search(ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->output_list, t->child->data->token->lexeme)!=NULL))
 					{	
@@ -794,8 +885,10 @@ void checkSemRules(astnode *t,symnode* current)
 						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType);
 					}
 					else
+					{
 						printf("Redeclaraton of Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-			
+						sem_num_errors++;
+					}
 					
 					if(t->child->right!=NULL)
 					{
@@ -811,7 +904,7 @@ void checkSemRules(astnode *t,symnode* current)
 				
 				case 94://N3:
 				{
-					printf("N3\n");
+					//printf("N3\n");
 
 					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL && !(current->isModuleScope==1 && ht_search(ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->output_list, t->child->data->token->lexeme)!=NULL))
 					{
@@ -819,7 +912,11 @@ void checkSemRules(astnode *t,symnode* current)
 						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType);
 					}
 					else
+					{
 						printf("Redeclaraton of Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
+					}
+
 					if(t->child->right!=NULL)
 					{
 						t->child->right->attr->baseType=t->attr->baseType;
@@ -833,7 +930,7 @@ void checkSemRules(astnode *t,symnode* current)
 				
 				case 117://default
 				{
-					printf("default\n");
+					//printf("default\n");
 					new_node=create_new_symnode();
 					new_node->module_name=(char *)malloc(sizeof(char)*21);
 					current= insert_as_symchild(current,new_node);
@@ -847,7 +944,10 @@ void checkSemRules(astnode *t,symnode* current)
 					if(t->child->tag==1 && t->child->data->token->index==4)
 					{
 						if(isRedefined(t->child,current)==1)
+						{
 							printf("Redefinition of Loop Variable at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+							sem_num_errors++;
+						}
 						setOutput(t->child,current);
 					}
 				}
@@ -870,7 +970,7 @@ void checkSemRules(astnode *t,symnode* current)
 }
 
 
-void fillTheParams(astnode* t,parameters *pr,int current_offset)
+int fillTheParams(astnode* t,parameters *pr,int current_offset)
 {
 	ht_item* temp = NULL;
 
@@ -945,6 +1045,7 @@ void fillTheParams(astnode* t,parameters *pr,int current_offset)
 						t->attr->high=-1;
 						t->attr->low=-1;
 						printf("Low > High Array Bound found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
 					}
 					break;
 				
@@ -963,11 +1064,12 @@ void fillTheParams(astnode* t,parameters *pr,int current_offset)
 				case 71://N1
 				case 70://input_plist
 				{
-					printf("input_plist | N1\n");
+					//printf("input_plist | N1\n");
+					//printf("current_offset= %d\n",current_offset);
 					fillTheParams(t->child->right,pr,current_offset);
 					if(ht_search(pr->input_list,t->child->data->token->lexeme)==NULL)
 					{
-						ht_insert_var_item(pr->input_list,t->child->data->token->lexeme ,current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,t->child->right->attr->low,t->child->right->attr->high);
+						ht_insert_var_item(pr->input_list,t->child->data->token->lexeme ,-current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,t->child->right->attr->low,t->child->right->attr->high);
 						current_offset=incrementOffset(current_offset,t->child->right->attr->baseType);
 						pr->input_types[pr->num_inputs].eleType=t->child->right->attr->eleType;
 						pr->input_types[pr->num_inputs].baseType=t->child->right->attr->baseType;
@@ -976,16 +1078,18 @@ void fillTheParams(astnode* t,parameters *pr,int current_offset)
 						pr->num_inputs++;
 					}
 					else
+					{
 						printf("Input Variable Collision found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
+					}
 						
-					if(t->child->right->right!=NULL)
-						fillTheParams(t->child->right->right,pr,current_offset);
+					current_offset=fillTheParams(t->child->right->right,pr,current_offset);
 
 					break;
 				}
 				case 69://ret
 				{
-					fillTheParams(t->child,pr,current_offset);
+					current_offset=fillTheParams(t->child,pr,current_offset);
 					break;
 				}
 				case 73://N2
@@ -994,15 +1098,18 @@ void fillTheParams(astnode* t,parameters *pr,int current_offset)
 					fillTheParams(t->child->right,pr,current_offset);
 					if(ht_search(pr->output_list,t->child->data->token->lexeme)==NULL)
 					{
-						ht_insert_var_item(pr->output_list,t->child->data->token->lexeme ,current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,-1,-1);
+						ht_insert_var_item(pr->output_list,t->child->data->token->lexeme ,-current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,-1,-1);
 						current_offset=incrementOffset(current_offset,t->child->right->attr->baseType);
 						pr->output_types[pr->num_outputs]=t->child->right->attr->baseType;
 						pr->num_outputs++;
 					}
 					else
-						printf("Output Variable Collision found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-					if(t->child->right->right!=NULL)
-						fillTheParams(t->child->right->right,pr,current_offset);
+					{
+						//printf("Output Variable Collision found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
+					}
+					
+					current_offset=fillTheParams(t->child->right->right,pr,current_offset);
 
 					break;
 				}				
@@ -1012,6 +1119,7 @@ void fillTheParams(astnode* t,parameters *pr,int current_offset)
 			}
 		}
 	}
+	return current_offset;
 }
 
 
@@ -1036,7 +1144,7 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 				case 64://moduleDeclarations
 				case 66://otherModules
 				{
-					printf("program | moduleDeclarations | otherModules\n");
+					//printf("program | moduleDeclarations | otherModules\n");
 					modulesParHamla(t->child,root);
 
 					astnode*rt= t->child->right;
@@ -1050,7 +1158,7 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 				}
 				case 68://module
 				{
-					printf("MODULE %s\n",t->child->data->token->lexeme);
+					//printf("MODULE %s\n",t->child->data->token->lexeme);
 					temp = ht_search(root->symbol_table, t->child->data->token->lexeme);
 
 					if(temp==NULL)
@@ -1058,6 +1166,7 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 
 					else if(temp->data->f_item->isDef==2)
 					{	printf("Redefinition of function found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
 						break;
 					}
 					else
@@ -1071,9 +1180,12 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 
 					astnode* rt=t->child->right;
 
+					int current_offset=0;
+
 					while(rt!=NULL)
 					{
-						fillTheParams(rt,temp->data->f_item->pr,0);
+						printf("current offset = %d\n",current_offset);
+						current_offset=fillTheParams(rt,temp->data->f_item->pr,current_offset);
 						rt=rt->right;
 					}
 					break;				
@@ -1081,11 +1193,14 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 
 				case 65://moduleDeclaration:
 				{
-					printf("moduleDeclaration %s\n",t->child->data->token->lexeme);
+					//printf("moduleDeclaration %s\n",t->child->data->token->lexeme);
 					if(ht_search(root->symbol_table, t->child->data->token->lexeme)==NULL)
 						ht_insert_func_item(root->symbol_table, t->child->data->token->lexeme, 1);
 					else
+					{
 						printf("Redeclaraton of function found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
+						sem_num_errors++;
+					}
 					break;				
 				}
 
@@ -1099,11 +1214,14 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 
 symnode* semCheck(astnode* t)
 {
+	sem_num_errors=0;
+
 	symnode* root=NULL;
 	printf("Generating Functions Parameters\n");
 	root=modulesParHamla(t,NULL);
 	printf("Function Parameter Generation Done\n");
 	checkSemRules(t,root);
+
 }
 
 

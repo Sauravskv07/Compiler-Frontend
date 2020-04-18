@@ -127,7 +127,7 @@ int main(int argc,char** argv)
 		
 		printf("ALL TEST CASES WORKING, ERROR RECOVERY USING FIRST SET\n");
 		
-		printf("\nENTER: \n 0: FOR EXITING \n 1: FOR COMMENT REMOVAL \n 2: FOR LEXICAL ANALYSIS \n 3: FOR LEXICAL ANALYSIS AND PARSING \n 4: FOR LEXICAL ANALYSIS , PARSING AND SEMANTIC ANALYSIS\n");
+		printf("\nENTER: \n 0: FOR EXITING \n 1: FOR COMMENT REMOVAL \n 2: FOR LEXICAL ANALYSIS \n 3: FOR LEXICAL ANALYSIS AND PARSING \n 4: FOR LEXICAL ANALYSIS , PARSING AND SEMANTIC ANALYSIS\n 5: FOR CODE GENERATION\n");
 		
 		scanf("%d",&choice);	
 
@@ -262,6 +262,56 @@ int main(int argc,char** argv)
 						printf("\n");
 					
 					semCheck(xp);
+
+					end_time = clock();
+
+					total_CPU_time  =  (double) (end_time - start_time);
+					
+					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
+			
+					break;
+				}
+
+
+
+			case 5:{
+					forwardPointer=0;
+				
+					backPointer=0;
+
+					LN=1;
+
+					endReached=0;
+					
+					start_time = clock();
+
+					fp=(FILE*)fopen(argv[1],"r");
+	
+					fseek(fp, 0, SEEK_SET);
+
+					if(fp==NULL)
+					{
+						printf("Some error while opening the file");
+						exit(1);
+					}
+
+					fp=getStream(fp);
+
+					forwardPointer=-1;
+
+					parseTree(argv[2]);
+
+					astnode *xp = createAST(root);
+
+					FILE* fp2=fopen("tree2.txt","w");
+					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
+					printTraversalAst(xp, fp2);
+					
+					fclose(fp2);
+
+						printf("\n");
+					
+					semCheck(xp);
 					resetIRParams();
 					genIRTable(xp,sym_root);
 					printIR(quad_row_tail);
@@ -275,7 +325,7 @@ int main(int argc,char** argv)
 					break;
 				}
 
-			case 5:{
+			case 6:{
 				
 					printf("TOTAL CPU TIME = %f\n",total_CPU_time);
 

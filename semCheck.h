@@ -8,9 +8,11 @@ GROUP NO. = 46
 */
 
 
+int sem_num_errors;
+
 void checkSemRules(astnode *t,symnode* current);
 symnode* modulesParHamla(astnode *t,symnode* root);
-void fillTheParams(astnode* t,parameters *pr,int current_offset);
+int fillTheParams(astnode* t,parameters *pr,int current_offset);
 VarType typeCheck(astnode *op,astnode *first,astnode *second);
 symnode* semCheck(astnode *t);
 void getID(astnode *t,symnode *current);
