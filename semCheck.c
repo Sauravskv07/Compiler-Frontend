@@ -88,7 +88,8 @@ int incrementOffset(int current_offset,VarType type)
 		current_offset+=8;
 	return current_offset;
 }
-void getID(astnode *t,symnode *current)
+
+ht_item* getID(astnode *t,symnode *current)
 {
 	//printf("inside get id\n");
 	symnode* temp2=current;
@@ -121,6 +122,7 @@ void getID(astnode *t,symnode *current)
 		t->attr->high = temp->data->v_item->high;
 	}
 
+	return temp;
 	//printf("outside get it\n");
 }
 
@@ -827,6 +829,9 @@ void checkSemRules(astnode *t,symnode* current)
 							printf("Non Integer Range Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
 							sem_num_errors++;
 						}
+						else
+							t->attr->lowNode=getID(t->child,current);
+						t->attr->low=-1;
 					}
 
 					if(t->child->right->data->token->index ==2)
@@ -839,6 +844,9 @@ void checkSemRules(astnode *t,symnode* current)
 							printf("Non Integer Range Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->right->data->token->LN, t->child->right->data->token->lexeme);
 							sem_num_errors++;
 						}
+						else
+							t->attr->highNode=getID(t->child->right,current);
+						t->attr->high=-1;
 					}
 
 					if(t->child->data->token->index == 2 && (t->child->right->data->token->index == 2) && (t->child->right->data->token->val.i_val < t->child->data->token->val.i_val))
@@ -860,6 +868,8 @@ void checkSemRules(astnode *t,symnode* current)
 					t->attr->eleType=t->child->right->attr->baseType;
 					t->attr->low=t->child->attr->low;
 					t->attr->high=t->child->attr->high;
+					t->attr->lowNode=t->child->attr->lowNode;
+					t->attr->highNode=t->child->attr->highNode;
 					break;
 				}
 				
@@ -871,17 +881,22 @@ void checkSemRules(astnode *t,symnode* current)
 					t->child->attr->eleType=t->child->right->attr->eleType;
 					t->child->attr->low=t->child->right->attr->low;
 					t->child->attr->high=t->child->right->attr->high;
+					t->child->attr->lowNode=t->child->right->attr->lowNode;
+					t->child->attr->highNode=t->child->right->attr->highNode;
 					checkSemRules(t->child,current);
 					break;
 				}
 
+				case 94://N3:
 				case 93://idList:
 				{
 					//printf("idList\n");
 
 					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL && !(current->isModuleScope==1 && ht_search(ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->output_list, t->child->data->token->lexeme)!=NULL))
 					{	
-						ht_item* temp= ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,current->current_offset, t->attr->baseType, t->attr->eleType, t->attr->low, t->attr->high);
+						temp=ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,current->current_offset, t->attr->baseType, t->attr->eleType, t->attr->low, t->attr->high);
+						temp->data->v_item->lowNode=t->attr->lowNode;
+						temp->data->v_item->highNode=t->attr->highNode;
 						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType);
 					}
 					else
@@ -896,36 +911,12 @@ void checkSemRules(astnode *t,symnode* current)
 						t->child->right->attr->eleType=t->attr->eleType;
 						t->child->right->attr->high=t->attr->high;
 						t->child->right->attr->low=t->attr->low;
+						t->child->right->attr->highNode=t->attr->highNode;
+						t->child->right->attr->lowNode=t->attr->lowNode;						
 						checkSemRules(t->child->right,current);
 					}
 					
 					break;
-				}
-				
-				case 94://N3:
-				{
-					//printf("N3\n");
-
-					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL && !(current->isModuleScope==1 && ht_search(ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->output_list, t->child->data->token->lexeme)!=NULL))
-					{
-						ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,current->current_offset, t->attr->baseType, t->attr->eleType, t->attr->low, t->attr->high);
-						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType);
-					}
-					else
-					{
-						printf("Redeclaraton of Variable found at LINE NUMBER =  %d  LEXEME = %s\n",t->child->data->token->LN, t->child->data->token->lexeme);
-						sem_num_errors++;
-					}
-
-					if(t->child->right!=NULL)
-					{
-						t->child->right->attr->baseType=t->attr->baseType;
-						t->child->right->attr->eleType=t->attr->eleType;
-						t->child->right->attr->high=t->attr->high;
-						t->child->right->attr->low=t->attr->low;
-						checkSemRules(t->child->right,current);
-					}
-					break;					
 				}
 				
 				case 117://default

@@ -15,5 +15,5 @@ symnode* modulesParHamla(astnode *t,symnode* root);
 int fillTheParams(astnode* t,parameters *pr,int current_offset);
 VarType typeCheck(astnode *op,astnode *first,astnode *second);
 symnode* semCheck(astnode *t);
-void getID(astnode *t,symnode *current);
+ht_item* getID(astnode *t,symnode *current);
 void checkOutputList(astnode *t,symnode *current,parameters *pr);

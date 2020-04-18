@@ -98,6 +98,8 @@ astnode* makeleaf(Token *tk)
 	an->attr->eleType=0;
 	an->attr->low=-1;
 	an->attr->high=-1;
+	an->attr->lowNode=NULL;
+	an->attr->highNode=NULL;
 	an->data = d;
 	an->child = NULL;
 	an->right = NULL;
@@ -115,6 +117,8 @@ astnode* makeastnode(ht_item *t)
 	an->attr->eleType=0;
 	an->attr->low=-1;
 	an->attr->high=-1;
+	an->attr->lowNode=NULL;
+	an->attr->highNode=NULL;
 	an->data = d;
 	an->child = NULL;
 	an->right = NULL;

@@ -10,6 +10,8 @@ GROUP NO. = 46
 typedef struct attributes{
 	VarType baseType;
 	VarType eleType;
+	ht_item* lowNode;
+	ht_item* highNode;
 	int low;
 	int high;
 } attributes;

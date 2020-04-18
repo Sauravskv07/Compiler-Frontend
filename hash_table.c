@@ -60,6 +60,8 @@ ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int offset, VarT
 	i->eleType=eleType;
 	i->low=low;
 	i->high=high;
+	i->highNode=NULL;
+	i->lowNode=NULL;
 	ht_item* j = (ht_item *)malloc(sizeof(ht_item));
 	j->key = strdup(key);
 	ht_data* k = (ht_data *)malloc(sizeof(ht_data));

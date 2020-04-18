@@ -48,7 +48,10 @@ typedef struct {
 typedef enum{INTEGER,REAL,BOOLEAN,ARRAY,UNDEFINED} VarType;
 
 typedef struct {
+	
 	int offset;		// Add other variables attributes also accordingly here.
+	struct ht_item* lowNode;
+	struct ht_item* highNode;
 	int low;
 	int high;
 	VarType eleType;
