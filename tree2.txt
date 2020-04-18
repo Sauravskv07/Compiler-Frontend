@@ -2,543 +2,104 @@ lexeme		lineno		tokenName		valueIfNumber		parentNodeSymbol	isLeafNode(yes/no)	No
 ----										ROOT			NO		program
 ----										program			NO		otherModules
 ----										otherModules			NO		module
-switch_var_demo1		8		ID				0		module		YES
+compute		3		ID				0		module		YES
 ----										module			NO		input_plist
-x		9		ID				0		input_plist		YES
-integer		9		INTEGER				0		input_plist		YES
+x		4		ID				0		input_plist		YES
+integer		4		INTEGER				0		input_plist		YES
 ----										input_plist			NO		N1
-y		9		ID				0		N1		YES
-real		9		REAL				0		N1		YES
-----										N1			NO		N1
-z		9		ID				0		N1		YES
-boolean		9		BOOLEAN				0		N1		YES
+y		4		ID				0		N1		YES
+integer		4		INTEGER				0		N1		YES
 ----										module			NO		ret
 ----										ret			NO		output_plist
-u		10		ID				0		output_plist		YES
-integer		10		INTEGER				0		output_plist		YES
+value		5		ID				0		output_plist		YES
+integer		5		INTEGER				0		output_plist		YES
+----										output_plist			NO		N2
+f		5		ID				0		N2		YES
+integer		5		INTEGER				0		N2		YES
 ----										module			NO		moduleDef
 ----										moduleDef			NO		statements
 ----										statements			NO		declareStmt
 ----										declareStmt			NO		idList
-m		13		ID				0		idList		YES
-----										idList			NO		N3
-n		13		ID				0		N3		YES
-----										N3			NO		N3
-k		13		ID				0		N3		YES
-integer		13		INTEGER				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-h		14		ID				0		idList		YES
-boolean		14		BOOLEAN				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-p		15		ID				0		idList		YES
-real		15		REAL				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		ioStmt
-n		16		ID				0		ioStmt		YES
-----										statements			NO		statements
-----										statements			NO		conditionalStmt
-k		17		ID				0		conditionalStmt		YES
-----										conditionalStmt			NO		caseStmts
-10		19		NUM				10		caseStmts		YES
-----										caseStmts			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-A		19		ID				0		idList		YES
-real		19		REAL				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-Q		20		ID				0		idList		YES
-integer		20		INTEGER				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-B		21		ID				0		idList		YES
-----										declareStmt			NO		dataType
-----										dataType			NO		range_arrays
-10		21		NUM				10		range_arrays		YES
-30		21		NUM				30		range_arrays		YES
-integer		21		INTEGER				0		dataType		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-E		22		ID				0		idList		YES
-----										declareStmt			NO		dataType
-----										dataType			NO		range_arrays
-4		22		NUM				4		range_arrays		YES
-10		22		NUM				10		range_arrays		YES
-integer		22		INTEGER				0		dataType		YES
+v1		7		ID				0		idList		YES
+integer		7		INTEGER				0		declareStmt		YES
 ----										statements			NO		statements
 ----										statements			NO		assignmentStmt
-B		23		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueARRStmt
-12		23		NUM				12		lvalueARRStmt		YES
-----										lvalueARRStmt			NO		arithmeticOrBooleanExpr
+v1		8		ID				0		assignmentStmt		YES
+----										assignmentStmt			NO		lvalueIDStmt
+----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
 ----										arithmeticOrBooleanExpr			NO		AnyTerm
 ----										AnyTerm			NO		arithmeticExpr
 ----										arithmeticExpr			NO		term
 ----										term			NO		var_id_num
-k		23		ID				0		var_id_num		YES
+v1		8		ID				0		var_id_num		YES
 ----										term			NO		N5
-*		23		MUL				0		N5		YES
-20		23		NUM				20		N5		YES
-----										caseStmts			NO		N9
-20		25		NUM				20		N9		YES
-----										N9			NO		statements
-----										statements			NO		assignmentStmt
-A		25		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-12.90		25		RNUM				1095657062		term		YES
-----										arithmeticExpr			NO		N4
-+		25		PLUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-p		25		ID				0		var_id_num		YES
-----										statements			NO		statements
-----										statements			NO		ioStmt
-Q		26		ID				0		ioStmt		YES
-----										statements			NO		statements
-----										statements			NO		iterativeStmt
-m		27		ID				0		iterativeStmt		YES
-----										iterativeStmt			NO		range
-10		27		NUM				10		range		YES
-15		27		NUM				15		range		YES
-----										iterativeStmt			NO		statements
-----										statements			NO		assignmentStmt
-n		29		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-n		29		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
-+		29		PLUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-m		29		ID				0		var_id_num		YES
-----										statements			NO		statements
-----										statements			NO		assignmentStmt
-E		31		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueARRStmt
-7		31		NUM				7		lvalueARRStmt		YES
-----										lvalueARRStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-k		31		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
-+		31		PLUS				0		N4		YES
-----										N4			NO		term
-12		31		NUM				12		term		YES
-----										N4			NO		N4
--		31		MINUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-Q		31		ID				0		var_id_num		YES
-----										term			NO		N5
-*		31		MUL				0		N5		YES
-10		31		NUM				10		N5		YES
-----										N9			NO		N9
-true		33		TRUE				0		N9		YES
-----										N9			NO		statements
-----										statements			NO		assignmentStmt
-m		33		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-m		33		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
--		33		MINUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-n		33		ID				0		var_id_num		YES
-----										conditionalStmt			NO		default
-----										default			NO		statements
-----										statements			NO		assignmentStmt
-E		35		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueARRStmt
-9		35		NUM				9		lvalueARRStmt		YES
-----										lvalueARRStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-B		35		ID				0		var_id_num		YES
-----										var_id_num			NO		whichId
-15		35		NUM				15		whichId		YES
-----										arithmeticExpr			NO		N4
-+		35		PLUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-Q		35		ID				0		var_id_num		YES
-----										statements			NO		statements
-----										statements			NO		assignmentStmt
-u		39		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-u		39		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
-+		39		PLUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-x		39		ID				0		var_id_num		YES
-----										term			NO		N5
-*		39		MUL				0		N5		YES
+*		8		MUL				0		N5		YES
 ----										N5			NO		var_id_num
-m		39		ID				0		var_id_num		YES
-----										N4			NO		N4
--		39		MINUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-n		39		ID				0		var_id_num		YES
+f		8		ID				0		var_id_num		YES
 ----										statements			NO		statements
 ----										statements			NO		conditionalStmt
-p		41		ID				0		conditionalStmt		YES
+v1		21		ID				0		conditionalStmt		YES
 ----										conditionalStmt			NO		caseStmts
-1		43		NUM				1		caseStmts		YES
-----										caseStmts			NO		statements
-----										statements			NO		assignmentStmt
-p		43		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-p		43		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
-+		43		PLUS				0		N4		YES
-----										N4			NO		term
-1		43		NUM				1		term		YES
-----										conditionalStmt			NO		default
-----										default			NO		statements
-----										statements			NO		assignmentStmt
-h		45		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-false		45		FALSE				0		arithmeticOrBooleanExpr		YES
-----										statements			NO		statements
-----										statements			NO		conditionalStmt
-h		49		ID				0		conditionalStmt		YES
-----										conditionalStmt			NO		caseStmts
-false		51		FALSE				0		caseStmts		YES
+5		23		NUM				5		caseStmts		YES
 ----										caseStmts			NO		statements
 ----										statements			NO		declareStmt
 ----										declareStmt			NO		idList
-A		51		ID				0		idList		YES
-real		51		REAL				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-Q		52		ID				0		idList		YES
-integer		52		INTEGER				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-B		53		ID				0		idList		YES
-----										declareStmt			NO		dataType
-----										dataType			NO		range_arrays
-10		53		NUM				10		range_arrays		YES
-30		53		NUM				30		range_arrays		YES
-integer		53		INTEGER				0		dataType		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-E		54		ID				0		idList		YES
-----										declareStmt			NO		dataType
-----										dataType			NO		range_arrays
-4		54		NUM				4		range_arrays		YES
-10		54		NUM				10		range_arrays		YES
-integer		54		INTEGER				0		dataType		YES
-----										statements			NO		statements
-----										statements			NO		assignmentStmt
-B		55		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueARRStmt
-12		55		NUM				12		lvalueARRStmt		YES
-----										lvalueARRStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-k		55		ID				0		var_id_num		YES
-----										term			NO		N5
-*		55		MUL				0		N5		YES
-20		55		NUM				20		N5		YES
+v3		23		ID				0		idList		YES
+integer		23		INTEGER				0		declareStmt		YES
 ----										caseStmts			NO		N9
-20		57		NUM				20		N9		YES
+1		25		NUM				1		N9		YES
 ----										N9			NO		statements
-----										statements			NO		assignmentStmt
-A		57		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-12.90		57		RNUM				1095657062		term		YES
-----										arithmeticExpr			NO		N4
-+		57		PLUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-p		57		ID				0		var_id_num		YES
-----										statements			NO		statements
-----										statements			NO		ioStmt
-Q		58		ID				0		ioStmt		YES
-----										statements			NO		statements
-----										statements			NO		iterativeStmt
-m		59		ID				0		iterativeStmt		YES
-----										iterativeStmt			NO		range
-10		59		NUM				10		range		YES
-15		59		NUM				15		range		YES
-----										iterativeStmt			NO		statements
-----										statements			NO		assignmentStmt
-n		61		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-n		61		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
-+		61		PLUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-m		61		ID				0		var_id_num		YES
-----										statements			NO		statements
-----										statements			NO		assignmentStmt
-E		63		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueARRStmt
-7		63		NUM				7		lvalueARRStmt		YES
-----										lvalueARRStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-k		63		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
-+		63		PLUS				0		N4		YES
-----										N4			NO		term
-12		63		NUM				12		term		YES
-----										N4			NO		N4
--		63		MINUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-Q		63		ID				0		var_id_num		YES
-----										term			NO		N5
-*		63		MUL				0		N5		YES
-10		63		NUM				10		N5		YES
-----										N9			NO		N9
-true		65		TRUE				0		N9		YES
-----										N9			NO		statements
-----										statements			NO		assignmentStmt
-m		65		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-m		65		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
--		65		MINUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-n		65		ID				0		var_id_num		YES
-----										statements			NO		statements
-----										statements			NO		ioStmt
-----										ioStmt			NO		var_id_num
-m		66		ID				0		var_id_num		YES
-----										conditionalStmt			NO		default
-----										default			NO		statements
-----										statements			NO		assignmentStmt
-E		68		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueARRStmt
-9		68		NUM				9		lvalueARRStmt		YES
-----										lvalueARRStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-B		68		ID				0		var_id_num		YES
-----										var_id_num			NO		whichId
-15		68		NUM				15		whichId		YES
-----										arithmeticExpr			NO		N4
-+		68		PLUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-Q		68		ID				0		var_id_num		YES
-----										otherModules			NO		otherModules
-----										otherModules			NO		module
-for_loop_demo		74		ID				0		module		YES
-----										module			NO		input_plist
-x		75		ID				0		input_plist		YES
-integer		75		INTEGER				0		input_plist		YES
-----										input_plist			NO		N1
-y		75		ID				0		N1		YES
-real		75		REAL				0		N1		YES
-----										N1			NO		N1
-z		75		ID				0		N1		YES
-boolean		75		BOOLEAN				0		N1		YES
-----										module			NO		ret
-----										ret			NO		output_plist
-u		76		ID				0		output_plist		YES
-integer		76		INTEGER				0		output_plist		YES
-----										module			NO		moduleDef
-----										moduleDef			NO		statements
 ----										statements			NO		declareStmt
 ----										declareStmt			NO		idList
-k		79		ID				0		idList		YES
-integer		79		INTEGER				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		iterativeStmt
-k		80		ID				0		iterativeStmt		YES
-----										iterativeStmt			NO		range
-12		80		NUM				12		range		YES
-70		80		NUM				70		range		YES
-----										iterativeStmt			NO		statements
-----										statements			NO		assignmentStmt
-u		82		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-x		82		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
-+		82		PLUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-k		82		ID				0		var_id_num		YES
-----										statements			NO		statements
-----										statements			NO		assignmentStmt
-k		83		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-k		83		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
-+		83		PLUS				0		N4		YES
-----										N4			NO		term
-2		83		NUM				2		term		YES
+v4		25		ID				0		idList		YES
+integer		25		INTEGER				0		declareStmt		YES
 ----										program			NO		driverModule
 ----										driverModule			NO		moduleDef
 ----										moduleDef			NO		statements
 ----										statements			NO		declareStmt
 ----										declareStmt			NO		idList
-a		89		ID				0		idList		YES
+v1		35		ID				0		idList		YES
 ----										idList			NO		N3
-b		89		ID				0		N3		YES
-integer		89		INTEGER				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-c		90		ID				0		idList		YES
-real		90		REAL				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		declareStmt
-----										declareStmt			NO		idList
-d		91		ID				0		idList		YES
-boolean		91		BOOLEAN				0		declareStmt		YES
-----										statements			NO		statements
-----										statements			NO		moduleReuseStmt
-----										moduleReuseStmt			NO		optional
-----										optional			NO		idList
-a		92		ID				0		idList		YES
-for_loop_demo		92		ID				0		moduleReuseStmt		YES
-----										moduleReuseStmt			NO		idList
-b		92		ID				0		idList		YES
-----										idList			NO		N3
-c		92		ID				0		N3		YES
+v3		35		ID				0		N3		YES
 ----										N3			NO		N3
-d		92		ID				0		N3		YES
+v_1_2_3		35		ID				0		N3		YES
+integer		35		INTEGER				0		declareStmt		YES
 ----										statements			NO		statements
-----										statements			NO		conditionalStmt
-a		93		ID				0		conditionalStmt		YES
-----										conditionalStmt			NO		caseStmts
-1		95		NUM				1		caseStmts		YES
-----										caseStmts			NO		statements
+----										statements			NO		declareStmt
+----										declareStmt			NO		idList
+v2		36		ID				0		idList		YES
+----										idList			NO		N3
+v4		36		ID				0		N3		YES
+real		36		REAL				0		declareStmt		YES
+----										statements			NO		statements
+----										statements			NO		declareStmt
+----										declareStmt			NO		idList
+x1		37		ID				0		idList		YES
+boolean		37		BOOLEAN				0		declareStmt		YES
+----										statements			NO		statements
+----										statements			NO		declareStmt
+----										declareStmt			NO		idList
+A		38		ID				0		idList		YES
+----										declareStmt			NO		dataType
+----										dataType			NO		range_arrays
+2		38		NUM				2		range_arrays		YES
+14		38		NUM				14		range_arrays		YES
+real		38		REAL				0		dataType		YES
+----										statements			NO		statements
 ----										statements			NO		assignmentStmt
-a		95		ID				0		assignmentStmt		YES
+v4		39		ID				0		assignmentStmt		YES
 ----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
+----										lvalueIDStmt			NO		U
++		39		PLUS				0		U		YES
+----										U			NO		new_NT
+----										new_NT			NO		arithmeticExpr
+----										arithmeticExpr			NO		term
+----										term			NO		factor
+----										factor			NO		arithmeticOrBooleanExpr
 ----										arithmeticOrBooleanExpr			NO		AnyTerm
 ----										AnyTerm			NO		arithmeticExpr
 ----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-a		95		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
-+		95		PLUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-b		95		ID				0		var_id_num		YES
-----										caseStmts			NO		N9
-2		97		NUM				2		N9		YES
-----										N9			NO		statements
-----										statements			NO		assignmentStmt
-a		97		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-a		97		ID				0		var_id_num		YES
-----										arithmeticExpr			NO		N4
--		97		MINUS				0		N4		YES
-----										N4			NO		term
-----										term			NO		var_id_num
-b		97		ID				0		var_id_num		YES
-----										N9			NO		N9
-3		99		NUM				3		N9		YES
-----										N9			NO		statements
-----										statements			NO		assignmentStmt
-a		99		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-a		99		ID				0		var_id_num		YES
-----										term			NO		N5
-*		99		MUL				0		N5		YES
-----										N5			NO		var_id_num
-b		99		ID				0		var_id_num		YES
-----										N9			NO		N9
-4		101		NUM				4		N9		YES
-----										N9			NO		statements
-----										statements			NO		assignmentStmt
-a		101		ID				0		assignmentStmt		YES
-----										assignmentStmt			NO		lvalueIDStmt
-----										lvalueIDStmt			NO		arithmeticOrBooleanExpr
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-----										AnyTerm			NO		arithmeticExpr
-----										arithmeticExpr			NO		term
-----										term			NO		var_id_num
-a		101		ID				0		var_id_num		YES
-----										term			NO		N5
-/		101		DIV				0		N5		YES
-----										N5			NO		var_id_num
-b		101		ID				0		var_id_num		YES
+5.0		39		RNUM				1084227584		term		YES
+----										statements			NO		statements
+----										statements			NO		ioStmt
+5		53		NUM				5		ioStmt		YES

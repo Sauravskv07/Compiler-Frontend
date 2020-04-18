@@ -92,6 +92,61 @@ e				EPSILON						N7		YES
 ----										statement			NO		simpleStmt
 ----										statements			NO		statement
 ----										statements			NO		statements
+switch		21		SWITCH				0		conditionalStmt		YES
+----										statement			NO		conditionalStmt
+(		21		BO				0		conditionalStmt		YES
+v1		21		ID				0		conditionalStmt		YES
+)		21		BC				0		conditionalStmt		YES
+start		22		START				0		conditionalStmt		YES
+case		23		CASE				0		caseStmts		YES
+----										conditionalStmt			NO		caseStmts
+5		23		NUM				5		value		YES
+----										caseStmts			NO		value
+:		23		COLON				0		caseStmts		YES
+declare		23		DECLARE				0		declareStmt		YES
+----										statement			NO		declareStmt
+v3		23		ID				0		idList		YES
+----										declareStmt			NO		idList
+e				EPSILON						N3		YES	
+----										idList			NO		N3
+:		23		COLON				0		declareStmt		YES
+integer		23		INTEGER				0		dataType		YES
+----										declareStmt			NO		dataType
+;		23		SEMICOL				0		declareStmt		YES
+----										statements			NO		statement
+----										caseStmts			NO		statements
+e				EPSILON						statements		YES	
+----										statements			NO		statements
+break		24		BREAK				0		caseStmts		YES
+;		24		SEMICOL				0		caseStmts		YES
+case		25		CASE				0		N9		YES
+----										caseStmts			NO		N9
+1		25		NUM				1		value		YES
+----										N9			NO		value
+:		25		COLON				0		N9		YES
+declare		25		DECLARE				0		declareStmt		YES
+----										statement			NO		declareStmt
+v4		25		ID				0		idList		YES
+----										declareStmt			NO		idList
+e				EPSILON						N3		YES	
+----										idList			NO		N3
+:		25		COLON				0		declareStmt		YES
+integer		25		INTEGER				0		dataType		YES
+----										declareStmt			NO		dataType
+;		25		SEMICOL				0		declareStmt		YES
+----										statements			NO		statement
+----										N9			NO		statements
+e				EPSILON						statements		YES	
+----										statements			NO		statements
+break		26		BREAK				0		N9		YES
+;		26		SEMICOL				0		N9		YES
+e				EPSILON						N9		YES	
+----										N9			NO		N9
+e				EPSILON						default		YES	
+----										conditionalStmt			NO		default
+end		29		END				0		conditionalStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
 e				EPSILON						statements		YES	
 ----										statements			NO		statements
 end		30		END				0		moduleDef		YES

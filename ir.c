@@ -322,7 +322,7 @@ void genIRTable(astnode *t,symnode* sym)
 				quad_row_head->next = p;
 				quad_row_head = p;
 
-				sym=getNextSymbolTable();
+				//sym=getNextSymbolTable();
 				genIRTable(rt->child->right,sym);
 				quad_row *p2 = getEmptyRow();
 				p2->op=JUMP;

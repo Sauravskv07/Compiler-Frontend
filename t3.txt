@@ -1,12 +1,4 @@
 ** This testcase demonstrates correctness of module structure with declaration and simple statements**
-<<<<<<< Updated upstream
-declare module square;
-<<module compute>>
-takes input [x:array[a..b] of real,y:integer];
-returns [value:real];
-start
-	value:= x[1]*x[1];
-=======
 **declare module square;**
 <<module compute>>
 takes input [x:integer,y:integer];
@@ -25,7 +17,7 @@ start
 	start
 		declare v3:integer;
 		v1:=v1+1;
-	end
+	end**
 	switch(v1)
 		start
 			case 5: declare v3:integer;
@@ -34,8 +26,7 @@ start
 				    break;
 			default: declare v7:integer;
 				    break;
-		end**
->>>>>>> Stashed changes
+		end
 end
 
 
@@ -49,18 +40,13 @@ start
 	**v2:=-(4 + 3*5);
 	v2:=+v2;
 	v2:=+A[v2];**
-	**x1:= (x1<=x1) OR x1 AND x1;
+	**x1:= (x1<=x1) OR (x1>x1) AND x1;
 	v2:=+((5));
 	v4:=A[12]*v4;
 	A[5]:=v4*(22 + v1)*2 + 66 + A[2];
 	get_value(v_1_2_3);
-<<<<<<< Updated upstream
-	declare result_:real;
-	[result_]:=use module compute with parameters A,v1;
-=======
 	declare result_:integer;
 	[result_,v1]:=use module square with parameters v1,v3;
->>>>>>> Stashed changes
 	print(result_);
 	print(A[v1]);
 	print(true);**
