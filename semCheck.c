@@ -365,7 +365,7 @@ void checkSemRules(astnode *t,symnode* current)
 			//moduleDef
 			switch(t->data->nonterm->data->t_item->index)
 			{
-				case 65://moduleDeclaration:
+				case 64://moduleDeclaration:
 				{
 					//printf("moduleDeclaration\n");
 					if(ht_search(current->symbol_table, t->child->data->token->lexeme)->data->f_item->isDef!=1)
@@ -373,7 +373,7 @@ void checkSemRules(astnode *t,symnode* current)
 					break;
 				}
 	
-				case 68://module
+				case 75://module
 				{	
 					//printf("module");
 					temp = ht_search(current->symbol_table, t->child->data->token->lexeme);
@@ -416,11 +416,11 @@ void checkSemRules(astnode *t,symnode* current)
 					break;					
 				}
 
-				case 70://input_plist
-				case 69://ret
+				case 77://input_plist
+				case 76://ret
 					break;
 
-				case 67://driverModule
+				case 74://driverModule
 				{
 					//printf("driverModule\n");
 					current= insert_as_symchild(current,create_new_symnode());
@@ -504,7 +504,7 @@ void checkSemRules(astnode *t,symnode* current)
 					break;
 				}
  			
-				case 82://var_id_num:
+				case 72://var_id_num:
 				{
 					//printf("var_id_num\n");
 
@@ -557,7 +557,7 @@ void checkSemRules(astnode *t,symnode* current)
 					break;
 				}
 
-				case 89://lvalueARRStmt:
+				case 93://lvalueARRStmt:
 				{
 					//printf("lvalueARRStmt\n");
 					checkSemRules(t->child,current);
@@ -583,7 +583,7 @@ void checkSemRules(astnode *t,symnode* current)
 					break;
 				}
 
-				case 88://lvalueIDStmt:
+				case 92://lvalueIDStmt:
 				case 97://newNT:
 				case 107://factor:
 				{
@@ -659,7 +659,7 @@ void checkSemRules(astnode *t,symnode* current)
 					break;
 				}
 
-				case 91://moduleReuseStmt:
+				case 89://moduleReuseStmt:
 				{
 					//printf("moduleReuseStmt\n");
 
@@ -754,7 +754,7 @@ void checkSemRules(astnode *t,symnode* current)
 					break;
 				}
 
-				case 113://conditionalStmt	
+				case 116://conditionalStmt	
 				{
 					//printf("conditionalStmt\n");
 
@@ -797,8 +797,8 @@ void checkSemRules(astnode *t,symnode* current)
 					return;						
 				}
 			
-				case 115://N9
-				case 114://caseStmts
+				case 113://N9
+				case 112://caseStmts
 				{
 					//printf("caseStmts | N9\n");
 
@@ -817,7 +817,7 @@ void checkSemRules(astnode *t,symnode* current)
 					
 				}
 
-				case 75://range_arrays
+				case 80://range_arrays
 				{
 					if(t->child->data->token->index == 2)
 						t->attr->low = t->child->data->token->val.i_val;
@@ -859,7 +859,7 @@ void checkSemRules(astnode *t,symnode* current)
 					break;
 				}
 
-				case 74://dataType
+				case 79://dataType
 				{
 					//printf("dataType\n");
 					checkSemRules(t->child,current);
@@ -873,7 +873,7 @@ void checkSemRules(astnode *t,symnode* current)
 					break;
 				}
 				
-				case 112://DeclareStmt:
+				case 115://DeclareStmt:
 				{
 					//printf("DeclareStmt\n");
 					checkSemRules(t->child->right,current);
@@ -888,7 +888,7 @@ void checkSemRules(astnode *t,symnode* current)
 				}
 
 				case 94://N3:
-				case 93://idList:
+				case 91://idList:
 				{
 					//printf("idList\n");
 
@@ -930,7 +930,7 @@ void checkSemRules(astnode *t,symnode* current)
 					break;
 				}
 
-				case 80://ioStmt
+				case 83://ioStmt
 				{
 					if(t->child->tag==1 && t->child->data->token->index==4)
 					{
@@ -1019,7 +1019,7 @@ int fillTheParams(astnode* t,parameters *pr,int current_offset)
 		{
 			switch(t->data->nonterm->data->t_item->index)
 			{
-				case 75://range_arrays
+				case 80://range_arrays
 				{
 					if(t->child->data->token->index == 2)
 						t->attr->low = t->child->data->token->val.i_val;
@@ -1041,7 +1041,7 @@ int fillTheParams(astnode* t,parameters *pr,int current_offset)
 					break;
 				
 				}
-				case 74://dataType
+				case 79://dataType
 				{
 					fillTheParams(t->child,pr,current_offset);
 					fillTheParams(t->child->right,pr,current_offset);
@@ -1052,8 +1052,8 @@ int fillTheParams(astnode* t,parameters *pr,int current_offset)
 					break;
 				}
 
-				case 71://N1
-				case 70://input_plist
+				case 67://N1
+				case 77://input_plist
 				{
 					//printf("input_plist | N1\n");
 					//printf("current_offset= %d\n",current_offset);
@@ -1078,13 +1078,13 @@ int fillTheParams(astnode* t,parameters *pr,int current_offset)
 
 					break;
 				}
-				case 69://ret
+				case 76://ret
 				{
 					current_offset=fillTheParams(t->child,pr,current_offset);
 					break;
 				}
-				case 73://N2
-				case 72://output_plist
+				case 68://N2
+				case 78://output_plist
 				{
 					fillTheParams(t->child->right,pr,current_offset);
 					if(ht_search(pr->output_list,t->child->data->token->lexeme)==NULL)
@@ -1132,7 +1132,7 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 				{
 						root= insert_as_symchild(root,create_new_symnode());
 				}
-				case 64://moduleDeclarations
+				case 65://moduleDeclarations
 				case 66://otherModules
 				{
 					//printf("program | moduleDeclarations | otherModules\n");
@@ -1147,7 +1147,7 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 					}
 					break;
 				}
-				case 68://module
+				case 75://module
 				{
 					//printf("MODULE %s\n",t->child->data->token->lexeme);
 					temp = ht_search(root->symbol_table, t->child->data->token->lexeme);
@@ -1182,7 +1182,7 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 					break;				
 				}
 
-				case 65://moduleDeclaration:
+				case 64://moduleDeclaration:
 				{
 					//printf("moduleDeclaration %s\n",t->child->data->token->lexeme);
 					if(ht_search(root->symbol_table, t->child->data->token->lexeme)==NULL)
