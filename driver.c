@@ -21,6 +21,7 @@ GROUP NO. = 46
 #include "parser.h"
 #include "symbol_table.h"
 #include "semCheck.h"
+#include "ir.h"
 
 
 int main(int argc,char** argv)
@@ -261,6 +262,9 @@ int main(int argc,char** argv)
 						printf("\n");
 					
 					semCheck(xp);
+					resetIRParams();
+					genIRTable(xp,sym_root);
+					printIR(quad_row_tail);
 
 					end_time = clock();
 

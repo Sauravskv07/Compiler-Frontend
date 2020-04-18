@@ -14,6 +14,7 @@ symnode* create_new_symnode(){
 	temp->symbol_table=ht_new();
 	temp->current_offset=0;
 	temp->isModuleScope=0;
+	temp->num_output_defined=0;
 	temp->module_name=NULL;
 	temp->isForScope=0;
 	temp->switchStatus=-1;

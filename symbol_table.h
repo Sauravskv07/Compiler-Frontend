@@ -3,6 +3,7 @@ typedef struct symnode
 	ht_hash_table* symbol_table;
 	int current_offset;
 	char *module_name;
+	char num_output_defined;
 	bool isModuleScope;
 	bool isForScope;
 	char for_id[21];

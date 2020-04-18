@@ -63,6 +63,31 @@ astnode* createAST(treenode* root)
 	}
 }
 
+void preproc(astnode* root)
+{
+	if(root!=NULL)
+	{
+		if(root->child!=NULL)
+		{
+			if(root->data->nonterm->data->t_item->index == ht_search(mapping_table, "N1")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "N2")->data->t_item->index)
+			{
+				astnode* t = root->parent->child;
+				while(t->right!=root) t = t->right;
+				astnode* t2 = root->child;
+				t->right = root->child;
+				while(t2!=NULL) {t2->parent = root->parent;t2=t2->right;}
+			}
+			preproc(root->child);
+			astnode* rt = root->child;
+			while(rt!=NULL)
+			{
+				rt=rt->right;
+				preproc(rt);
+			}
+		}
+	}
+}
+
 astnode* makeleaf(Token *tk)
 {
 	astnode * an = malloc(sizeof(astnode));
@@ -127,7 +152,12 @@ astnode* makenode4(ht_item *t, astnode *n1, astnode *n2, astnode *n3, astnode *n
 	lc = insertNextRightSiblingInAst(lc, n4);
 	return an;
 }
-
+astnode* createpAST(treenode* root)
+{
+	astnode* p = createAST(root);
+	preproc(p);
+	return p;
+}
 astnode *insertChildInAst(astnode *parent, astnode *child)
 {
 	if(child==NULL)

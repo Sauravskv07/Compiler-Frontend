@@ -39,6 +39,12 @@ typedef struct {
 	parameters *pr;  
 } func_item;
 
+typedef struct quad_row quad_row;
+typedef struct {
+	bool def;
+	quad_row *label;  
+} label_item;
+
 typedef enum{INTEGER,REAL,BOOLEAN,ARRAY,UNDEFINED} VarType;
 
 typedef struct {
@@ -53,6 +59,7 @@ typedef union {
     var_item* v_item;
     func_item* f_item;
     term_item* t_item;
+    label_item* l_item;
 } ht_data;
 
 typedef struct {
@@ -78,6 +85,7 @@ ht_hash_table* keyword_table;
 
 ht_item* ht_insert_term_item(ht_hash_table* ht, const char* key, int index, Type tag);
 ht_item* ht_insert_func_item(ht_hash_table* ht, const char* key, int isDef);
+ht_item* ht_insert_label_item(ht_hash_table* ht, const char* key, bool def);
 ht_item* ht_insert_var_item(ht_hash_table* ht, const char* key, int offset, VarType baseType, VarType eleType,int low,int high);
 ht_item* ht_insert(ht_hash_table* ht, ht_item *item);
 ht_item* ht_search(ht_hash_table* ht, const char* key);
