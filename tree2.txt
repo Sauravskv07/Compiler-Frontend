@@ -53,6 +53,12 @@ integer		23		INTEGER				0		declareStmt		YES
 ----										declareStmt			NO		idList
 v4		25		ID				0		idList		YES
 integer		25		INTEGER				0		declareStmt		YES
+----										conditionalStmt			NO		default
+----										default			NO		statements
+----										statements			NO		declareStmt
+----										declareStmt			NO		idList
+v7		27		ID				0		idList		YES
+integer		27		INTEGER				0		declareStmt		YES
 ----										program			NO		driverModule
 ----										driverModule			NO		moduleDef
 ----										moduleDef			NO		statements

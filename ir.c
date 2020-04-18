@@ -18,7 +18,7 @@ GROUP NO. = 46
 #include "symbol_table.h"
 #include "ir.h"
 
-const char *OPNames[] = {"START","NOP","CALL","RET","DEC","PRINT","INP","ARR_GET","ARR_ASSIGN","BRANCH", "JUMP","ASSIGN","INC","EQUATE","UNARY","PLUS","MINUS","MUL","DIV,","AND","OR","LT","LE","GT","GE","EQ","NE","PUSH","POP"};
+const char *OPNames[] = {"START","END","NOP","CALL","RET","DEC","PRINT","INP","ARR_GET","ARR_ASSIGN","BRANCH", "JUMP","ASSIGN","INC","EQUATE","UNARY","PLUS","MINUS","MUL","DIV,","AND","OR","LT","LE","GT","GE","EQ","NE","PUSH","POP"};
 void printIR(quad_row *q)
 {
 	if(q!=NULL)
@@ -365,6 +365,7 @@ void genIRTable(astnode *t,symnode* sym)
 			}
 			else if(i==ht_search(mapping_table, "driverModule")->data->t_item->index)
 			{
+				default_flag = false;
 				sym=getNextSymbolTable();
 				setNextSymbolTable(NULL);
 				quad_row *driverstart = getEmptyRow();
@@ -383,6 +384,17 @@ void genIRTable(astnode *t,symnode* sym)
 				driverstart->prev = quad_row_head;
 				quad_row_head->next = driverstart;
 				quad_row_head = driverstart;
+
+				genIRTable(t->child,sym);
+				p = getEmptyRow();
+				p->op=END;
+				p->next = NULL;
+				p->tag[0] = -1;
+				p->tag[1] = -1;
+				p->tag[2] = -1;
+				p->prev = quad_row_head;
+				quad_row_head->next = p;
+				quad_row_head = p;
 			}
 			else if(i==ht_search(mapping_table, "module")->data->t_item->index)
 			{

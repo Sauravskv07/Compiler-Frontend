@@ -142,8 +142,25 @@ break		26		BREAK				0		N9		YES
 ;		26		SEMICOL				0		N9		YES
 e				EPSILON						N9		YES	
 ----										N9			NO		N9
-e				EPSILON						default		YES	
+default		27		DEFAULT				0		default		YES
 ----										conditionalStmt			NO		default
+:		27		COLON				0		default		YES
+declare		27		DECLARE				0		declareStmt		YES
+----										statement			NO		declareStmt
+v7		27		ID				0		idList		YES
+----										declareStmt			NO		idList
+e				EPSILON						N3		YES	
+----										idList			NO		N3
+:		27		COLON				0		declareStmt		YES
+integer		27		INTEGER				0		dataType		YES
+----										declareStmt			NO		dataType
+;		27		SEMICOL				0		declareStmt		YES
+----										statements			NO		statement
+----										default			NO		statements
+e				EPSILON						statements		YES	
+----										statements			NO		statements
+break		28		BREAK				0		default		YES
+;		28		SEMICOL				0		default		YES
 end		29		END				0		conditionalStmt		YES
 ----										statements			NO		statement
 ----										statements			NO		statements
