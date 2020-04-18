@@ -59,7 +59,7 @@ void genIRTable(astnode *t,symnode* sym)
 				default_flag = false;
 				genIRTable(t->child->right,sym);
 			}
-			else if(i==ht_search(mapping_table, "input_plist")->data->t_item->index || i==ht_search(mapping_table, "output_plist")->data->t_item->index)
+			/*else if(i==ht_search(mapping_table, "input_plist")->data->t_item->index || i==ht_search(mapping_table, "output_plist")->data->t_item->index)
 			{
 				default_flag = false;
 				astnode* rt=t;
@@ -78,7 +78,7 @@ void genIRTable(astnode *t,symnode* sym)
 				quad_row_head = p;
 				rt = rt->child->right->right;
 				}
-			}
+			}*/
 			else if(i==ht_search(mapping_table, "declareStmt")->data->t_item->index)
 			{
 				default_flag = false;
@@ -437,8 +437,8 @@ void genIRTable(astnode *t,symnode* sym)
 				default_flag = false;
 				astnode* rt=t->child;
 				quad_row *p;
-				while(rt->child->right!=NULL) rt = rt->child->right;
-				while(rt!=t->child->parent)
+				//while(rt->child->right!=NULL) rt = rt->child->right;
+				while(rt!=NULL && rt->child!=NULL)
 				{
 				p = getEmptyRow();
 				p->op=POP;
@@ -450,12 +450,35 @@ void genIRTable(astnode *t,symnode* sym)
 				p->prev = quad_row_head;
 				quad_row_head->next = p;
 				quad_row_head = p;
-				rt = rt->parent;
+				rt = rt->child->right;
 				}
 			}
 			else if(i==ht_search(mapping_table, "moduleReuseStmt")->data->t_item->index)
 			{
 				default_flag = false;
+				
+				if(t->child->right->right!=NULL)
+				{
+				default_flag = false;
+				astnode* rt=t->child->child;
+				quad_row *p;
+				while(rt->child->right!=NULL) rt = rt->child->right;
+				while(rt!=t->child->child->parent)
+				{
+				p = getEmptyRow();
+				p->op=PUSH;
+				p->next = NULL;
+				p->tag[0] = 0;
+				p->tag[1] = -1;
+				p->tag[2] = -1;
+				p->val[0].v_item = getVar(sym, rt->child->data->token)->data->v_item;
+				p->prev = quad_row_head;
+				quad_row_head->next = p;
+				quad_row_head = p;
+				rt = rt->parent;
+				}
+				}
+
 				astnode* rt;
 				quad_row *funcstart;
 				if(t->child->right->right!=NULL) rt=t->child->right;
@@ -497,6 +520,24 @@ void genIRTable(astnode *t,symnode* sym)
 				p->prev = quad_row_head;
 				quad_row_head->next = p;
 				quad_row_head = p;
+
+				if(t->child->right->right!=NULL) rt=t->child->right;
+				else rt=t->child;
+				rt=rt->right;
+				//while(rt->child->right!=NULL) rt = rt->child->right;
+				while(rt!=NULL && rt->child!=NULL)
+				{
+				p = getEmptyRow();
+				p->op=POP;
+				p->next = NULL;
+				p->tag[0] = -1;
+				p->tag[1] = -1;
+				p->tag[2] = -1;
+				p->prev = quad_row_head;
+				quad_row_head->next = p;
+				quad_row_head = p;
+				rt = rt->child->right;
+				}
 
 				if(t->child->right->right!=NULL) genIRTable(t->child,sym);
 			}
