@@ -76,7 +76,24 @@ int isRedefined(astnode *t,symnode *current)
 
 }
 
-int incrementOffset(int current_offset,VarType type)
+int incrementOffset(int current_offset,VarType baseType,VarType eleType,int low,int high)
+{
+	int arr[]={2,4,1};
+
+	if(baseType==0)//integer
+		current_offset+=2;
+	else if(baseType==1)//real
+		current_offset+=4;
+	else if(baseType==2)//boolean
+		current_offset+=1;
+	else if(baseType==3 && (low==-1 ||high==-1))
+		current_offset+=8;
+	else if(baseType==3)
+		current_offset+=4+(high-low+1)*arr[eleType];
+	return current_offset;
+}
+
+int incrementOffset2(int current_offset,VarType type)
 {
 	if(type==0)//integer
 		current_offset+=2;
@@ -897,7 +914,7 @@ void checkSemRules(astnode *t,symnode* current)
 						temp=ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,current->current_offset, t->attr->baseType, t->attr->eleType, t->attr->low, t->attr->high);
 						temp->data->v_item->lowNode=t->attr->lowNode;
 						temp->data->v_item->highNode=t->attr->highNode;
-						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType);
+						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType,t->attr->eleType,t->attr->low,t->attr->high);
 					}
 					else
 					{
@@ -1060,8 +1077,8 @@ int fillTheParams(astnode* t,parameters *pr,int current_offset)
 					fillTheParams(t->child->right,pr,current_offset);
 					if(ht_search(pr->input_list,t->child->data->token->lexeme)==NULL)
 					{
+						current_offset=incrementOffset2(current_offset,t->child->right->attr->baseType);
 						ht_insert_var_item(pr->input_list,t->child->data->token->lexeme ,-current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,t->child->right->attr->low,t->child->right->attr->high);
-						current_offset=incrementOffset(current_offset,t->child->right->attr->baseType);
 						pr->input_types[pr->num_inputs].eleType=t->child->right->attr->eleType;
 						pr->input_types[pr->num_inputs].baseType=t->child->right->attr->baseType;
 						pr->input_types[pr->num_inputs].low=t->child->right->attr->low;
@@ -1089,8 +1106,8 @@ int fillTheParams(astnode* t,parameters *pr,int current_offset)
 					fillTheParams(t->child->right,pr,current_offset);
 					if(ht_search(pr->output_list,t->child->data->token->lexeme)==NULL)
 					{
+						current_offset=incrementOffset2(current_offset,t->child->right->attr->baseType);
 						ht_insert_var_item(pr->output_list,t->child->data->token->lexeme ,-current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,-1,-1);
-						current_offset=incrementOffset(current_offset,t->child->right->attr->baseType);
 						pr->output_types[pr->num_outputs]=t->child->right->attr->baseType;
 						pr->num_outputs++;
 					}

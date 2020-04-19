@@ -5,6 +5,7 @@ takes input [x:integer,y:integer];
 returns [value:integer,f:integer];
 start
 	declare v1:integer;
+	declare v5:boolean;
 	v1:=v1*f;
 	f:=1;
 	value:= x*x + 5;
@@ -18,13 +19,11 @@ start
 		declare v3:integer;
 		x:=x+1;
 	end
-	switch(v1)
+	switch(v5)
 		start
-			case 5: declare v3:integer;
+			case true: declare v3:integer;
 				   break;
-			case 1: declare v4:integer;
-				    break;
-			default: declare v7:integer;
+			case false: declare v4:integer;
 				    break;
 		end
 end
@@ -35,11 +34,12 @@ start
 	declare v1,v3,v_1_2_3:integer;
 	declare v2,v4:real;
 	declare x1:boolean;
-	declare A:array[2..14] of real;
+	declare A,B:array[2..14] of real;
 	v4:=+((5.0));
 	v2:=+v2;
+	A:=B;
 	v2:=+A[v1];
-	x1:= (v1<=v1) AND x1;
+	x1:= (v1<=v1) OR x1;
 	v2:=+((5.0));
 	v4:=A[12]*v4;
 	A[5]:=A[2];
@@ -50,6 +50,7 @@ start
 	print(A[v1]);
 	print(true);
 	print(5);
+	print(A);
 	
 end
 
