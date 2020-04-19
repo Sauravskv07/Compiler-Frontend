@@ -58,7 +58,8 @@ symnode* insert_as_symchild(symnode* parent,symnode* child){
 
 int nestlevel = 0;
 int off = 0;
-void printsymnode(symnode* root)
+
+void printsymnodes(symnode* root)
 {
 	if(root!=NULL)
 	{
@@ -66,11 +67,15 @@ void printsymnode(symnode* root)
 		if(root == sym_root)
 		{
 			printhashparams();
+			//st = root;
+			//en = root;
 		}
 		else
 		{
 		//printf("%d ",root->current_offset);
 		printhashtable(root->module_name,-1,-1,root->symbol_table);//root->linstart,root->linend,
+		nextSt(0);
+		nextEn();
 		}
 		nestlevel = nestlevel + 1;
 		printsymnode(root->child);
@@ -82,6 +87,14 @@ void printsymnode(symnode* root)
 		}
 		nestlevel = nestlevel -1;
 	}
+}
+void printsymnode(symnode* rt)
+{
+	st = root;
+	en = root;
+	nextSt(1);
+	nextEn();
+	printsymnodes(rt);
 }
 void printhashtable(char *module_name, int linstart, int linend, ht_hash_table* ht)
 {
@@ -98,8 +111,8 @@ void printhashtable(char *module_name, int linstart, int linend, ht_hash_table* 
 			char *range = "---";
 			int wd = width[ht->items[i]->data->v_item->baseType];
 			char a[5];char b[5];
-			if(linstart==-1){linstart=getFunclinSt(ht->items[i]);}
-			if(linend==-1){linend=getFunclinEn(ht->items[i]);}
+			if(linstart==-1){linstart=st->data->token->LN;}
+			if(linend==-1){linend=en->data->token->LN;}
 			sprintf(a, "%d", linstart);
 			sprintf(b, "%d", linend);
 			char *lin = "---";
@@ -181,7 +194,7 @@ int getFunclinEn(ht_item* ht)
 		}
 		if(flag ==true && p->child==NULL && strcmp("start", p->data->token->lexeme)==0)
 		{
-			i = i + 1; //return p->data->token->LN;
+			i = i + 1;
 		}
 		if(flag ==true && p->child==NULL && strcmp("end", p->data->token->lexeme)==0)
 		{
@@ -198,10 +211,55 @@ int getFunclinEn(ht_item* ht)
 		p = p->right;
 	}
 }
-// 1st start before variable declaration.
-
-// and corresponding end command.
-
+int nextSt(int i)
+{
+	treenode * p = st;
+	bool flag=false;
+	if(i==1) flag=true;
+	while(p!=NULL)
+	{
+		if(p->child==NULL && strcmp("start", p->data->token->lexeme)==0)
+		{
+			if(flag==true)
+			{st = p;
+			return 0;}
+			flag = true;
+		}
+		
+		if(p->child!=NULL){p = p->child;continue;}
+		while(p!=NULL && p->right==NULL)
+		{
+			p=p->parent;
+		}
+		if(p==NULL) return 0;
+		p = p->right;
+	}
+}
+int nextEn()
+{
+	treenode * p = st;
+	int i = 0;
+	while(p!=NULL)
+	{
+		if(p->child==NULL && strcmp("start", p->data->token->lexeme)==0)
+		{
+			i = i + 1;
+		}
+		if(p->child==NULL && strcmp("end", p->data->token->lexeme)==0)
+		{
+			i = i - 1; 
+			if(i==0) {en=p; return 0; }
+		}
+		
+		if(p->child!=NULL){p = p->child;continue;}
+		while(p!=NULL && p->right==NULL)
+		{
+			p=p->parent;
+		}
+		if(p==NULL) return 0;
+		p = p->right;
+	}
+}
 
 
 

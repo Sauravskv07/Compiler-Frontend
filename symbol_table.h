@@ -16,6 +16,8 @@ typedef struct symnode
 }symnode;
 
 symnode* sym_root;
+treenode *st;
+treenode *en;
 symnode* create_new_symnode();
 symnode* insert_as_symchild(symnode* parent,symnode* child);
 void printsymnode(symnode* root);
@@ -23,3 +25,5 @@ void printhashtable(char *module_name, int linstart, int linend, ht_hash_table* 
 void printhashparams();
 int getFunclinSt(ht_item* ht);
 int getFunclinEn(ht_item* ht);
+int nextSt();
+int nextEn();
