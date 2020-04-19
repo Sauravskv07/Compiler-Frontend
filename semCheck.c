@@ -922,11 +922,11 @@ void checkSemRules(astnode *t,symnode* current)
 				case 117://default
 				{
 					//printf("default\n");
-					new_node=create_new_symnode();
-					new_node->module_name=(char *)malloc(sizeof(char)*21);
-					current= insert_as_symchild(current,new_node);
+					//new_node=create_new_symnode();
+					//new_node->module_name=(char *)malloc(sizeof(char)*21);
+					//current= insert_as_symchild(current,new_node);
 					checkSemRules(t->child,current);
-					current=current->parent;
+					//current=current->parent;
 					break;
 				}
 

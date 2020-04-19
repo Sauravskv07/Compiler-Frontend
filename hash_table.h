@@ -46,12 +46,13 @@ typedef struct {
 } label_item;
 
 typedef enum{INTEGER,REAL,BOOLEAN,ARRAY,UNDEFINED} VarType;
+typedef struct ht_item ht_item;
 
 typedef struct {
 	
 	int offset;		// Add other variables attributes also accordingly here.
-	struct ht_item* lowNode;
-	struct ht_item* highNode;
+	ht_item* lowNode;
+	ht_item* highNode;
 	int low;
 	int high;
 	VarType eleType;
@@ -65,7 +66,7 @@ typedef union {
     label_item* l_item;
 } ht_data;
 
-typedef struct {
+typedef struct ht_item{
     char* key;
     ht_data* data;
     Category ct;

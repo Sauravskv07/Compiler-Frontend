@@ -25,7 +25,7 @@ typedef struct astnode
 	Type tag;
 } astnode;
 
-
+astnode* astroot;
 astnode* createAST(treenode* root);
 astnode *insertChildInAst(astnode *parent, astnode *child);
 astnode *insertNextRightSiblingInAst(astnode *child, astnode *right);

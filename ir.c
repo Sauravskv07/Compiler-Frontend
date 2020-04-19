@@ -18,7 +18,7 @@ GROUP NO. = 46
 #include "symbol_table.h"
 #include "ir.h"
 
-const char *OPNames[] = {"START","END","NOP","CALL","RET","DEC","PRINT","INP","ARR_GET","ARR_ASSIGN","BRANCH", "JUMP","ASSIGN","INC","EQUATE","UNARY","PLUS","MINUS","MUL","DIV,","AND","OR","LT","LE","GT","GE","EQ","NE","PUSH","POP"};
+const char *OPNames[] = {"START","END","NOP","CALL","RET","DEC","PRINT","INP","ARR_GET","ARR_ASSIGN","BRANCH", "JUMP","ASSIGN","INC","EQUATE","UNARY","PLUS","MINUS","MUL","DIV,","AND","OR","LT","LE","GT","GE","EQ","NE","PUSH","POP","POP2"};
 void printIR(quad_row *q)
 {
 	printf("\n");
@@ -217,7 +217,7 @@ void genIRTable(astnode *t,symnode* sym)
 				quad_row *p = getEmptyRow();
 				p->op=ASSIGN;
 				p->next = NULL;
-				p->tag[0] = -1;
+				p->tag[0] = 0;
 				p->tag[1] = 1;
 				p->tag[2] = -1;
 				p->val[0].v_item = loop_var;
@@ -345,7 +345,7 @@ void genIRTable(astnode *t,symnode* sym)
 				rt=t->child->right->right;
 				if(rt!=NULL)
 				{
-				sym=getNextSymbolTable();
+				//sym=getNextSymbolTable();
 				genIRTable(rt->child,sym);
 				quad_row *p2 = getEmptyRow();
 				p2->op=JUMP;
@@ -528,11 +528,12 @@ void genIRTable(astnode *t,symnode* sym)
 				while(rt!=NULL && rt->child!=NULL)
 				{
 				p = getEmptyRow();
-				p->op=POP;
+				p->op=POP2;
 				p->next = NULL;
-				p->tag[0] = -1;
+				p->tag[0] = 0;
 				p->tag[1] = -1;
 				p->tag[2] = -1;
+				p->val[0].v_item = getVar(sym, rt->child->data->token)->data->v_item;
 				p->prev = quad_row_head;
 				quad_row_head->next = p;
 				quad_row_head = p;
