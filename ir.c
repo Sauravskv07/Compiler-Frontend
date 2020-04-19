@@ -217,17 +217,17 @@ void genIRTable(astnode *t,symnode* sym)
 				quad_row *p = getEmptyRow();
 				p->op=ASSIGN;
 				p->next = NULL;
-				p->tag[0] = 0;
-				p->tag[1] = 1;
-				p->tag[2] = -1;
-				p->val[0].v_item = loop_var;
-				p->val[1].tk_item = t->child->right->child->data->token;
+				p->tag[0] = 1;
+				p->tag[1] = -1;
+				p->tag[2] = 0;
+				p->val[2].v_item = loop_var;
+				p->val[0].tk_item = t->child->right->child->data->token;
 				p->prev = quad_row_head;
 				quad_row_head->next = p;
 				quad_row_head = p;
 				
 				p = getEmptyRow();
-				p->op=LT;
+				p->op=LE;
 				p->next = NULL;
 				p->tag[0] = 0;
 				p->tag[1] = 1;
