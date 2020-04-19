@@ -405,7 +405,7 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 					
 					semCheck(xp);
 					if(sym_root->right==NULL) printf("ppp");
-					printf("\nPrinting symbol table : \n");
+					printf("\n\n\nPrinting symbol table : \n");
 					printsymnode(sym_root);
 
 					end_time = clock();

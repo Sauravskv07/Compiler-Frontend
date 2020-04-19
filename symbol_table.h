@@ -25,5 +25,6 @@ void printhashtable(char *module_name, int linstart, int linend, ht_hash_table* 
 void printhashparams();
 int getFunclinSt(ht_item* ht);
 int getFunclinEn(ht_item* ht);
-int nextSt();
+int str[20];
+int nextSt(int i);
 int nextEn();

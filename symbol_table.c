@@ -67,23 +67,20 @@ void printsymnodes(symnode* root)
 		if(root == sym_root)
 		{
 			printhashparams();
-			//st = root;
-			//en = root;
 		}
 		else
 		{
-		//printf("%d ",root->current_offset);
-		printhashtable(root->module_name,-1,-1,root->symbol_table);//root->linstart,root->linend,
+		printhashtable(root->module_name,-1,-1,root->symbol_table);
 		nextSt(0);
 		nextEn();
 		}
 		nestlevel = nestlevel + 1;
-		printsymnode(root->child);
+		printsymnodes(root->child);
 		symnode* rt = root->child;
 		while(rt!=NULL)
 		{
 			rt = rt->right;
-			printsymnode(rt);
+			printsymnodes(rt);
 		}
 		nestlevel = nestlevel -1;
 	}
@@ -94,6 +91,12 @@ void printsymnode(symnode* rt)
 	en = root;
 	nextSt(1);
 	nextEn();
+	printf("\n Please note that since entire activation record is allocated at function call,\n");
+	printf(" the variables allocation may have different order since they are fetched from hash table.\n");
+	printf(" Therefore offsets calcualtions are according to the order of allocation.\n");
+	printf(" You can check that by seeing that offset increments by the width value and \n");
+	printf(" and total memory of the activation record.\n\n");
+	printf("Name\t\tModule\t\tLine\tWidth\tisArray\tStatic/Dynamic\tRange\tType\tOffset\tNesting level\t\n");
 	printsymnodes(rt);
 }
 void printhashtable(char *module_name, int linstart, int linend, ht_hash_table* ht)
@@ -134,7 +137,7 @@ void printhashtable(char *module_name, int linstart, int linend, ht_hash_table* 
 				{wd = wd + (ht->items[i]->data->v_item->high - ht->items[i]->data->v_item->low +1)*width[ht->items[i]->data->v_item->eleType];;}
 			}
 			else {type = tp[ht->items[i]->data->v_item->baseType]; isArr = "no";}
-			printf("%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s\t%d\t%d\t\n",ht->items[i]->key,module_name,lin,wd,isArr,statdy,range,type,off,nestlevel);
+			printf("%s\t\t%s\t\t%s\t%d\t%s\t%s\t\t%s\t%s\t%d\t%d\t\n",ht->items[i]->key,module_name,lin,wd,isArr,statdy,range,type,off,nestlevel);
 			off = off + wd;
 		}
 	}
