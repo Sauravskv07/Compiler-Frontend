@@ -318,7 +318,7 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 					genIRTable(xp,sym_root);
 					printIR(quad_row_tail);
 
-					//codeGen(quad_row_tail);
+					codeGen(quad_row_tail);
 
 					end_time = clock();
 
@@ -420,11 +420,57 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 					break;
 				}
 			case 8:{
+					forwardPointer=0;
 				
-					printf("TOTAL CPU TIME = %f\n",total_CPU_time);
+					backPointer=0;
 
-					printf("TOTAL TIME IN SECONDS TAKEN BY THE PARSER AND LEXER = %f",total_CPU_time_in_seconds);
+					LN=1;
 
+					endReached=0;
+					
+					start_time = clock();
+
+					fp=(FILE*)fopen(argv[1],"r");
+	
+					fseek(fp, 0, SEEK_SET);
+
+					if(fp==NULL)
+					{
+						printf("Some error while opening the file");
+						exit(1);
+					}
+
+					fp=getStream(fp);
+
+					forwardPointer=-1;
+
+					parseTree(argv[2]);
+
+					astnode *xp = createAST(root);
+
+					FILE* fp2=fopen("tree2.txt","w");
+					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
+
+					fclose(fp2);
+
+						printf("\n");
+					
+					semCheck(xp);
+/*
+You may encounter a segmentation fault due to existence of some syntax/semantic error in the program file. Please run code generation on a error free program only.");
+*/
+					resetIRParams();
+					genIRTable(xp,sym_root);
+					printIR(quad_row_tail);
+
+					//codeGen(quad_row_tail);
+
+					end_time = clock();
+
+					total_CPU_time  =  (double) (end_time - start_time);
+					
+					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
+			
 					break;
 				}
 
