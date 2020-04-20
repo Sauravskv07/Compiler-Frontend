@@ -1,5 +1,5 @@
 stage1exe : adt.o lexer.o hash_table.o parseTable.o parseRules.o parser.o utils.o ast.o semCheck.o symbol_table.o ir.o codeGen.o
-	gcc -o stage1exe driver.c adt.o ast.o lexer.o hash_table.o parseTable.o parseRules.o parser.o utils.o ir.o semCheck.o codeGen.o symbol_table.o -lm -fno-stack-protector
+	gcc -o compiler driver.c adt.o ast.o lexer.o hash_table.o parseTable.o parseRules.o parser.o utils.o ir.o semCheck.o codeGen.o symbol_table.o -lm -fno-stack-protector
 
 adt.o : adt.c adt.h
 	gcc -c adt.c

@@ -213,7 +213,11 @@ int main(int argc,char** argv)
 
 					forwardPointer=-1;
 
-					parseTree(argv[2]);
+					printf("ENTER THE DESTINATION FILE NAME FOR PARSE TREE:\n");
+					char dst[30];
+					scanf("%s",dst);
+
+					parseTree(dst);
 
 					end_time = clock();
 
@@ -250,6 +254,9 @@ int main(int argc,char** argv)
 
 					forwardPointer=-1;
 
+				printf("ENTER THE DESTINATION FILE NAME:\n");
+				char dst[30];
+				scanf("%s",dst);
 					parseTree(argv[2]);
 
 					astnode *xp = createAST(root);
@@ -369,56 +376,6 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 					
 				}
 
-			case 7:{
-					forwardPointer=0;
-				
-					backPointer=0;
-
-					LN=1;
-
-					endReached=0;
-					
-					start_time = clock();
-
-					fp=(FILE*)fopen(argv[1],"r");
-	
-					fseek(fp, 0, SEEK_SET);
-
-					if(fp==NULL)
-					{
-						printf("Some error while opening the file");
-						exit(1);
-					}
-
-					fp=getStream(fp);
-
-					forwardPointer=-1;
-
-					parseTree(argv[2]);
-
-					astnode *xp = createAST(root);
-					astroot = xp;
-
-					FILE* fp2=fopen("tree2.txt","w");
-					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-					
-					fclose(fp2);
-
-						printf("\n");
-					
-					semCheck(xp);
-					if(sym_root->right==NULL) printf("ppp");
-					printf("\n\n\nPrinting symbol table : \n");
-					printsymnode(sym_root);
-
-					end_time = clock();
-
-					total_CPU_time  =  (double) (end_time - start_time);
-					
-					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
-			
-					break;
-				}
 			case 8:{
 					forwardPointer=0;
 				
@@ -444,32 +401,100 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 
 					forwardPointer=-1;
 
-					parseTree(argv[2]);
+					char parse_name[]={'p','a','r','s','e','.','t','x','t','\0'};
+					
+					parseTree(parse_name);
 
-					astnode *xp = createAST(root);
+					if(num_errors==0)
+					{
+						astnode *xp = createAST(root);
+						astroot = xp;
 
-					FILE* fp2=fopen("tree2.txt","w");
-					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-
-					fclose(fp2);
+						FILE* fp2=fopen("tree2.txt","w");
+						fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
+					
+						fclose(fp2);
 
 						printf("\n");
 					
-					semCheck(xp);
-/*
-You may encounter a segmentation fault due to existence of some syntax/semantic error in the program file. Please run code generation on a error free program only.");
-*/
-					resetIRParams();
-					genIRTable(xp,sym_root);
-					printIR(quad_row_tail);
+						semCheck(xp);
+					}
+					//if(sym_root->right==NULL) printf("ppp");
 
-					//codeGen(quad_row_tail);
+					//printf("\n\n\nPrinting symbol table : \n");
+					
+					//printsymnode(sym_root);
 
 					end_time = clock();
 
 					total_CPU_time  =  (double) (end_time - start_time);
 					
 					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
+
+					printf("TOTAL_CPU_TIME = %lf\n",total_CPU_time);
+					printf("total_CPU_time_in_seconds = %lf\n",total_CPU_time_in_seconds);
+			
+					break;
+				}
+			case 9:{
+					forwardPointer=0;
+				
+					backPointer=0;
+
+					LN=1;
+
+					endReached=0;
+					
+					start_time = clock();
+
+					fp=(FILE*)fopen(argv[1],"r");
+	
+					fseek(fp, 0, SEEK_SET);
+
+					if(fp==NULL)
+					{
+						printf("Some error while opening the file");
+						exit(1);
+					}
+
+					fp=getStream(fp);
+
+					forwardPointer=-1;
+
+					char parse_name[]={'p','a','r','s','e','.','t','x','t','\0'};
+
+					parseTree(parse_name);
+
+					if(num_errors==0)
+					{
+						astnode *xp = createAST(root);
+
+						FILE* fp2=fopen("tree2.txt","w");
+						fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
+
+						fclose(fp2);
+
+						printf("\n");
+					
+					
+						semCheck(xp);
+/*
+You may encounter a segmentation fault due to existence of some syntax/semantic error in the program file. Please run code generation on a error free program only.");
+*/
+						if(sem_num_errors==0)
+						{
+							resetIRParams();
+							genIRTable(xp,sym_root);
+							printIR(quad_row_tail);
+					
+							codeGen(quad_row_tail);
+						}
+						else 
+							printf("some semantic errors present\n");
+
+					}
+					else
+						printf("some syntactic errors present\n");
 			
 					break;
 				}
