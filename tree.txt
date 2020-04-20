@@ -1,94 +1,116 @@
 lexeme		lineno		tokenName		valueIfNumber		parentNodeSymbol	isLeafNode(yes/no)	NodeSymbol
-declare		2		DECLARE				0		moduleDeclaration		YES
-----										moduleDeclarations			NO		moduleDeclaration
-module		2		MODULE				0		moduleDeclaration		YES
-square		2		ID				0		moduleDeclaration		YES
-;		2		SEMICOL				0		moduleDeclaration		YES
-----										program			NO		moduleDeclarations
 e				EPSILON						moduleDeclarations		YES	
-----										moduleDeclarations			NO		moduleDeclarations
+----										program			NO		moduleDeclarations
 ----										ROOT			NO		program
-<<		3		DEF				0		module		YES
+<<		8		DEF				0		module		YES
 ----										otherModules			NO		module
-module		3		MODULE				0		module		YES
-compute		3		ID				0		module		YES
->>		3		ENDDEF				0		module		YES
-takes		4		TAKES				0		module		YES
-input		4		INPUT				0		module		YES
-[		4		SQBO				0		module		YES
-x		4		ID				0		input_plist		YES
+module		8		MODULE				0		module		YES
+compute_expr		8		ID				0		module		YES
+>>		8		ENDDEF				0		module		YES
+takes		9		TAKES				0		module		YES
+input		9		INPUT				0		module		YES
+[		9		SQBO				0		module		YES
+a		9		ID				0		input_plist		YES
 ----										module			NO		input_plist
-:		4		COLON				0		input_plist		YES
-integer		4		INTEGER				0		dataType		YES
+:		9		COLON				0		input_plist		YES
+integer		9		INTEGER				0		dataType		YES
 ----										input_plist			NO		dataType
-,		4		COMMA				0		N1		YES
+,		9		COMMA				0		N1		YES
 ----										input_plist			NO		N1
-y		4		ID				0		N1		YES
-:		4		COLON				0		N1		YES
-integer		4		INTEGER				0		dataType		YES
+b		9		ID				0		N1		YES
+:		9		COLON				0		N1		YES
+integer		9		INTEGER				0		dataType		YES
+----										N1			NO		dataType
+,		9		COMMA				0		N1		YES
+----										N1			NO		N1
+c		9		ID				0		N1		YES
+:		9		COLON				0		N1		YES
+boolean		9		BOOLEAN				0		dataType		YES
 ----										N1			NO		dataType
 e				EPSILON						N1		YES	
 ----										N1			NO		N1
-]		4		SQBC				0		module		YES
-;		4		SEMICOL				0		module		YES
-returns		5		RETURNS				0		ret		YES
+]		9		SQBC				0		module		YES
+;		9		SEMICOL				0		module		YES
+returns		10		RETURNS				0		ret		YES
 ----										module			NO		ret
-[		5		SQBO				0		ret		YES
-value		5		ID				0		output_plist		YES
+[		10		SQBO				0		ret		YES
+u		10		ID				0		output_plist		YES
 ----										ret			NO		output_plist
-:		5		COLON				0		output_plist		YES
-integer		5		INTEGER				0		type		YES
+:		10		COLON				0		output_plist		YES
+integer		10		INTEGER				0		type		YES
 ----										output_plist			NO		type
-,		5		COMMA				0		N2		YES
+,		10		COMMA				0		N2		YES
 ----										output_plist			NO		N2
-f		5		ID				0		N2		YES
-:		5		COLON				0		N2		YES
-integer		5		INTEGER				0		type		YES
+v		10		ID				0		N2		YES
+:		10		COLON				0		N2		YES
+boolean		10		BOOLEAN				0		type		YES
 ----										N2			NO		type
 e				EPSILON						N2		YES	
 ----										N2			NO		N2
-]		5		SQBC				0		ret		YES
-;		5		SEMICOL				0		ret		YES
-start		6		START				0		moduleDef		YES
+]		10		SQBC				0		ret		YES
+;		10		SEMICOL				0		ret		YES
+start		11		START				0		moduleDef		YES
 ----										module			NO		moduleDef
-declare		7		DECLARE				0		declareStmt		YES
+declare		12		DECLARE				0		declareStmt		YES
 ----										statement			NO		declareStmt
-v1		7		ID				0		idList		YES
+p		12		ID				0		idList		YES
 ----										declareStmt			NO		idList
-e				EPSILON						N3		YES	
+,		12		COMMA				0		N3		YES
 ----										idList			NO		N3
-:		7		COLON				0		declareStmt		YES
-integer		7		INTEGER				0		dataType		YES
+q		12		ID				0		N3		YES
+,		12		COMMA				0		N3		YES
+----										N3			NO		N3
+d		12		ID				0		N3		YES
+e				EPSILON						N3		YES	
+----										N3			NO		N3
+:		12		COLON				0		declareStmt		YES
+integer		12		INTEGER				0		dataType		YES
 ----										declareStmt			NO		dataType
-;		7		SEMICOL				0		declareStmt		YES
+;		12		SEMICOL				0		declareStmt		YES
 ----										statements			NO		statement
 ----										moduleDef			NO		statements
-declare		8		DECLARE				0		declareStmt		YES
+declare		13		DECLARE				0		declareStmt		YES
 ----										statement			NO		declareStmt
-v5		8		ID				0		idList		YES
+m		13		ID				0		idList		YES
 ----										declareStmt			NO		idList
 e				EPSILON						N3		YES	
 ----										idList			NO		N3
-:		8		COLON				0		declareStmt		YES
-boolean		8		BOOLEAN				0		dataType		YES
+:		13		COLON				0		declareStmt		YES
+boolean		13		BOOLEAN				0		dataType		YES
 ----										declareStmt			NO		dataType
-;		8		SEMICOL				0		declareStmt		YES
+;		13		SEMICOL				0		declareStmt		YES
 ----										statements			NO		statement
 ----										statements			NO		statements
-v1		9		ID				0		assignmentStmt		YES
+get_value		14		GET_VALUE				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		14		BO				0		ioStmt		YES
+d		14		ID				0		ioStmt		YES
+)		14		BC				0		ioStmt		YES
+;		14		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+get_value		15		GET_VALUE				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		15		BO				0		ioStmt		YES
+q		15		ID				0		ioStmt		YES
+)		15		BC				0		ioStmt		YES
+;		15		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+p		16		ID				0		assignmentStmt		YES
 ----										simpleStmt			NO		assignmentStmt
-:=		9		ASSIGNOP				0		lvalueIDStmt		YES
+:=		16		ASSIGNOP				0		lvalueIDStmt		YES
 ----										whichStmt			NO		lvalueIDStmt
-v1		9		ID				0		var_id_num		YES
+a		16		ID				0		var_id_num		YES
 ----										factor			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
 ----										term			NO		factor
 ----										arithmeticExpr			NO		term
-*		9		MUL				0		op2		YES
+*		16		MUL				0		op2		YES
 ----										N5			NO		op2
 ----										term			NO		N5
-f		9		ID				0		var_id_num		YES
+b		16		ID				0		var_id_num		YES
 ----										factor			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
@@ -96,70 +118,27 @@ e				EPSILON						whichId		YES
 e				EPSILON						N5		YES	
 ----										N5			NO		N5
 ----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-e				EPSILON						N8		YES	
-----										AnyTerm			NO		N8
-----										expression			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-----										lvalueIDStmt			NO		expression
-;		9		SEMICOL				0		lvalueIDStmt		YES
-----										assignmentStmt			NO		whichStmt
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-f		10		ID				0		assignmentStmt		YES
-----										simpleStmt			NO		assignmentStmt
-:=		10		ASSIGNOP				0		lvalueIDStmt		YES
-----										whichStmt			NO		lvalueIDStmt
-1		10		NUM				1		var_id_num		YES
-----										factor			NO		var_id_num
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-e				EPSILON						N8		YES	
-----										AnyTerm			NO		N8
-----										expression			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-----										lvalueIDStmt			NO		expression
-;		10		SEMICOL				0		lvalueIDStmt		YES
-----										assignmentStmt			NO		whichStmt
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-value		11		ID				0		assignmentStmt		YES
-----										simpleStmt			NO		assignmentStmt
-:=		11		ASSIGNOP				0		lvalueIDStmt		YES
-----										whichStmt			NO		lvalueIDStmt
-x		11		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-*		11		MUL				0		op2		YES
-----										N5			NO		op2
-----										term			NO		N5
-x		11		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										N5			NO		factor
-e				EPSILON						N5		YES	
-----										N5			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-+		11		PLUS				0		op1		YES
++		16		PLUS				0		op1		YES
 ----										N4			NO		op1
 ----										arithmeticExpr			NO		N4
-5		11		NUM				5		var_id_num		YES
+d		16		ID				0		var_id_num		YES
+----										factor			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										term			NO		factor
+----										N4			NO		term
+*		16		MUL				0		op2		YES
+----										N5			NO		op2
+----										term			NO		N5
+2		16		NUM				2		var_id_num		YES
+----										factor			NO		var_id_num
+----										N5			NO		factor
+e				EPSILON						N5		YES	
+----										N5			NO		N5
+-		16		MINUS				0		op1		YES
+----										N4			NO		op1
+----										N4			NO		N4
+3		16		NUM				3		var_id_num		YES
 ----										factor			NO		var_id_num
 ----										term			NO		factor
 ----										N4			NO		term
@@ -174,363 +153,16 @@ e				EPSILON						N8		YES
 e				EPSILON						N7		YES	
 ----										arithmeticOrBooleanExpr			NO		N7
 ----										lvalueIDStmt			NO		expression
-;		11		SEMICOL				0		lvalueIDStmt		YES
+;		16		SEMICOL				0		lvalueIDStmt		YES
 ----										assignmentStmt			NO		whichStmt
 ----										statement			NO		simpleStmt
 ----										statements			NO		statement
 ----										statements			NO		statements
-v1		12		ID				0		assignmentStmt		YES
+m		17		ID				0		assignmentStmt		YES
 ----										simpleStmt			NO		assignmentStmt
-:=		12		ASSIGNOP				0		lvalueIDStmt		YES
+:=		17		ASSIGNOP				0		lvalueIDStmt		YES
 ----										whichStmt			NO		lvalueIDStmt
-v1		12		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-*		12		MUL				0		op2		YES
-----										N5			NO		op2
-----										term			NO		N5
-v1		12		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										N5			NO		factor
-e				EPSILON						N5		YES	
-----										N5			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-e				EPSILON						N8		YES	
-----										AnyTerm			NO		N8
-----										expression			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-----										lvalueIDStmt			NO		expression
-;		12		SEMICOL				0		lvalueIDStmt		YES
-----										assignmentStmt			NO		whichStmt
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-while		13		WHILE				0		iterativeStmt		YES
-----										statement			NO		iterativeStmt
-(		13		BO				0		iterativeStmt		YES
-v1		13		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-<		13		LT				0		relationalOp		YES
-----										N8			NO		relationalOp
-----										AnyTerm			NO		N8
-v1		13		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										N8			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										iterativeStmt			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-)		13		BC				0		iterativeStmt		YES
-start		14		START				0		iterativeStmt		YES
-declare		15		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-v3		15		ID				0		idList		YES
-----										declareStmt			NO		idList
-e				EPSILON						N3		YES	
-----										idList			NO		N3
-:		15		COLON				0		declareStmt		YES
-integer		15		INTEGER				0		dataType		YES
-----										declareStmt			NO		dataType
-;		15		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										iterativeStmt			NO		statements
-e				EPSILON						statements		YES	
-----										statements			NO		statements
-end		16		END				0		iterativeStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-for		17		FOR				0		iterativeStmt		YES
-----										statement			NO		iterativeStmt
-(		17		BO				0		iterativeStmt		YES
-v1		17		ID				0		iterativeStmt		YES
-in		17		IN				0		iterativeStmt		YES
-1		17		NUM				1		range		YES
-----										iterativeStmt			NO		range
-..		17		RANGEOP				0		range		YES
-15		17		NUM				15		range		YES
-)		17		BC				0		iterativeStmt		YES
-start		18		START				0		iterativeStmt		YES
-declare		19		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-v3		19		ID				0		idList		YES
-----										declareStmt			NO		idList
-e				EPSILON						N3		YES	
-----										idList			NO		N3
-:		19		COLON				0		declareStmt		YES
-integer		19		INTEGER				0		dataType		YES
-----										declareStmt			NO		dataType
-;		19		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										iterativeStmt			NO		statements
-x		20		ID				0		assignmentStmt		YES
-----										simpleStmt			NO		assignmentStmt
-:=		20		ASSIGNOP				0		lvalueIDStmt		YES
-----										whichStmt			NO		lvalueIDStmt
-x		20		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-+		20		PLUS				0		op1		YES
-----										N4			NO		op1
-----										arithmeticExpr			NO		N4
-1		20		NUM				1		var_id_num		YES
-----										factor			NO		var_id_num
-----										term			NO		factor
-----										N4			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-e				EPSILON						N4		YES	
-----										N4			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-e				EPSILON						N8		YES	
-----										AnyTerm			NO		N8
-----										expression			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-----										lvalueIDStmt			NO		expression
-;		20		SEMICOL				0		lvalueIDStmt		YES
-----										assignmentStmt			NO		whichStmt
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-e				EPSILON						statements		YES	
-----										statements			NO		statements
-end		21		END				0		iterativeStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-switch		22		SWITCH				0		conditionalStmt		YES
-----										statement			NO		conditionalStmt
-(		22		BO				0		conditionalStmt		YES
-v5		22		ID				0		conditionalStmt		YES
-)		22		BC				0		conditionalStmt		YES
-start		23		START				0		conditionalStmt		YES
-case		24		CASE				0		caseStmts		YES
-----										conditionalStmt			NO		caseStmts
-true		24		TRUE				0		value		YES
-----										caseStmts			NO		value
-:		24		COLON				0		caseStmts		YES
-declare		24		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-v3		24		ID				0		idList		YES
-----										declareStmt			NO		idList
-e				EPSILON						N3		YES	
-----										idList			NO		N3
-:		24		COLON				0		declareStmt		YES
-integer		24		INTEGER				0		dataType		YES
-----										declareStmt			NO		dataType
-;		24		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										caseStmts			NO		statements
-e				EPSILON						statements		YES	
-----										statements			NO		statements
-break		25		BREAK				0		caseStmts		YES
-;		25		SEMICOL				0		caseStmts		YES
-case		26		CASE				0		N9		YES
-----										caseStmts			NO		N9
-false		26		FALSE				0		value		YES
-----										N9			NO		value
-:		26		COLON				0		N9		YES
-declare		26		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-v4		26		ID				0		idList		YES
-----										declareStmt			NO		idList
-e				EPSILON						N3		YES	
-----										idList			NO		N3
-:		26		COLON				0		declareStmt		YES
-integer		26		INTEGER				0		dataType		YES
-----										declareStmt			NO		dataType
-;		26		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										N9			NO		statements
-e				EPSILON						statements		YES	
-----										statements			NO		statements
-break		27		BREAK				0		N9		YES
-;		27		SEMICOL				0		N9		YES
-e				EPSILON						N9		YES	
-----										N9			NO		N9
-e				EPSILON						default		YES	
-----										conditionalStmt			NO		default
-end		28		END				0		conditionalStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-e				EPSILON						statements		YES	
-----										statements			NO		statements
-end		29		END				0		moduleDef		YES
-----										program			NO		otherModules
-e				EPSILON						otherModules		YES	
-----										otherModules			NO		otherModules
-<<<		32		DRIVERDEF				0		driverModule		YES
-----										program			NO		driverModule
-driver		32		DRIVER				0		driverModule		YES
-program		32		PROGRAM				0		driverModule		YES
->>>		32		DRIVERENDDEF				0		driverModule		YES
-start		33		START				0		moduleDef		YES
-----										driverModule			NO		moduleDef
-declare		34		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-v1		34		ID				0		idList		YES
-----										declareStmt			NO		idList
-,		34		COMMA				0		N3		YES
-----										idList			NO		N3
-v3		34		ID				0		N3		YES
-,		34		COMMA				0		N3		YES
-----										N3			NO		N3
-v_1_2_3		34		ID				0		N3		YES
-e				EPSILON						N3		YES	
-----										N3			NO		N3
-:		34		COLON				0		declareStmt		YES
-integer		34		INTEGER				0		dataType		YES
-----										declareStmt			NO		dataType
-;		34		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										moduleDef			NO		statements
-declare		35		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-v2		35		ID				0		idList		YES
-----										declareStmt			NO		idList
-,		35		COMMA				0		N3		YES
-----										idList			NO		N3
-v4		35		ID				0		N3		YES
-e				EPSILON						N3		YES	
-----										N3			NO		N3
-:		35		COLON				0		declareStmt		YES
-real		35		REAL				0		dataType		YES
-----										declareStmt			NO		dataType
-;		35		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-declare		36		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-x1		36		ID				0		idList		YES
-----										declareStmt			NO		idList
-e				EPSILON						N3		YES	
-----										idList			NO		N3
-:		36		COLON				0		declareStmt		YES
-boolean		36		BOOLEAN				0		dataType		YES
-----										declareStmt			NO		dataType
-;		36		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-declare		37		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-A		37		ID				0		idList		YES
-----										declareStmt			NO		idList
-,		37		COMMA				0		N3		YES
-----										idList			NO		N3
-B		37		ID				0		N3		YES
-e				EPSILON						N3		YES	
-----										N3			NO		N3
-:		37		COLON				0		declareStmt		YES
-array		37		ARRAY				0		dataType		YES
-----										declareStmt			NO		dataType
-[		37		SQBO				0		dataType		YES
-2		37		NUM				2		index		YES
-----										range_arrays			NO		index
-----										dataType			NO		range_arrays
-..		37		RANGEOP				0		range_arrays		YES
-14		37		NUM				14		index		YES
-----										range_arrays			NO		index
-]		37		SQBC				0		dataType		YES
-of		37		OF				0		dataType		YES
-real		37		REAL				0		type		YES
-----										dataType			NO		type
-;		37		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-v4		38		ID				0		assignmentStmt		YES
-----										simpleStmt			NO		assignmentStmt
-:=		38		ASSIGNOP				0		lvalueIDStmt		YES
-----										whichStmt			NO		lvalueIDStmt
-+		38		PLUS				0		unary_op		YES
-----										U			NO		unary_op
-----										expression			NO		U
-(		38		BO				0		new_NT		YES
-----										U			NO		new_NT
-(		38		BO				0		factor		YES
-----										term			NO		factor
-5.0	38		RNUM				5.000000	var_id_num		YES
-----										factor			NO		var_id_num
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-e				EPSILON						N8		YES	
-----										AnyTerm			NO		N8
-----										factor			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-)		38		BC				0		factor		YES
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										new_NT			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-)		38		BC				0		new_NT		YES
-----										lvalueIDStmt			NO		expression
-;		38		SEMICOL				0		lvalueIDStmt		YES
-----										assignmentStmt			NO		whichStmt
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-v2		39		ID				0		assignmentStmt		YES
-----										simpleStmt			NO		assignmentStmt
-:=		39		ASSIGNOP				0		lvalueIDStmt		YES
-----										whichStmt			NO		lvalueIDStmt
-+		39		PLUS				0		unary_op		YES
-----										U			NO		unary_op
-----										expression			NO		U
-v2		39		ID				0		var_id_num		YES
-----										new_NT			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										U			NO		new_NT
-----										lvalueIDStmt			NO		expression
-;		39		SEMICOL				0		lvalueIDStmt		YES
-----										assignmentStmt			NO		whichStmt
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-A		40		ID				0		assignmentStmt		YES
-----										simpleStmt			NO		assignmentStmt
-:=		40		ASSIGNOP				0		lvalueIDStmt		YES
-----										whichStmt			NO		lvalueIDStmt
-B		40		ID				0		var_id_num		YES
+c		17		ID				0		var_id_num		YES
 ----										factor			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
@@ -545,85 +177,10 @@ e				EPSILON						N4		YES
 e				EPSILON						N8		YES	
 ----										AnyTerm			NO		N8
 ----										expression			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-----										lvalueIDStmt			NO		expression
-;		40		SEMICOL				0		lvalueIDStmt		YES
-----										assignmentStmt			NO		whichStmt
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-v2		41		ID				0		assignmentStmt		YES
-----										simpleStmt			NO		assignmentStmt
-:=		41		ASSIGNOP				0		lvalueIDStmt		YES
-----										whichStmt			NO		lvalueIDStmt
-+		41		PLUS				0		unary_op		YES
-----										U			NO		unary_op
-----										expression			NO		U
-A		41		ID				0		var_id_num		YES
-----										new_NT			NO		var_id_num
-[		41		SQBO				0		whichId		YES
-----										var_id_num			NO		whichId
-v1		41		ID				0		index		YES
-----										whichId			NO		index
-]		41		SQBC				0		whichId		YES
-----										U			NO		new_NT
-----										lvalueIDStmt			NO		expression
-;		41		SEMICOL				0		lvalueIDStmt		YES
-----										assignmentStmt			NO		whichStmt
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-x1		42		ID				0		assignmentStmt		YES
-----										simpleStmt			NO		assignmentStmt
-:=		42		ASSIGNOP				0		lvalueIDStmt		YES
-----										whichStmt			NO		lvalueIDStmt
-(		42		BO				0		factor		YES
-----										term			NO		factor
-v1		42		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-<=		42		LE				0		relationalOp		YES
-----										N8			NO		relationalOp
-----										AnyTerm			NO		N8
-v1		42		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-e				EPSILON						whichId		YES	
-----										var_id_num			NO		whichId
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										N8			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										factor			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-)		42		BC				0		factor		YES
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-e				EPSILON						N8		YES	
-----										AnyTerm			NO		N8
-----										expression			NO		arithmeticOrBooleanExpr
-OR		42		OR				0		logicalOp		YES
+AND		17		AND				0		logicalOp		YES
 ----										N7			NO		logicalOp
 ----										arithmeticOrBooleanExpr			NO		N7
-x1		42		ID				0		var_id_num		YES
+a		17		ID				0		var_id_num		YES
 ----										factor			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
@@ -635,82 +192,54 @@ e				EPSILON						N5		YES
 e				EPSILON						N4		YES	
 ----										arithmeticExpr			NO		N4
 ----										N7			NO		AnyTerm
-e				EPSILON						N8		YES	
+<=		17		LE				0		relationalOp		YES
+----										N8			NO		relationalOp
 ----										AnyTerm			NO		N8
+b		17		ID				0		var_id_num		YES
+----										factor			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										term			NO		factor
+----										arithmeticExpr			NO		term
+e				EPSILON						N5		YES	
+----										term			NO		N5
+----										N8			NO		arithmeticExpr
+e				EPSILON						N4		YES	
+----										arithmeticExpr			NO		N4
 e				EPSILON						N7		YES	
 ----										N7			NO		N7
 ----										lvalueIDStmt			NO		expression
-;		42		SEMICOL				0		lvalueIDStmt		YES
+;		17		SEMICOL				0		lvalueIDStmt		YES
 ----										assignmentStmt			NO		whichStmt
 ----										statement			NO		simpleStmt
 ----										statements			NO		statement
 ----										statements			NO		statements
-v2		43		ID				0		assignmentStmt		YES
+u		18		ID				0		assignmentStmt		YES
 ----										simpleStmt			NO		assignmentStmt
-:=		43		ASSIGNOP				0		lvalueIDStmt		YES
+:=		18		ASSIGNOP				0		lvalueIDStmt		YES
 ----										whichStmt			NO		lvalueIDStmt
-+		43		PLUS				0		unary_op		YES
-----										U			NO		unary_op
-----										expression			NO		U
-(		43		BO				0		new_NT		YES
-----										U			NO		new_NT
-(		43		BO				0		factor		YES
-----										term			NO		factor
-5.0	43		RNUM				5.000000	var_id_num		YES
-----										factor			NO		var_id_num
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-e				EPSILON						N8		YES	
-----										AnyTerm			NO		N8
-----										factor			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-)		43		BC				0		factor		YES
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										new_NT			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-)		43		BC				0		new_NT		YES
-----										lvalueIDStmt			NO		expression
-;		43		SEMICOL				0		lvalueIDStmt		YES
-----										assignmentStmt			NO		whichStmt
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-v4		44		ID				0		assignmentStmt		YES
-----										simpleStmt			NO		assignmentStmt
-:=		44		ASSIGNOP				0		lvalueIDStmt		YES
-----										whichStmt			NO		lvalueIDStmt
-A		44		ID				0		var_id_num		YES
-----										factor			NO		var_id_num
-[		44		SQBO				0		whichId		YES
-----										var_id_num			NO		whichId
-12		44		NUM				12		index		YES
-----										whichId			NO		index
-]		44		SQBC				0		whichId		YES
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-*		44		MUL				0		op2		YES
-----										N5			NO		op2
-----										term			NO		N5
-v4		44		ID				0		var_id_num		YES
+p		18		ID				0		var_id_num		YES
 ----										factor			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
-----										N5			NO		factor
+----										term			NO		factor
+----										arithmeticExpr			NO		term
 e				EPSILON						N5		YES	
-----										N5			NO		N5
+----										term			NO		N5
 ----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
++		18		PLUS				0		op1		YES
+----										N4			NO		op1
 ----										arithmeticExpr			NO		N4
+q		18		ID				0		var_id_num		YES
+----										factor			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										term			NO		factor
+----										N4			NO		term
+e				EPSILON						N5		YES	
+----										term			NO		N5
+e				EPSILON						N4		YES	
+----										N4			NO		N4
 ----										arithmeticOrBooleanExpr			NO		AnyTerm
 e				EPSILON						N8		YES	
 ----										AnyTerm			NO		N8
@@ -718,26 +247,19 @@ e				EPSILON						N8		YES
 e				EPSILON						N7		YES	
 ----										arithmeticOrBooleanExpr			NO		N7
 ----										lvalueIDStmt			NO		expression
-;		44		SEMICOL				0		lvalueIDStmt		YES
+;		18		SEMICOL				0		lvalueIDStmt		YES
 ----										assignmentStmt			NO		whichStmt
 ----										statement			NO		simpleStmt
 ----										statements			NO		statement
 ----										statements			NO		statements
-A		45		ID				0		assignmentStmt		YES
+v		19		ID				0		assignmentStmt		YES
 ----										simpleStmt			NO		assignmentStmt
-[		45		SQBO				0		lvalueARRStmt		YES
-----										whichStmt			NO		lvalueARRStmt
-5		45		NUM				5		index		YES
-----										lvalueARRStmt			NO		index
-]		45		SQBC				0		lvalueARRStmt		YES
-:=		45		ASSIGNOP				0		lvalueARRStmt		YES
-A		45		ID				0		var_id_num		YES
+:=		19		ASSIGNOP				0		lvalueIDStmt		YES
+----										whichStmt			NO		lvalueIDStmt
+m		19		ID				0		var_id_num		YES
 ----										factor			NO		var_id_num
-[		45		SQBO				0		whichId		YES
+e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
-2		45		NUM				2		index		YES
-----										whichId			NO		index
-]		45		SQBC				0		whichId		YES
 ----										term			NO		factor
 ----										arithmeticExpr			NO		term
 e				EPSILON						N5		YES	
@@ -749,123 +271,298 @@ e				EPSILON						N4		YES
 e				EPSILON						N8		YES	
 ----										AnyTerm			NO		N8
 ----										expression			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
+OR		19		OR				0		logicalOp		YES
+----										N7			NO		logicalOp
 ----										arithmeticOrBooleanExpr			NO		N7
-----										lvalueARRStmt			NO		expression
-;		45		SEMICOL				0		lvalueARRStmt		YES
+p		19		ID				0		var_id_num		YES
+----										factor			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										term			NO		factor
+----										arithmeticExpr			NO		term
+e				EPSILON						N5		YES	
+----										term			NO		N5
+----										AnyTerm			NO		arithmeticExpr
+e				EPSILON						N4		YES	
+----										arithmeticExpr			NO		N4
+----										N7			NO		AnyTerm
+<=		19		LE				0		relationalOp		YES
+----										N8			NO		relationalOp
+----										AnyTerm			NO		N8
+q		19		ID				0		var_id_num		YES
+----										factor			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										term			NO		factor
+----										arithmeticExpr			NO		term
+e				EPSILON						N5		YES	
+----										term			NO		N5
+----										N8			NO		arithmeticExpr
+e				EPSILON						N4		YES	
+----										arithmeticExpr			NO		N4
+e				EPSILON						N7		YES	
+----										N7			NO		N7
+----										lvalueIDStmt			NO		expression
+;		19		SEMICOL				0		lvalueIDStmt		YES
 ----										assignmentStmt			NO		whichStmt
 ----										statement			NO		simpleStmt
 ----										statements			NO		statement
 ----										statements			NO		statements
-get_value		46		GET_VALUE				0		ioStmt		YES
+print		20		PRINT				0		ioStmt		YES
 ----										statement			NO		ioStmt
-(		46		BO				0		ioStmt		YES
-v_1_2_3		46		ID				0		ioStmt		YES
-)		46		BC				0		ioStmt		YES
-;		46		SEMICOL				0		ioStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-declare		47		DECLARE				0		declareStmt		YES
-----										statement			NO		declareStmt
-result_		47		ID				0		idList		YES
-----										declareStmt			NO		idList
-e				EPSILON						N3		YES	
-----										idList			NO		N3
-:		47		COLON				0		declareStmt		YES
-integer		47		INTEGER				0		dataType		YES
-----										declareStmt			NO		dataType
-;		47		SEMICOL				0		declareStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-[		48		SQBO				0		optional		YES
-----										moduleReuseStmt			NO		optional
-result_		48		ID				0		idList		YES
-----										optional			NO		idList
-,		48		COMMA				0		N3		YES
-----										idList			NO		N3
-v1		48		ID				0		N3		YES
-e				EPSILON						N3		YES	
-----										N3			NO		N3
-]		48		SQBC				0		optional		YES
-:=		48		ASSIGNOP				0		optional		YES
-----										simpleStmt			NO		moduleReuseStmt
-use		48		USE				0		moduleReuseStmt		YES
-module		48		MODULE				0		moduleReuseStmt		YES
-compute		48		ID				0		moduleReuseStmt		YES
-with		48		WITH				0		moduleReuseStmt		YES
-parameters		48		PARAMETERS				0		moduleReuseStmt		YES
-v1		48		ID				0		idList		YES
-----										moduleReuseStmt			NO		idList
-,		48		COMMA				0		N3		YES
-----										idList			NO		N3
-v3		48		ID				0		N3		YES
-e				EPSILON						N3		YES	
-----										N3			NO		N3
-;		48		SEMICOL				0		moduleReuseStmt		YES
-----										statement			NO		simpleStmt
-----										statements			NO		statement
-----										statements			NO		statements
-print		49		PRINT				0		ioStmt		YES
-----										statement			NO		ioStmt
-(		49		BO				0		ioStmt		YES
-result_		49		ID				0		var_id_num		YES
+(		20		BO				0		ioStmt		YES
+a		20		ID				0		var_id_num		YES
 ----										var			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
 ----										ioStmt			NO		var
-)		49		BC				0		ioStmt		YES
-;		49		SEMICOL				0		ioStmt		YES
+)		20		BC				0		ioStmt		YES
+;		20		SEMICOL				0		ioStmt		YES
 ----										statements			NO		statement
 ----										statements			NO		statements
-print		50		PRINT				0		ioStmt		YES
+print		21		PRINT				0		ioStmt		YES
 ----										statement			NO		ioStmt
-(		50		BO				0		ioStmt		YES
-A		50		ID				0		var_id_num		YES
-----										var			NO		var_id_num
-[		50		SQBO				0		whichId		YES
-----										var_id_num			NO		whichId
-v1		50		ID				0		index		YES
-----										whichId			NO		index
-]		50		SQBC				0		whichId		YES
-----										ioStmt			NO		var
-)		50		BC				0		ioStmt		YES
-;		50		SEMICOL				0		ioStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-print		51		PRINT				0		ioStmt		YES
-----										statement			NO		ioStmt
-(		51		BO				0		ioStmt		YES
-true		51		TRUE				0		boolConstt		YES
-----										var			NO		boolConstt
-----										ioStmt			NO		var
-)		51		BC				0		ioStmt		YES
-;		51		SEMICOL				0		ioStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-print		52		PRINT				0		ioStmt		YES
-----										statement			NO		ioStmt
-(		52		BO				0		ioStmt		YES
-5		52		NUM				5		var_id_num		YES
-----										var			NO		var_id_num
-----										ioStmt			NO		var
-)		52		BC				0		ioStmt		YES
-;		52		SEMICOL				0		ioStmt		YES
-----										statements			NO		statement
-----										statements			NO		statements
-print		53		PRINT				0		ioStmt		YES
-----										statement			NO		ioStmt
-(		53		BO				0		ioStmt		YES
-A		53		ID				0		var_id_num		YES
+(		21		BO				0		ioStmt		YES
+b		21		ID				0		var_id_num		YES
 ----										var			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
 ----										ioStmt			NO		var
-)		53		BC				0		ioStmt		YES
-;		53		SEMICOL				0		ioStmt		YES
+)		21		BC				0		ioStmt		YES
+;		21		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+print		22		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		22		BO				0		ioStmt		YES
+c		22		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		22		BC				0		ioStmt		YES
+;		22		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+print		23		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		23		BO				0		ioStmt		YES
+d		23		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		23		BC				0		ioStmt		YES
+;		23		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+print		24		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		24		BO				0		ioStmt		YES
+p		24		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		24		BC				0		ioStmt		YES
+;		24		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+print		25		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		25		BO				0		ioStmt		YES
+q		25		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		25		BC				0		ioStmt		YES
+;		25		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+print		26		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		26		BO				0		ioStmt		YES
+u		26		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		26		BC				0		ioStmt		YES
+;		26		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+print		27		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		27		BO				0		ioStmt		YES
+v		27		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		27		BC				0		ioStmt		YES
+;		27		SEMICOL				0		ioStmt		YES
 ----										statements			NO		statement
 ----										statements			NO		statements
 e				EPSILON						statements		YES	
 ----										statements			NO		statements
-end		55		END				0		moduleDef		YES
+end		28		END				0		moduleDef		YES
+----										program			NO		otherModules
+e				EPSILON						otherModules		YES	
+----										otherModules			NO		otherModules
+<<<		30		DRIVERDEF				0		driverModule		YES
+----										program			NO		driverModule
+driver		30		DRIVER				0		driverModule		YES
+program		30		PROGRAM				0		driverModule		YES
+>>>		30		DRIVERENDDEF				0		driverModule		YES
+start		31		START				0		moduleDef		YES
+----										driverModule			NO		moduleDef
+declare		32		DECLARE				0		declareStmt		YES
+----										statement			NO		declareStmt
+x		32		ID				0		idList		YES
+----										declareStmt			NO		idList
+,		32		COMMA				0		N3		YES
+----										idList			NO		N3
+y		32		ID				0		N3		YES
+,		32		COMMA				0		N3		YES
+----										N3			NO		N3
+z		32		ID				0		N3		YES
+e				EPSILON						N3		YES	
+----										N3			NO		N3
+:		32		COLON				0		declareStmt		YES
+integer		32		INTEGER				0		dataType		YES
+----										declareStmt			NO		dataType
+;		32		SEMICOL				0		declareStmt		YES
+----										statements			NO		statement
+----										moduleDef			NO		statements
+get_value		33		GET_VALUE				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		33		BO				0		ioStmt		YES
+x		33		ID				0		ioStmt		YES
+)		33		BC				0		ioStmt		YES
+;		33		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+get_value		34		GET_VALUE				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		34		BO				0		ioStmt		YES
+y		34		ID				0		ioStmt		YES
+)		34		BC				0		ioStmt		YES
+;		34		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+declare		35		DECLARE				0		declareStmt		YES
+----										statement			NO		declareStmt
+k		35		ID				0		idList		YES
+----										declareStmt			NO		idList
+,		35		COMMA				0		N3		YES
+----										idList			NO		N3
+h		35		ID				0		N3		YES
+e				EPSILON						N3		YES	
+----										N3			NO		N3
+:		35		COLON				0		declareStmt		YES
+boolean		35		BOOLEAN				0		dataType		YES
+----										declareStmt			NO		dataType
+;		35		SEMICOL				0		declareStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+h		36		ID				0		assignmentStmt		YES
+----										simpleStmt			NO		assignmentStmt
+:=		36		ASSIGNOP				0		lvalueIDStmt		YES
+----										whichStmt			NO		lvalueIDStmt
+false		36		FALSE				0		boolConstt		YES
+----										AnyTerm			NO		boolConstt
+----										arithmeticOrBooleanExpr			NO		AnyTerm
+----										expression			NO		arithmeticOrBooleanExpr
+e				EPSILON						N7		YES	
+----										arithmeticOrBooleanExpr			NO		N7
+----										lvalueIDStmt			NO		expression
+;		36		SEMICOL				0		lvalueIDStmt		YES
+----										assignmentStmt			NO		whichStmt
+----										statement			NO		simpleStmt
+----										statements			NO		statement
+----										statements			NO		statements
+[		37		SQBO				0		optional		YES
+----										moduleReuseStmt			NO		optional
+z		37		ID				0		idList		YES
+----										optional			NO		idList
+,		37		COMMA				0		N3		YES
+----										idList			NO		N3
+k		37		ID				0		N3		YES
+e				EPSILON						N3		YES	
+----										N3			NO		N3
+]		37		SQBC				0		optional		YES
+:=		37		ASSIGNOP				0		optional		YES
+----										simpleStmt			NO		moduleReuseStmt
+use		37		USE				0		moduleReuseStmt		YES
+module		37		MODULE				0		moduleReuseStmt		YES
+compute_expr		37		ID				0		moduleReuseStmt		YES
+with		37		WITH				0		moduleReuseStmt		YES
+parameters		37		PARAMETERS				0		moduleReuseStmt		YES
+x		37		ID				0		idList		YES
+----										moduleReuseStmt			NO		idList
+,		37		COMMA				0		N3		YES
+----										idList			NO		N3
+y		37		ID				0		N3		YES
+,		37		COMMA				0		N3		YES
+----										N3			NO		N3
+h		37		ID				0		N3		YES
+e				EPSILON						N3		YES	
+----										N3			NO		N3
+;		37		SEMICOL				0		moduleReuseStmt		YES
+----										statement			NO		simpleStmt
+----										statements			NO		statement
+----										statements			NO		statements
+print		38		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		38		BO				0		ioStmt		YES
+x		38		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		38		BC				0		ioStmt		YES
+;		38		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+print		39		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		39		BO				0		ioStmt		YES
+y		39		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		39		BC				0		ioStmt		YES
+;		39		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+print		40		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		40		BO				0		ioStmt		YES
+z		40		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		40		BC				0		ioStmt		YES
+;		40		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+print		41		PRINT				0		ioStmt		YES
+----										statement			NO		ioStmt
+(		41		BO				0		ioStmt		YES
+k		41		ID				0		var_id_num		YES
+----										var			NO		var_id_num
+e				EPSILON						whichId		YES	
+----										var_id_num			NO		whichId
+----										ioStmt			NO		var
+)		41		BC				0		ioStmt		YES
+;		41		SEMICOL				0		ioStmt		YES
+----										statements			NO		statement
+----										statements			NO		statements
+e				EPSILON						statements		YES	
+----										statements			NO		statements
+end		42		END				0		moduleDef		YES
 e				EPSILON						otherModules		YES	
 ----										program			NO		otherModules

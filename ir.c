@@ -854,8 +854,38 @@ void genIRTable(astnode *t,symnode* sym)
 			else if(i==ht_search(mapping_table, "arithmeticOrBooleanExpr")->data->t_item->index)
 			{
 				default_flag = false;
+				if(t->child!=NULL && t->child->child!=NULL)
+				{
 				genIRTable(t->child,sym);
 				genIRTable(t->child->right,sym);
+				}
+				else
+				{
+					quad_row *p = getEmptyRow();
+					p->next = NULL;
+					p->tag[1] = -1;
+					p->tag[2] = -1;
+					ht_item* temp = getVar(sym, t->child->data->token);
+					if(temp!=NULL)
+					{
+					p->val[0].v_item = temp->data->v_item;
+					p->op=ASSIGN;
+					p->tag[0] = 0;
+					p->tag[2] = 3;
+					p->val[2].t_item = getTempVariable(t->attr->baseType);
+					}
+					else
+					{
+					p->val[0].tk_item = t->child->data->token;
+					p->op=ASSIGN;
+					p->tag[0] = 1;
+					p->tag[2] = 3;
+					p->val[2].t_item = getTempVariable(t->attr->baseType);
+					}
+					p->prev = quad_row_head;
+					quad_row_head->next = p;
+					quad_row_head = p;
+				}
 			}
 			else if(i==ht_search(mapping_table, "N7")->data->t_item->index)
 			{

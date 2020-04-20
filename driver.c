@@ -305,7 +305,7 @@ int main(int argc,char** argv)
 
 					FILE* fp2=fopen("tree2.txt","w");
 					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-					
+
 					fclose(fp2);
 
 						printf("\n");
