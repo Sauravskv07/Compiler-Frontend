@@ -28,3 +28,7 @@ int getFunclinEn(ht_item* ht);
 int str[20];
 int nextSt(int i);
 int nextEn();
+void printsymarr(symnode* root);
+void printsymnodearr(symnode* rt);
+void printhashtablearr(char *module_name, int linstart, int linend, ht_hash_table* ht);
+void printhashparamsarr();

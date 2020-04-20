@@ -265,6 +265,104 @@ int nextEn()
 	}
 }
 
+void printsymarr(symnode* root)
+{
+	if(root!=NULL)
+	{
+		if(root->parent == sym_root) {off = 0;}
+		if(root == sym_root)
+		{
+			printhashparamsarr();
+		}
+		else
+		{
+		printhashtablearr(root->module_name,-1,-1,root->symbol_table);
+		nextSt(0);
+		nextEn();
+		}
+		nestlevel = nestlevel + 1;
+		printsymarr(root->child);
+		symnode* rt = root->child;
+		while(rt!=NULL)
+		{
+			rt = rt->right;
+			printsymarr(rt);
+		}
+		nestlevel = nestlevel -1;
+	}
+}
+void printsymnodearr(symnode* rt)
+{
+	st = root;
+	en = root;
+	nextSt(1);
+	nextEn();
+	printf("Name\t\tModule\t\tLine\tStatic/Dynamic\tRange\tType\n");
+	printsymarr(rt);
+}
+void printhashtablearr(char *module_name, int linstart, int linend, ht_hash_table* ht)
+{
+	const char *tp[] = {"INTEGER","REAL","BOOLEAN","ARRAY","UNDEFINED"};
+	int width[] = {2,4,1,1,0};
+	if(module_name==NULL || module_name[0]==0) {module_name="driver";}
+	for(int i=0;i<MAX_SIZE_MAPPING_TABLE;i++)
+	{
+		if(ht->items[i]!=NULL)
+		{
+			char *type = "";
+			char *isArr = "";
+			char *statdy = "---";
+			char *range = "---";
+			int wd = width[ht->items[i]->data->v_item->baseType];
+			char a[5];char b[5];
+			if(linstart==-1){linstart=st->data->token->LN;}
+			if(linend==-1){linend=en->data->token->LN;}
+			sprintf(a, "%d", linstart);
+			sprintf(b, "%d", linend);
+			char *lin = "---";
+			lin = a;
+			lin = strcat(lin,",");
+			lin = strcat(lin,b);
+			if(ht->items[i]->data->v_item->baseType==3) 
+			{
+				statdy = "static";
+				char a[5];char b[5];
+				type = tp[ht->items[i]->data->v_item->eleType]; isArr = "yes";
+				if(ht->items[i]->data->v_item->lowNode!=NULL)
+				{statdy="dynamic"; range = ht->items[i]->data->v_item->lowNode->key;}
+				else {sprintf(a, "%d", ht->items[i]->data->v_item->low); range = a;}
+				if(ht->items[i]->data->v_item->highNode!=NULL)
+				{statdy="dynamic";range = ht->items[i]->data->v_item->highNode->key;}
+				else {sprintf(b, "%d", ht->items[i]->data->v_item->high); range =  strcat(range,",");range =  strcat(range,b);}
+				if(ht->items[i]->data->v_item->lowNode==NULL && ht->items[i]->data->v_item->highNode==NULL)
+				{wd = wd + (ht->items[i]->data->v_item->high - ht->items[i]->data->v_item->low +1)*width[ht->items[i]->data->v_item->eleType];;}
+				printf("%s\t\t%s\t\t%s\t%s\t%s\t%s\t\n",ht->items[i]->key,module_name,lin,statdy,range,type);
+			}
+			else {type = tp[ht->items[i]->data->v_item->baseType]; isArr = "no";}
+			off = off + wd;
+		}
+	}
+}
+void printhashparamsarr()
+{
+	ht_hash_table* ht = sym_root->symbol_table;
+	for(int i=0;i<MAX_SIZE_MAPPING_TABLE;i++)
+	{
+		if(ht->items[i]!=NULL)
+		{
+			if(ht_search(sym_root->symbol_table,ht->items[i]->key)->data->f_item->pr!=NULL)
+			{
+			ht_hash_table* ht2 = ht_search(sym_root->symbol_table,ht->items[i]->key)->data->f_item->pr->input_list;
+			printhashtablearr(ht->items[i]->key, getFunclinSt(ht->items[i]),getFunclinEn(ht->items[i]), ht2);
+			ht2 = ht_search(sym_root->symbol_table,ht->items[i]->key)->data->f_item->pr->output_list;
+			printhashtablearr(ht->items[i]->key, getFunclinSt(ht->items[i]),getFunclinEn(ht->items[i]), ht2);
+			}
+			off = 0;
+		}
+	}
+}
+
+
 
 
 
