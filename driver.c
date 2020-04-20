@@ -22,6 +22,7 @@ GROUP NO. = 46
 #include "symbol_table.h"
 #include "semCheck.h"
 #include "ir.h"
+#include "codeGen.h"
 
 
 int main(int argc,char** argv)
@@ -316,6 +317,8 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 					resetIRParams();
 					genIRTable(xp,sym_root);
 					printIR(quad_row_tail);
+
+					//codeGen(quad_row_tail);
 
 					end_time = clock();
 
