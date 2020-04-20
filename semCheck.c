@@ -910,11 +910,12 @@ void checkSemRules(astnode *t,symnode* current)
 					//printf("idList\n");
 
 					if(ht_search(current->symbol_table,t->child->data->token->lexeme)==NULL && !(current->isModuleScope==1 && ht_search(ht_search(sym_root->symbol_table,current->module_name)->data->f_item->pr->output_list, t->child->data->token->lexeme)!=NULL))
-					{	
-						temp=ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,current->current_offset, t->attr->baseType, t->attr->eleType, t->attr->low, t->attr->high);
+					{
+						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType,t->attr->eleType,t->attr->low,t->attr->high);	
+						temp=ht_insert_var_item(current->symbol_table,t->child->data->token->lexeme ,-current->current_offset, t->attr->baseType, t->attr->eleType, t->attr->low, t->attr->high);
 						temp->data->v_item->lowNode=t->attr->lowNode;
 						temp->data->v_item->highNode=t->attr->highNode;
-						current->current_offset=incrementOffset(current->current_offset,t->attr->baseType,t->attr->eleType,t->attr->low,t->attr->high);
+						
 					}
 					else
 					{
@@ -1077,8 +1078,8 @@ int fillTheParams(astnode* t,parameters *pr,int current_offset)
 					fillTheParams(t->child->right,pr,current_offset);
 					if(ht_search(pr->input_list,t->child->data->token->lexeme)==NULL)
 					{
+						ht_insert_var_item(pr->input_list,t->child->data->token->lexeme ,current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,t->child->right->attr->low,t->child->right->attr->high);
 						current_offset=incrementOffset2(current_offset,t->child->right->attr->baseType);
-						ht_insert_var_item(pr->input_list,t->child->data->token->lexeme ,-current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,t->child->right->attr->low,t->child->right->attr->high);
 						pr->input_types[pr->num_inputs].eleType=t->child->right->attr->eleType;
 						pr->input_types[pr->num_inputs].baseType=t->child->right->attr->baseType;
 						pr->input_types[pr->num_inputs].low=t->child->right->attr->low;
@@ -1106,8 +1107,8 @@ int fillTheParams(astnode* t,parameters *pr,int current_offset)
 					fillTheParams(t->child->right,pr,current_offset);
 					if(ht_search(pr->output_list,t->child->data->token->lexeme)==NULL)
 					{
+						ht_insert_var_item(pr->output_list,t->child->data->token->lexeme ,current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,-1,-1);
 						current_offset=incrementOffset2(current_offset,t->child->right->attr->baseType);
-						ht_insert_var_item(pr->output_list,t->child->data->token->lexeme ,-current_offset, t->child->right->attr->baseType, t->child->right->attr->eleType,-1,-1);
 						pr->output_types[pr->num_outputs]=t->child->right->attr->baseType;
 						pr->num_outputs++;
 					}

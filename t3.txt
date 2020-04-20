@@ -10,7 +10,7 @@ start
 	f:=1;
 	value:= x*x + 5;
 	v1:=v1*v1;
-	while(v1<v1)
+	while(v1>x)
 	start
 		declare v3:integer;
 	end
@@ -40,9 +40,9 @@ start
 	A:=B;
 	v2:=+A[v1];
 	x1:= (v1<=v1) OR x1;
-	v2:=+((5.0));
+	v2:=+5.0;
 	v4:=A[12]*v4;
-	A[5]:=A[2];
+	A[v1]:=A[2];
 	get_value(v_1_2_3);
 	declare result_:integer;
 	[result_,v1]:=use module compute with parameters v1,v3;

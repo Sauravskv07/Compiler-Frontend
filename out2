@@ -229,10 +229,10 @@ e				EPSILON						N5		YES
 e				EPSILON						N4		YES	
 ----										arithmeticExpr			NO		N4
 ----										arithmeticOrBooleanExpr			NO		AnyTerm
-<		13		LT				0		relationalOp		YES
+>		13		GT				0		relationalOp		YES
 ----										N8			NO		relationalOp
 ----										AnyTerm			NO		N8
-v1		13		ID				0		var_id_num		YES
+x		13		ID				0		var_id_num		YES
 ----										factor			NO		var_id_num
 e				EPSILON						whichId		YES	
 ----										var_id_num			NO		whichId
@@ -652,33 +652,9 @@ v2		43		ID				0		assignmentStmt		YES
 +		43		PLUS				0		unary_op		YES
 ----										U			NO		unary_op
 ----										expression			NO		U
-(		43		BO				0		new_NT		YES
-----										U			NO		new_NT
-(		43		BO				0		factor		YES
-----										term			NO		factor
 5.0	43		RNUM				5.000000	var_id_num		YES
-----										factor			NO		var_id_num
-----										term			NO		factor
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										AnyTerm			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-----										arithmeticOrBooleanExpr			NO		AnyTerm
-e				EPSILON						N8		YES	
-----										AnyTerm			NO		N8
-----										factor			NO		arithmeticOrBooleanExpr
-e				EPSILON						N7		YES	
-----										arithmeticOrBooleanExpr			NO		N7
-)		43		BC				0		factor		YES
-----										arithmeticExpr			NO		term
-e				EPSILON						N5		YES	
-----										term			NO		N5
-----										new_NT			NO		arithmeticExpr
-e				EPSILON						N4		YES	
-----										arithmeticExpr			NO		N4
-)		43		BC				0		new_NT		YES
+----										new_NT			NO		var_id_num
+----										U			NO		new_NT
 ----										lvalueIDStmt			NO		expression
 ;		43		SEMICOL				0		lvalueIDStmt		YES
 ----										assignmentStmt			NO		whichStmt
@@ -727,7 +703,7 @@ A		45		ID				0		assignmentStmt		YES
 ----										simpleStmt			NO		assignmentStmt
 [		45		SQBO				0		lvalueARRStmt		YES
 ----										whichStmt			NO		lvalueARRStmt
-5		45		NUM				5		index		YES
+v1		45		ID				0		index		YES
 ----										lvalueARRStmt			NO		index
 ]		45		SQBC				0		lvalueARRStmt		YES
 :=		45		ASSIGNOP				0		lvalueARRStmt		YES

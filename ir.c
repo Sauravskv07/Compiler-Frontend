@@ -28,10 +28,10 @@ void printIR(quad_row *q)
 		printf("%s \t\t",OPNames[q->op]);
 		for(int i=0;i<3;i++)
 		{
-			if(q->tag[i]==0) printf("%d \t\t",q->val[i].v_item->offset);
-			else if(q->tag[i]==1) printf("%s \t\t",q->val[i].tk_item->lexeme);
-			else if(q->tag[i]==2) printf("%d \t\t",q->val[i].qr_item->srno);
-			else if(q->tag[i]==3) printf("%d \t\t",q->val[i].t_item->offset);
+			if(q->tag[i]==0) printf("v-%d \t\t",q->val[i].v_item->offset);
+			else if(q->tag[i]==1) printf("tk-%s \t\t",q->val[i].tk_item->lexeme);
+			else if(q->tag[i]==2) printf("l-%d \t\t",q->val[i].qr_item->srno);
+			else if(q->tag[i]==3) printf("t-%d \t\t",q->val[i].t_item->offset);
 			else printf("\t\t");
 		}
 		printIR(q->next);
