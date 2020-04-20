@@ -10,7 +10,7 @@ GROUP NO. = 46
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#define MAX_BUFF_SIZE 1000
+#define MAX_BUFF_SIZE 8000
 #define MAX_SIZE_MAPPING_TABLE 251
 
 

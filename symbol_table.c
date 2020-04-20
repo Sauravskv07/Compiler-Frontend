@@ -91,6 +91,7 @@ void printsymnode(symnode* rt)
 	en = root;
 	nextSt(1);
 	nextEn();
+	printf("\n\n Please ignore if any alignment error in printing. This might be due to large names.\n\n");
 	printf("\n Please note that since entire activation record is allocated at function call,\n");
 	printf(" the variables allocation may have different order since they are fetched from hash table.\n");
 	printf(" Therefore offsets calcualtions are according to the order of allocation.\n");
@@ -103,7 +104,7 @@ void printhashtable(char *module_name, int linstart, int linend, ht_hash_table* 
 {
 	const char *tp[] = {"INTEGER","REAL","BOOLEAN","ARRAY","UNDEFINED"};
 	int width[] = {2,4,1,1,0};
-	if(module_name==NULL) {module_name="driver";}
+	if(module_name==NULL || module_name[0]==0) {module_name="driver";}
 	for(int i=0;i<MAX_SIZE_MAPPING_TABLE;i++)
 	{
 		if(ht->items[i]!=NULL)

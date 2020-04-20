@@ -1,7 +1,6 @@
 **Code Generation test case 4: Computing expressions using integer, boolean and static array data types**
 
-**Single driver module with two levels of nesting 
-Variant of test case 3**
+**Single driver module with two levels of nesting Variant of test case 3**
 
 <<<driver program>>>
 start
@@ -30,7 +29,7 @@ start
 	v:= z > 10 OR a<=b AND x<y AND u;	**follows left to right associativity**
         print(z);
 	print(u);
-	get_value(A); 
+	get_value(A);
                           
 **Note: Implement get_value(A) using type information of A. Your code template should first inform user of the size, range indices and type of data and read accordingly to populate the memory locations allocated for elements of A**
    
@@ -54,6 +53,7 @@ Repeat for 6 times for executing for loop
 Read array element values as 12, 4, -8, 9, 10, -18 as shown below and 
 then print the value of y
 and print values of A - i.e. all elements of A one after the other in each line
+
 
 On the console your output and input messages should appear in new line for each print as shown below
 Input: Enter an integer value
