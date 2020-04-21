@@ -19,15 +19,15 @@ GROUP NO. = 46
 #include "symbol_table.h"
 #include "semCheck.h"
 
-void printSize()
+void printSize(symnode* root)
 {
-	if(sym_root==NULL)
+	if(root==NULL)
 	{
 		printf("sym root error\n");
 	}
 	else
 	{
-		symnode* current_func=sym_root->child;
+		symnode* current_func=root->child;
 
 		while(current_func != NULL)
 		{

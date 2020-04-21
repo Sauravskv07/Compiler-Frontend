@@ -320,6 +320,8 @@ int main(int argc,char** argv)
 					LN=1;
 
 					endReached=0;
+					
+					start_time = clock();
 
 					fp=(FILE*)fopen(argv[1],"r");
 	
@@ -334,20 +336,26 @@ int main(int argc,char** argv)
 					fp=getStream(fp);
 
 					forwardPointer=-1;
-
+					
 					parseTree();
 
-					astnode *xp = createpAST(root);
+					if(num_errors==0)
+					{
+						astnode *xp = createAST(root);
+						astroot = xp;
 
-					//printAST(xp);
+						printf("\n");
+					
+						semCheck(xp);
+					}
+					if(sym_root->right==NULL) printf("sym_root error\n");
 
-					semCheck(xp);
-
-					printf("STATIC SIZE OF ACTIVATION RECORDS ARE:\n");
-
-					printSize();
-
+					printf("\n\n\nPrinting symbol table : \n");
+					
+					printSize(sym_root);
+			
 					break;
+
 					
 				}
 
