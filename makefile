@@ -26,5 +26,5 @@ semCheck.o : semCheck.c semCheck.h
 symbol_table.o : symbol_table.c symbol_table.h
 	gcc -c symbol_table.c
 clean :
-	rm stage1exe adt.o hash_table.o parser.o parseRules.o utils.o lexer.o parseTable.o ast.o ir.o semCheck.o symbol_table.o codeGen.o
+	rm compiler adt.o hash_table.o parser.o parseRules.o utils.o lexer.o parseTable.o ast.o ir.o semCheck.o symbol_table.o codeGen.o
 

@@ -121,6 +121,20 @@ void allocMemory(symnode* current_func,FILE* fp)
 	fprintf(fp,"\tsub\tRSP,\t%d\n",offset+i);
 }
 
+void deallocMemory(symnode* current_func,FILE* fp)
+{
+	//printf("INSIDE ALLOC MEMORY\n");
+	int offset=current_func->current_offset;
+	
+	int i=16-offset%16;
+	if(i>8)
+		i=i-8;
+	if(i<8)
+		i=i+8;
+
+	fprintf(fp,"\tadd\tRSP,\t%d\n",offset+i);
+}
+
 int getTok(Token* tk,quad_row *q,FILE* fp)
 {
 	int reg=0;	
@@ -165,7 +179,7 @@ int getVarReg(var_item* v,quad_row *q,FILE* fp)
 	//printf("OFFSET = %d\n",offset);
 
 	if(offset>=0)
-		offset=offset+8;
+		offset=offset+16;
 
 	fprintf(fp,"\tmov\trbx,\trbp\n");
 	fprintf(fp,"\tadd\trbx,\t%d\n",offset);
@@ -236,7 +250,7 @@ void setAddr(var_item* v,FILE* fp)
 	//printf("OFFSET = %d\n",offset);
 
 	if(offset>=0)
-		offset=offset+8;
+		offset=offset+16;
 
 	fprintf(fp,"\tmov\trbx,\trbp\n");
 	fprintf(fp,"\tadd\trbx,\t%d\n",offset);
@@ -348,18 +362,20 @@ void codeGen(quad_row *q)
 								fprintf(fp,"\tmov\t%s,\t%d\n",registers[regop2],q->val[0].v_item->high);	
 							}
 							
-							regop3=getReg(3,q);
+							regop3=getReg(2,q);
+							fprintf(fp,"\txor\t%s,\t%s\n",registers[regop3],registers[regop3]);
 							fprintf(fp,"\tmov\t%s,\t%s\n",registers[regop3],registers[regop2]);
-							fprintf(fp,"\tsub\t%s,\t%s\n",registers[regop2],registers[regop1]);
+							fprintf(fp,"\tsub\t%s,\t%s\n",registers[regop3],registers[regop1]);
+							fprintf(fp,"\tinc\t%s\n",registers[regop3]);
 							
 							if(q->val[0].v_item->eleType==0)
-								fprintf(fp,"\tadd\t%s,\t%s\n",registers[regop2],registers[regop2]);
-							fprintf(fp,"\tsub\trsp,\t%s\n",registers[regop2]);		
-							
-							fprintf(fp,"\tpush\t%s\n",registers[regop3]);
-							fprintf(fp,"\tpush\t%s\n",registers[regop1]);
+								fprintf(fp,"\tadd\t%s,\t%s\n",registers[regop3],registers[regop3]);
 
-							fprintf(fp,"\tmov\t[rbp+%d],\trsp\n",q->val[0].v_item->offset);
+							fprintf(fp,"\tmov\t[rbp%d],\trsp\n",q->val[0].v_item->offset);
+							fprintf(fp,"\tpush\t%s\n",registers[regop2]);
+							fprintf(fp,"\tpush\t%s\n",registers[regop1]);
+							fprintf(fp,"\tsub\trsp,\t%s\n",registers[regop3+32]);		
+
 							freeReg(regop1);
 							freeReg(regop2);
 							freeReg(regop3);
@@ -519,10 +535,89 @@ void codeGen(quad_row *q)
 
 					if(q->val[2].v_item->low==-1 || q->val[2].v_item->high==-1)
 					{
+						if(q->tag[1]==0)
+						{
+			
+							fprintf(fp,"\tcmp\t%s,\t[RBX]\n",registers[regop1]);
+							fprintf(fp,"\tJGE TESTH%d\n",q->srno);
+							fprintf(fp,"\tmov\trdi,\tErrorLow\n");
+							fprintf(fp,"\txor\trax,\trax\n");
+							fprintf(fp,"\tPUSH\t%s\n",registers[regop1]);
+							fprintf(fp,"\tPUSH\tRBX\n");
+							fprintf(fp,"\tPUSH\tRBP\n");
+							fprintf(fp,"\tcall\tprintf\n");
+							fprintf(fp,"\tPOP\tRBP\n");
+							fprintf(fp,"\tPOP\tRBX\n");
+							fprintf(fp,"\tPOP\t%s\n",registers[regop1]);
+
+							fprintf(fp,"\tmov\trax,\t60\t\t; system call for exit\n");
+							fprintf(fp,"\txor\trdi,\trdi\t\t; exit code 0\n");
+							fprintf(fp,"\tsyscall\t\t; invoke operating system to exit\n");
+	
+							fprintf(fp,"TESTH%d:\n",q->srno);
+							fprintf(fp,"\tcmp\t%s,\t[RBX+2]\n",registers[regop1]);
+							fprintf(fp,"\tJLE TESTC%d\n",q->srno);
+							fprintf(fp,"\tmov\trdi,\tErrorHigh\n");
+							fprintf(fp,"\txor\trax,\trax\n");
+							fprintf(fp,"\tPUSH\t%s\n",registers[regop1]);
+							fprintf(fp,"\tPUSH\tRBX\n");
+							fprintf(fp,"\tPUSH\tRBP\n");
+							fprintf(fp,"\tcall\tprintf\n");
+							fprintf(fp,"\tPOP\tRBP\n");
+							fprintf(fp,"\tPOP\tRBX\n");
+							fprintf(fp,"\tPOP\t%s\n",registers[regop1]);
+
+	
+							fprintf(fp,"\tmov\trax,\t60\t\t; system call for exit\n");
+							fprintf(fp,"\txor\trdi,\trdi\t\t; exit code 0\n");
+							fprintf(fp,"\tsyscall\t\t; invoke operating system to exit\n");
+						
+							fprintf(fp,"TESTC%d:\n",q->srno);
+						}
+
 						fprintf(fp,"\tsub\t%s,\t[RBX]\n",registers[regop1]);
 					}
 					else
 					{
+
+						if(q->tag[1]==0)
+						{
+							fprintf(fp,"\tcmp\t%s,\t%d\n",registers[regop1],q->val[2].v_item->low);
+							fprintf(fp,"\tJGE TESTH%d\n",q->srno);
+							fprintf(fp,"\tmov\trdi,\tErrorLow\n");
+							fprintf(fp,"\txor\trax,\trax\n");
+							fprintf(fp,"\tPUSH\t%s\n",registers[regop1]);
+							fprintf(fp,"\tPUSH\tRBX\n");
+							fprintf(fp,"\tPUSH\tRBP\n");
+							fprintf(fp,"\tcall\tprintf\n");
+							fprintf(fp,"\tPOP\tRBP\n");
+							fprintf(fp,"\tPOP\tRBX\n");
+							fprintf(fp,"\tPOP\t%s\n",registers[regop1]);
+	
+							fprintf(fp,"\tmov\trax,\t60\t\t; system call for exit\n");
+							fprintf(fp,"\txor\trdi,\trdi\t\t; exit code 0\n");
+							fprintf(fp,"\tsyscall\t\t; invoke operating system to exit\n");
+	
+							fprintf(fp,"TESTH%d:\n",q->srno);
+							fprintf(fp,"\tcmp\t%s,\t%d\n",registers[regop1],q->val[2].v_item->high);
+							fprintf(fp,"\tJLE TESTC%d\n",q->srno);
+							fprintf(fp,"\tmov\trdi,\tErrorHigh\n");
+							fprintf(fp,"\txor\trax,\trax\n");
+							fprintf(fp,"\tPUSH\t%s\n",registers[regop1]);
+							fprintf(fp,"\tPUSH\tRBX\n");
+							fprintf(fp,"\tPUSH\tRBP\n");
+							fprintf(fp,"\tcall\tprintf\n");
+							fprintf(fp,"\tPOP\tRBP\n");
+							fprintf(fp,"\tPOP\tRBX\n");
+							fprintf(fp,"\tPOP\t%s\n",registers[regop1]);
+	
+							fprintf(fp,"\tmov\trax,\t60\t\t; system call for exit\n");
+							fprintf(fp,"\txor\trdi,\trdi\t\t; exit code 0\n");
+							fprintf(fp,"\tsyscall\t\t; invoke operating system to exit\n");				
+					
+							fprintf(fp,"TESTC%d:\n",q->srno);
+						}
+
 						fprintf(fp,"\tsub\t%s,\t%d\n",registers[regop1],q->val[2].v_item->low);
 					}
 
@@ -562,10 +657,89 @@ void codeGen(quad_row *q)
 
 				if(q->val[0].v_item->low==-1 || q->val[0].v_item->high==-1)
 				{
+					if(q->tag[1]==0||q->tag[1]==3)
+					{
+			
+						fprintf(fp,"\tcmp\t%s,\t[RBX]\n",registers[regop1]);
+						fprintf(fp,"\tJGE TESTH%d\n",q->srno);
+						fprintf(fp,"\tmov\trdi,\tErrorLow\n");
+						fprintf(fp,"\txor\trax,\trax\n");
+						fprintf(fp,"\tPUSH\t%s\n",registers[regop1]);
+						fprintf(fp,"\tPUSH\tRBX\n");
+						fprintf(fp,"\tPUSH\tRBP\n");
+						fprintf(fp,"\tcall\tprintf\n");
+						fprintf(fp,"\tPOP\tRBP\n");
+						fprintf(fp,"\tPOP\tRBX\n");
+						fprintf(fp,"\tPOP\t%s\n",registers[regop1]);
+
+						fprintf(fp,"\tmov\trax,\t60\t\t; system call for exit\n");
+						fprintf(fp,"\txor\trdi,\trdi\t\t; exit code 0\n");
+						fprintf(fp,"\tsyscall\t\t; invoke operating system to exit\n");
+	
+						fprintf(fp,"TESTH%d:\n",q->srno);
+						fprintf(fp,"\tcmp\t%s,\t[RBX+2]\n",registers[regop1]);
+						fprintf(fp,"\tJLE TESTC%d\n",q->srno);
+						fprintf(fp,"\tmov\trdi,\tErrorHigh\n");
+						fprintf(fp,"\txor\trax,\trax\n");
+						fprintf(fp,"\tPUSH\t%s\n",registers[regop1]);
+						fprintf(fp,"\tPUSH\tRBX\n");
+						fprintf(fp,"\tPUSH\tRBP\n");
+						fprintf(fp,"\tcall\tprintf\n");
+						fprintf(fp,"\tPOP\tRBP\n");
+						fprintf(fp,"\tPOP\tRBX\n");
+						fprintf(fp,"\tPOP\t%s\n",registers[regop1]);
+
+	
+						fprintf(fp,"\tmov\trax,\t60\t\t; system call for exit\n");
+						fprintf(fp,"\txor\trdi,\trdi\t\t; exit code 0\n");
+						fprintf(fp,"\tsyscall\t\t; invoke operating system to exit\n");
+						
+						fprintf(fp,"TESTC%d:\n",q->srno);
+					}
+
 					fprintf(fp,"\tsub\t%s,\t[RBX]\n",registers[regop1]);
 				}
 				else
 				{
+
+					if(q->tag[1]==0||q->tag[1]==3)
+					{
+						fprintf(fp,"\tcmp\t%s,\t%d\n",registers[regop1],q->val[0].v_item->low);
+						fprintf(fp,"\tJGE TESTH%d\n",q->srno);
+						fprintf(fp,"\tmov\trdi,\tErrorLow\n");
+						fprintf(fp,"\txor\trax,\trax\n");
+						fprintf(fp,"\tPUSH\t%s\n",registers[regop1]);
+						fprintf(fp,"\tPUSH\tRBX\n");
+						fprintf(fp,"\tPUSH\tRBP\n");
+						fprintf(fp,"\tcall\tprintf\n");
+						fprintf(fp,"\tPOP\tRBP\n");
+						fprintf(fp,"\tPOP\tRBX\n");
+						fprintf(fp,"\tPOP\t%s\n",registers[regop1]);
+	
+						fprintf(fp,"\tmov\trax,\t60\t\t; system call for exit\n");
+						fprintf(fp,"\txor\trdi,\trdi\t\t; exit code 0\n");
+						fprintf(fp,"\tsyscall\t\t; invoke operating system to exit\n");
+	
+						fprintf(fp,"TESTH%d:\n",q->srno);
+						fprintf(fp,"\tcmp\t%s,\t%d\n",registers[regop1],q->val[0].v_item->high);
+						fprintf(fp,"\tJLE TESTC%d\n",q->srno);
+						fprintf(fp,"\tmov\trdi,\tErrorHigh\n");
+						fprintf(fp,"\txor\trax,\trax\n");
+						fprintf(fp,"\tPUSH\t%s\n",registers[regop1]);
+						fprintf(fp,"\tPUSH\tRBX\n");
+						fprintf(fp,"\tPUSH\tRBP\n");
+						fprintf(fp,"\tcall\tprintf\n");
+						fprintf(fp,"\tPOP\tRBP\n");
+						fprintf(fp,"\tPOP\tRBX\n");
+						fprintf(fp,"\tPOP\t%s\n",registers[regop1]);
+	
+						fprintf(fp,"\tmov\trax,\t60\t\t; system call for exit\n");
+						fprintf(fp,"\txor\trdi,\trdi\t\t; exit code 0\n");
+						fprintf(fp,"\tsyscall\t\t; invoke operating system to exit\n");				
+					
+						fprintf(fp,"TESTC%d:\n",q->srno);
+					}
+
 					fprintf(fp,"\tsub\t%s,\t%d\n",registers[regop1],q->val[0].v_item->low);
 				}
 
@@ -635,7 +809,9 @@ void codeGen(quad_row *q)
 			}
 			case CALL:
 			{
+				fprintf(fp,"\tPUSH\tRBP\n");
 				fprintf(fp,"\tcall\tLabel%d\n",q->val[0].qr_item->srno);
+				fprintf(fp,"\tPOP\tRBP\n");
 				break;	
 			}
 			case START:
@@ -651,6 +827,7 @@ void codeGen(quad_row *q)
 			}
 			case RET:
 			{
+				deallocMemory(current_func,fp);
 				fprintf(fp,"\tret\n");
 				current_func=current_func->right;
 				func_start=1;
@@ -692,8 +869,13 @@ void codeGen(quad_row *q)
 					setAddr(q->val[0].v_item,fp);
 					if(q->val[0].v_item->baseType==0)
 						fprintf(fp,"\tPUSH\tword [rbx]\n");
-					if(q->val[0].v_item->baseType==2)
-						fprintf(fp,"\tPUSH\tbyte [rbx]\n");
+					if(q->val[0].v_item->baseType==1)
+					{
+						fprintf(fp,"dec\trsp\n");
+						fprintf(fp,"\tmov\tAL, byte [rbx]\n");
+						fprintf(fp,"\tmov\trbx,\trsp\n");
+						fprintf(fp,"\tmov\t[rbx],\tAl\n");
+					}
 					if(q->val[0].v_item->baseType==3)
 						fprintf(fp,"\tPUSH\tqword [rbx]\n");
 					else
@@ -708,13 +890,21 @@ void codeGen(quad_row *q)
 			{
 				if(q->tag[0]==0)
 				{
-					setAddr(q->val[0].v_item,fp);
 					if(q->val[0].v_item->baseType==0)
+					{
+						setAddr(q->val[0].v_item,fp);
 						fprintf(fp,"\tPOP\tword [rbx]\n");
-					if(q->val[0].v_item->baseType==2)
-						fprintf(fp,"\tPOP\tbyte [rbx]\n");
-					if(q->val[0].v_item->baseType==3)
-						fprintf(fp,"\tPOP\tqword [rbx]\n");
+					}
+					else if(q->val[0].v_item->baseType==2)
+					{
+						fprintf(fp,"\tmov\trbx,\trsp\n");
+						fprintf(fp,"\tmov\tAL,\tbyte [rbx]\n");
+						setAddr(q->val[0].v_item,fp);
+						fprintf(fp,"\tmov\t[rbx],\tAl\n");
+						fprintf(fp,"inc\trsp\n");
+					}
+					else if(q->val[0].v_item->baseType==3)
+						fprintf(fp,"\tadd\trsp,\t8\n");
 					else
 						printf("real type not compatible with pop\n");
 				}
@@ -727,9 +917,26 @@ void codeGen(quad_row *q)
 			{
 				if(q->tag[0]==0)
 				{
-					reg=getVarReg(q->val[0].v_item,q,fp);
-					fprintf(fp,"\tPOP\t%s\n",registers[reg]);
-					freeReg(reg);//new function
+					if(q->val[0].v_item->baseType==2)
+					{
+						fprintf(fp,"inc\trsp\n");
+					}					
+
+					else if(q->val[0].v_item->baseType==0)
+					{
+						fprintf(fp,"\tadd\trsp,\t2\n");
+					}
+
+					else if(q->val[0].v_item->baseType==3)
+					{
+						fprintf(fp,"\tadd\trsp,\t8\n");
+					}
+
+					else
+					{
+						printf("Type not handled\n");
+					}					
+				
 				}
 				else
 					printf("Other types of POP not possible\n");
@@ -1031,6 +1238,8 @@ void codeGen(quad_row *q)
 	}
 
 	fprintf(fp,"section .data\n");
+	fprintf(fp,"ErrorHigh:\n\tdb \"Index Greater Than Bound! RUNTIME ERROR! \",10,0\n");
+	fprintf(fp,"ErrorLow:\n\tdb \"Index Smaller Than Bound! RUNTIME ERROR! \",10,0\n");
 	fprintf(fp,"Output:\n\tdb \"Output =\",10,0\n");
 	fprintf(fp,"BoolTrue:\n\tdb \"true\",10,0\n");
 	fprintf(fp,"BoolFalse:\n\tdb \"false\",10,0\n");
