@@ -18,11 +18,26 @@ const char *registers[] = {"AL", "BL", "SPL", "BPL", "SIL", "DIL", "DL","CL", "R
 
 int current_reg=6;
 
+void regState()
+{
+	printf("\n");
+	for(int reg=0;reg<16;reg++)
+	{
+		printf("%s ",registers[reg]);
+	}
+	printf("\n");
+	for(int reg=0;reg<16;reg++)
+	{
+		printf("%d  ",reg_arr[reg]);
+	}
+	printf("\n");
+}
+
 int getReg(int size,quad_row *q)
 {
 
 	current_reg++;
-	printf("inside Get Reg\n");
+	printf("GET_REG\n");
 	int reg;
 	int flag=0;
 	for(int i=0;i<9;i++)
@@ -66,6 +81,7 @@ int getReg(int size,quad_row *q)
 				}
 			}
 		}
+		current_reg++;
 	}
 
 	if(flag==1)
@@ -92,7 +108,7 @@ int getReg(int size,quad_row *q)
 
 void allocMemory(symnode* current_func,FILE* fp)
 {
-	printf("INSIDE ALLOC MEMORY\n");
+	//printf("INSIDE ALLOC MEMORY\n");
 	int offset=current_func->current_offset;
 	
 	int i=16-offset%16;
@@ -142,11 +158,11 @@ void freeReg(int reg_index)
 
 int getVarReg(var_item* v,quad_row *q,FILE* fp)
 {
-	printf("INSIDE GET VAR\n");
+	//printf("INSIDE GET VAR\n");
 	int reg=0;
 	int offset=v->offset;
 	
-	printf("OFFSET = %d\n",offset);
+	//printf("OFFSET = %d\n",offset);
 
 	if(offset>=0)
 		offset=offset+8;
@@ -188,7 +204,7 @@ int getVarReg(var_item* v,quad_row *q,FILE* fp)
 
 int getTemp(temp_item* t,quad_row *q)
 {
-	printf("INSIDE GET TEMP %d\n",t->baseType);
+	//printf("INSIDE GET TEMP %d\n",t->baseType);
 	int arr[]={2,1,3,4};
 	int reg;
 	if(temp_arr[t->offset][0]==-1)
@@ -214,10 +230,10 @@ void freeAllReg()
 
 void setAddr(var_item* v,FILE* fp)
 {
-	printf("INSIDE SET ADDR\n");
+	//printf("INSIDE SET ADDR\n");
 	int offset=v->offset;
 
-	printf("OFFSET = %d\n",offset);
+	//printf("OFFSET = %d\n",offset);
 
 	if(offset>=0)
 		offset=offset+8;
@@ -359,7 +375,7 @@ void codeGen(quad_row *q)
 				else
 					printf("error dec 1 \n");
 
-				printf("OUTSIDE DEC\n");
+				//printf("OUTSIDE DEC\n");
 				break;
 			}
 			case INC:
@@ -395,9 +411,15 @@ void codeGen(quad_row *q)
 				else printf("Relation operator error 2 \n");
 
 				if(q->tag[2]==3)
-					regop3=getTemp(q->val[2].t_item,q);
+				{
+					regop3=getReg(1,q);
+					reg_arr[reg%16]=q->val[2].t_item->offset;
+					temp_arr[q->val[2].t_item->offset][0]=regop3;
+					temp_arr[q->val[2].t_item->offset][1]=0;
+				}
 				else printf("Relation operator error 3 \n");
 
+				fprintf(fp,"\txor\t%s,\t%s\n",registers[regop3],registers[regop3]);
 				fprintf(fp,"\tCMP\t%s,\t%s\n",registers[regop1],registers[regop2]);
 				
 				if(q->op==LT)
@@ -417,7 +439,7 @@ void codeGen(quad_row *q)
 				
 				fprintf(fp,"\tmov\t%s,\t1\n",registers[regop3]);
 
-				fprintf(fp,"\tJRP%d:\n",q->srno);
+				fprintf(fp,"JRP%d:\n",q->srno);
 
 				freeReg(regop1);
 				freeReg(regop2);
@@ -432,14 +454,14 @@ void codeGen(quad_row *q)
 				else
 					printf("error branch 1 \n");
 
-				if(q->tag[1]!=3 || q->tag[2]!=3)
+				if(q->tag[1]!=2 || q->tag[2]!=2)
 				{	
 					printf("error branch 2-3 \n");
 					break;
 				}
 				fprintf(fp,"\tCMP\t%s,\t0\n",registers[regop1]);
-				fprintf(fp,"\tJE Label%d\n",q->val[3].qr_item->srno);
-				fprintf(fp,"\tJMP Label%d\n",q->val[2].qr_item->srno);
+				fprintf(fp,"\tJE Label%d\n",q->val[2].qr_item->srno);
+				fprintf(fp,"\tJMP Label%d\n",q->val[1].qr_item->srno);
 				break;	
 			}
 			case UNARY:
@@ -490,14 +512,27 @@ void codeGen(quad_row *q)
 				
 				else
 					printf("Invalid operand arr_get 2\n");
-				
-				fprintf(fp,"\tmovsx\tRSI,\t%s\n",registers[regop1]);
 
 				if(q->tag[2]==0)
-				{	setAddr(q->val[2].v_item,fp);
-					if(q->val[2].v_item->baseType==0)
+				{
+					setAddr(q->val[2].v_item,fp);
+
+					if(q->val[2].v_item->low==-1 || q->val[2].v_item->high==-1)
+					{
+						fprintf(fp,"\tsub\t%s,\t[RBX]\n",registers[regop1]);
+					}
+					else
+					{
+						fprintf(fp,"\tsub\t%s,\t%d\n",registers[regop1],q->val[2].v_item->low);
+					}
+
+					fprintf(fp,"\tadd\trbx,\t4\n");
+				
+					fprintf(fp,"\tmovsx\tRSI,\t%s\n",registers[regop1]);
+
+					if(q->val[2].v_item->eleType==0)
 						fprintf(fp,"\tmov\t[RBX+2*RSI],\t%s\n",registers[regop2]);
-					else if(q->val[2].v_item->baseType==2)
+					else if(q->val[2].v_item->eleType==2)
 						fprintf(fp,"\tmov\t[RBX+RSI],\t%s\n",registers[regop2]);
 					else
 						printf("invalid type arr-assign \n");
@@ -511,10 +546,6 @@ void codeGen(quad_row *q)
 			}
 			case ARR_GET:
 			{
-				if(q->tag[0]==0)
-					setAddr(q->val[0].v_item,fp);
-				else
-					printf("Invalid operand arr_get 1\n");
 				if(q->tag[1]==1)
 					regop1=getTok(q->val[1].tk_item,q,fp);
 				else if(q->tag[1]==3)
@@ -524,14 +555,30 @@ void codeGen(quad_row *q)
 				else
 					printf("Invalid operand arr_get 2\n");
 
+				if(q->tag[0]==0)
+					setAddr(q->val[0].v_item,fp);
+				else
+					printf("Invalid operand arr_get 1\n");
+
+				if(q->val[0].v_item->low==-1 || q->val[0].v_item->high==-1)
+				{
+					fprintf(fp,"\tsub\t%s,\t[RBX]\n",registers[regop1]);
+				}
+				else
+				{
+					fprintf(fp,"\tsub\t%s,\t%d\n",registers[regop1],q->val[0].v_item->low);
+				}
+
+				fprintf(fp,"\tadd\trbx,\t4\n");
+
 				fprintf(fp,"\tmovsx\tRSI,\t%s\n",registers[regop1]);
 
 				if(q->tag[2]==3)
 				{
 					regop2=getTemp(q->val[2].t_item,q);
-					if(q->val[2].t_item->baseType==0)
+					if(q->val[0].v_item->eleType==0)
 						fprintf(fp,"\tmov\t%s,\t[RBX+2*RSI]\n",registers[regop2]);
-					else if(q->val[2].t_item->baseType==2)
+					else if(q->val[0].v_item->eleType==2)
 						fprintf(fp,"\tmov\t%s,\t[RBX+RSI]\n",registers[regop2]);
 					else
 						printf("invalid type arr-get \n");				
@@ -545,7 +592,14 @@ void codeGen(quad_row *q)
 			case ASSIGN:
 			{
 
-				printf("here assign\n");
+				//printf("here assign\n");
+				if(q->tag[0]==3 && q->tag[2]==3)
+				{
+					regop1=getTemp(q->val[0].t_item,q);
+					regop2=getTemp(q->val[2].t_item,q);
+					fprintf(fp,"\tmov\t%s,\t%s\n",registers[regop2],registers[regop1]);
+					break;
+				}		
 
 				if(q->tag[0]==0)
 					regop1=getVarReg(q->val[0].v_item,q,fp);
@@ -556,7 +610,7 @@ void codeGen(quad_row *q)
 				else
 					printf("Invalid op to assign 1\n");
 
-				printf("here assign also\n");
+				//printf("here assign also\n");
 
 				if(q->tag[2]==0)
 				{
@@ -572,9 +626,9 @@ void codeGen(quad_row *q)
 				else
 					printf("Invalid op to assign 2\n");
 				
-				if(q->tag[2]==0 && q->tag[0]==1)
+				if(q->tag[2]==0 && (q->tag[0]==1||q->tag[0]==3))
 					freeReg(regop1);
-				printf("here assign\n");
+				//printf("here assign\n");
 
 				break;									
 	
@@ -604,7 +658,7 @@ void codeGen(quad_row *q)
 			}
 			case NOP:
 			{
-				printf("INSIDE NOP: %d %d\n",main_label,func_start);
+				//printf("INSIDE NOP: %d %d\n",main_label,func_start);
 				if(q->srno==main_label)
 					fprintf(fp,"main:\n");
 				else
@@ -747,7 +801,6 @@ void codeGen(quad_row *q)
 
 				}
 				
-				freeReg(regop1);
 				freeReg(regop2);
 
 				break;	
@@ -756,17 +809,18 @@ void codeGen(quad_row *q)
 			{
 				if((q->tag[0]!=2 && q->tag[0]!=-1))
 				{	
+					fprintf(fp,"\tmov\trdi,\tOutput\n");
+					fprintf(fp,"\txor\trax,\trax\n");
+					fprintf(fp,"PUSH\tRBP\n");
+					fprintf(fp,"\tcall\tprintf\n");
+					fprintf(fp,"POP\tRBP\n");
+
 					if(q->tag[0]==3)
 						reg=getTemp(q->val[0].t_item,q);//getTemp	
 					else  if(q->tag[0]==0)
 						reg=getVarReg(q->val[0].v_item,q,fp);//getVar
 					else if(q->tag[0]==1)
 						reg=getTok(q->val[0].tk_item,q,fp);//getTok
-					
-					fprintf(fp,"\tmov\trdi,\tOutput\n");
-					fprintf(fp,"\txor\trax,\trax\n");
-					fprintf(fp,"\tcall\tprintf\n");	
-	
 					if(q->tag[0]==0 && q->val[0].v_item->baseType==3)
 					{
 
@@ -785,7 +839,7 @@ void codeGen(quad_row *q)
 							regop2=getReg(2,q);
 							fprintf(fp,"\tmov\t%s,\t%d\n",registers[regop2],q->val[0].v_item->high-q->val[0].v_item->low);
 						}
-						fprintf(fp,"inc\t%s\n",registers[regop2]);
+						fprintf(fp,"\tinc\t%s\n",registers[regop2]);
 						fprintf(fp,"\tadd\trbx,\t4\n");
 						fprintf(fp,"\tPLA%d:\n",q->srno);
 						if(q->val[0].v_item->eleType==2)
@@ -799,12 +853,19 @@ void codeGen(quad_row *q)
 						}
 						else if(q->val[0].v_item->eleType==0)
 						{
-							fprintf(fp,"\tmov\tesi,\t[RBX]\n");
+							fprintf(fp,"\tmov\trdi,\tIntOutput\n");
+							fprintf(fp,"\tmovsx\trsi,\tword [RBX]\n");
 							fprintf(fp,"\tadd\trbx,2\n");
 						}
 
 						fprintf(fp,"\txor\trax,\trax\n");
-						fprintf(fp,"\tcall printf\n");
+						fprintf(fp,"PUSH\t%s\n",registers[regop2]);
+						fprintf(fp,"PUSH\tRBX\n");
+						fprintf(fp,"PUSH\tRBP\n");
+						fprintf(fp,"\tcall\tprintf\n");
+						fprintf(fp,"POP\tRBP\n");
+						fprintf(fp,"POP\tRBX\n");
+						fprintf(fp,"POP\t%s\n",registers[regop2]);
 
 						if(q->val[0].v_item->eleType==1)
 						{
@@ -835,16 +896,19 @@ void codeGen(quad_row *q)
 						}
 						
 						fprintf(fp,"\txor\trax,\trax\n");
+						fprintf(fp,"PUSH\tRBP\n");
 						fprintf(fp,"\tcall\tprintf\n");
+						fprintf(fp,"POP\tRBP\n");
 					}
 					freeReg(reg);
 				}
-				printf("OUTSIDE PRINTF\n");
+				//printf("OUTSIDE PRINTF\n");
 				break;
 			}
 			case INP:
 			{
-				printf("INSIDE INP\n");
+				
+				//printf("INSIDE INP\n");
 				if(q->tag[0]==0)
 				{
 					setAddr(q->val[0].v_item,fp);
@@ -856,13 +920,23 @@ void codeGen(quad_row *q)
 							fprintf(fp,"\tmov\trdi,\tBoolInputString\n");
 
 						fprintf(fp,"\txor\trax,\trax\n");
+	
+						fprintf(fp,"PUSH\tRBX\n");
+						fprintf(fp,"PUSH\tRBP\n");
 						fprintf(fp,"\tcall printf\n");
+						fprintf(fp,"POP\tRBP\n");
+						fprintf(fp,"POP\tRBX\n");
 					
 						fprintf(fp,"\tmov\trdi,\tIntInput\n");
 						fprintf(fp,"\tmov\trsi,\tintvar\t\n");
 						fprintf(fp,"\txor\trax,\trax\n");
+
+						fprintf(fp,"PUSH\tRBX\n");
+						fprintf(fp,"PUSH\tRBP\n");
 						fprintf(fp,"\tcall\tscanf\n");
-					
+						fprintf(fp,"POP\tRBP\n");
+						fprintf(fp,"POP\tRBX\n");
+				
 						fprintf(fp,"\tmov\tax,\t[intvar]\n");
 						if(q->val[0].v_item->baseType==0)
 							fprintf(fp,"\tmov\t[RBX],\tax\n");
@@ -898,22 +972,35 @@ void codeGen(quad_row *q)
 						fprintf(fp,"\tmovsx\trsi,\t%s\n",registers[regop2]);
 
 						fprintf(fp,"\txor\trax,\trax\n");
+						
+						fprintf(fp,"PUSH\tRBX\n");
+						fprintf(fp,"PUSH\tRBP\n");
+						fprintf(fp,"PUSH\t%s\n",registers[regop2]);
 						fprintf(fp,"\tcall printf\n");
+						fprintf(fp,"POP\t%s\n",registers[regop2]);
+						fprintf(fp,"PUSH\tRBP\n");
+						fprintf(fp,"PUSH\tRBX\n");
 
 						fprintf(fp,"\tILA%d:\n",q->srno);
 					
 						fprintf(fp,"\tmov\trdi,\tIntInput\n");
 						fprintf(fp,"\tmov\trsi,intvar\t\n");
 						fprintf(fp,"\txor\trax,\trax\n");
-						fprintf(fp,"\tcall\tscanf\n");
+						fprintf(fp,"PUSH\tRBX\n");
+						fprintf(fp,"PUSH\tRBP\n");
+						fprintf(fp,"PUSH\t%s\n",registers[regop2]);
+						fprintf(fp,"\tcall scanf\n");
+						fprintf(fp,"POP\t%s\n",registers[regop2]);
+						fprintf(fp,"PUSH\tRBP\n");
+						fprintf(fp,"PUSH\tRBX\n");
 							
 						fprintf(fp,"\tmov\tax,\t[intvar]\n");
-						if(q->val[0].v_item->baseType==0)
+						if(q->val[0].v_item->eleType==0)
 						{
 							fprintf(fp,"\tmov\t[RBX],\tax\n");
 							fprintf(fp,"\tadd\trbx,2\n");
 						}
-						if(q->val[0].v_item->baseType==2)	
+						if(q->val[0].v_item->eleType==2)	
 						{	
 							fprintf(fp,"\tmov\t[RBX],\tal\n");
 							fprintf(fp,"\tadd\trbx,1");
@@ -934,11 +1021,12 @@ void codeGen(quad_row *q)
 					printf("INPUT Invalid \n");
 				}
 
-				printf("OUTSIDE INP\n");
+				//printf("OUTSIDE INP\n");
 				break;
 			}
 		}
 
+		regState();
 		q=q->next;	
 	}
 

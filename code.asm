@@ -3,197 +3,279 @@ extern printf,scanf
 section .text
 main:
 	mov	RBP,	RSP
-	sub	RSP,	24
-Label10:
-	mov	CL,	1
-Label11:
+	sub	RSP,	64
 	mov	rbx,	rbp
-	add	rbx,	-13
-	mov	[RBX],	CL
+	add	rbx,	-28
+	mov	word [RBX],6
+	mov	word [RBX+2],10
+	mov	rbx,	rbp
+	add	rbx,	-42
+	mov	word [RBX],6
+	mov	word [RBX+2],10
+	mov	rbx,	rbp
+	add	rbx,	-56
+	mov	word [RBX],6
+	mov	word [RBX+2],10
 Label12:
-	mov	R8W,	5
+	mov	rbx,	rbp
+	add	rbx,	-28
+	mov	CX,	4
+	inc	CX
+	add	rbx,	4
+	mov	rdi,	IntArrInputString
+	movsx	rsi,	CX
+	xor	rax,	rax
+PUSH	RBX
+PUSH	RBP
+PUSH	CX
+	call printf
+POP	CX
+PUSH	RBP
+PUSH	RBX
+	ILA12:
+	mov	rdi,	IntInput
+	mov	rsi,intvar	
+	xor	rax,	rax
+PUSH	RBX
+PUSH	RBP
+PUSH	CX
+	call scanf
+POP	CX
+PUSH	RBP
+PUSH	RBX
+	mov	ax,	[intvar]
+	mov	[RBX],	ax
+	add	rbx,2
+	dec	CX
+	jnz ILA12
 Label13:
 	mov	rbx,	rbp
-	add	rbx,	-8
-	mov	[RBX],	R8W
+	add	rbx,	-42
+	mov	R8W,	4
+	inc	R8W
+	add	rbx,	4
+	mov	rdi,	IntArrInputString
+	movsx	rsi,	R8W
+	xor	rax,	rax
+PUSH	RBX
+PUSH	RBP
+PUSH	R8W
+	call printf
+POP	R8W
+PUSH	RBP
+PUSH	RBX
+	ILA13:
+	mov	rdi,	IntInput
+	mov	rsi,intvar	
+	xor	rax,	rax
+PUSH	RBX
+PUSH	RBP
+PUSH	R8W
+	call scanf
+POP	R8W
+PUSH	RBP
+PUSH	RBX
+	mov	ax,	[intvar]
+	mov	[RBX],	ax
+	add	rbx,2
+	dec	R8W
+	jnz ILA13
 Label14:
-	mov	R9W,	9
+	mov	R9W,	7
 Label15:
 	mov	rbx,	rbp
-	add	rbx,	-10
+	add	rbx,	-6
 	mov	[RBX],	R9W
 Label16:
+	mov	R10W,	1
 	mov	rbx,	rbp
-	add	rbx,	-2
-	mov	rdi,	IntInputString
-	xor	rax,	rax
-	call printf
-	mov	rdi,	IntInput
-	mov	rsi,	intvar	
-	xor	rax,	rax
-	call	scanf
-	mov	ax,	[intvar]
-	mov	[RBX],	ax
+	add	rbx,	-8
+	mov	[RBX],	R10W
 Label17:
 	mov	rbx,	rbp
-	add	rbx,	-4
+	add	rbx,	-8
+	mov	R11W,	[rbx]
+	mov	R12W,	3
+	xor	R13B,	R13B
+	CMP	R11W,	R12W
+	JG	JRP17
+	mov	R13B,	1
+JRP17:
+Label18:
+	CMP	R13B,	0
+	JE Label39
+	JMP Label19
+Label19:
+Label20:
+	mov	rbx,	rbp
+	add	rbx,	-2
 	mov	rdi,	IntInputString
 	xor	rax,	rax
+PUSH	RBX
+PUSH	RBP
 	call printf
+POP	RBP
+POP	RBX
 	mov	rdi,	IntInput
 	mov	rsi,	intvar	
 	xor	rax,	rax
+PUSH	RBX
+PUSH	RBP
 	call	scanf
+POP	RBP
+POP	RBX
 	mov	ax,	[intvar]
 	mov	[RBX],	ax
-Label18:
-	mov	rbx,	rbp
-	add	rbx,	-2
-	mov	R10W,	[rbx]
-Label19:
+Label21:
 	mov	rbx,	rbp
 	add	rbx,	-4
-	mov	R11W,	[rbx]
-Label20:
-	mov	rbx,	rbp
-	add	rbx,	-10
-	mov	R12W,	[rbx]
-Label21:
-	IMUL	R11W,	R12W
+	mov	rdi,	IntInputString
+	xor	rax,	rax
+PUSH	RBX
+PUSH	RBP
+	call printf
+POP	RBP
+POP	RBX
+	mov	rdi,	IntInput
+	mov	rsi,	intvar	
+	xor	rax,	rax
+PUSH	RBX
+PUSH	RBP
+	call	scanf
+POP	RBP
+POP	RBX
+	mov	ax,	[intvar]
+	mov	[RBX],	ax
 Label22:
-	ADD	R10W,	R11W
+	mov	rbx,	rbp
+	add	rbx,	-2
+	mov	R14W,	[rbx]
+	mov	rbx,	rbp
+	add	rbx,	-28
+	sub	R14W,	6
+	add	rbx,	4
+	movsx	RSI,	R14W
+	mov	R15W,	[RBX+2*RSI]
 Label23:
 	mov	rbx,	rbp
-	add	rbx,	-8
-	mov	R13W,	[rbx]
+	add	rbx,	-4
+	mov	CX,	[rbx]
+	mov	rbx,	rbp
+	add	rbx,	-42
+	sub	CX,	6
+	add	rbx,	4
+	movsx	RSI,	CX
+	mov	R8W,	[RBX+2*RSI]
 Label24:
+	ADD	R15W,	R8W
+Label25:
 	mov	rbx,	rbp
 	add	rbx,	-10
-	mov	R14W,	[rbx]
-Label25:
-	SUB	R13W,	R14W
+	mov	[RBX],	R15W
 Label26:
 	mov	rbx,	rbp
-	add	rbx,	-4
-	mov	R15W,	[rbx]
+	add	rbx,	-6
+	mov	R9W,	[rbx]
+	mov	rbx,	rbp
+	add	rbx,	-28
+	sub	R9W,	6
+	add	rbx,	4
+	movsx	RSI,	R9W
+	mov	R10W,	[RBX+2*RSI]
 Label27:
-	IMUL	R13W,	R15W
+	mov	rbx,	rbp
+	add	rbx,	-4
+	mov	R11W,	[rbx]
+	mov	rbx,	rbp
+	add	rbx,	-42
+	sub	R11W,	6
+	add	rbx,	4
+	movsx	RSI,	R11W
+	mov	R12W,	[RBX+2*RSI]
 Label28:
-	ADD	R10W,	R13W
+	ADD	R10W,	R12W
 Label29:
 	mov	rbx,	rbp
-	add	rbx,	-8
-	mov	CX,	[rbx]
+	add	rbx,	-12
+	mov	[RBX],	R10W
 Label30:
-	mov	R8W,	2
+	mov	rbx,	rbp
+	add	rbx,	-2
+	mov	R13W,	[rbx]
+	mov	rbx,	rbp
+	add	rbx,	-28
+	sub	R13W,	6
+	add	rbx,	4
+	movsx	RSI,	R13W
+	mov	R14W,	[RBX+2*RSI]
 Label31:
-	IMUL	CX,	R8W
+	mov	rbx,	rbp
+	add	rbx,	-6
+	mov	R15W,	[rbx]
+	mov	rbx,	rbp
+	add	rbx,	-42
+	sub	R15W,	6
+	add	rbx,	4
+	movsx	RSI,	R15W
+	mov	CX,	[RBX+2*RSI]
 Label32:
-	ADD	R10W,	CX
+	ADD	R14W,	CX
 Label33:
 	mov	rbx,	rbp
-	add	rbx,	-10
-	mov	R9W,	[rbx]
+	add	rbx,	-14
+	mov	[RBX],	R14W
 Label34:
-	mov	rbx,	rbp
-	add	rbx,	-2
-	mov	R10W,	[rbx]
-Label35:
-	IMUL	R9W,	R10W
-Label36:
-	SUB	R10W,	R9W
-Label37:
-	mov	rbx,	rbp
-	add	rbx,	-6
-	mov	[RBX],	R10W
-Label38:
-	mov	rbx,	rbp
-	add	rbx,	-6
-	mov	R11W,	[rbx]
-Label39:
-	mov	R12W,	10
-Label40:
-	CMP	R11W,	R12W
-	JLE	JRP40
-	mov	R13W,	1
-	JRP40:
-Label41:
-Label42:
-	mov	rbx,	rbp
-	add	rbx,	-8
-	mov	R14W,	[rbx]
-Label43:
+	mov	rdi,	Output
+	xor	rax,	rax
+PUSH	RBP
+	call	printf
+POP	RBP
 	mov	rbx,	rbp
 	add	rbx,	-10
-	mov	R15W,	[rbx]
-Label44:
-	CMP	R14W,	R15W
-	JG	JRP44
-	mov	CX,	1
-	JRP44:
-	JMP	Label47
-Label46:
-Label47:
-	OR	R13W,	R13W
-Label48:
-Label49:
-	mov	rbx,	rbp
-	add	rbx,	-2
 	mov	R8W,	[rbx]
-Label50:
+	mov	rdi,	IntOutput
+	movsx	rsi,	R8W
+	xor	rax,	rax
+PUSH	RBP
+	call	printf
+POP	RBP
+Label35:
+	mov	rdi,	Output
+	xor	rax,	rax
+PUSH	RBP
+	call	printf
+POP	RBP
 	mov	rbx,	rbp
-	add	rbx,	-4
+	add	rbx,	-12
 	mov	R9W,	[rbx]
-Label51:
-	CMP	R8W,	R9W
-	JGE	JRP51
-	mov	R10W,	1
-	JRP51:
-	JMP	Label54
-Label53:
-Label54:
-	AND	R13W,	R13W
-Label55:
-Label56:
-	mov	rbx,	rbp
-	add	rbx,	-13
-	mov	R11B,	[rbx]
-	JMP	Label59
-Label58:
-Label59:
-	AND	R13W,	R13W
-Label60:
+	mov	rdi,	IntOutput
+	movsx	rsi,	R9W
+	xor	rax,	rax
+PUSH	RBP
+	call	printf
+POP	RBP
+Label36:
+	mov	rdi,	Output
+	xor	rax,	rax
+PUSH	RBP
+	call	printf
+POP	RBP
 	mov	rbx,	rbp
 	add	rbx,	-14
-	mov	[RBX],	R13W
-Label61:
-	mov	rbx,	rbp
-	add	rbx,	-6
-	mov	R12W,	[rbx]
-	mov	rdi,	Output
-	xor	rax,	rax
-	call	printf
+	mov	R10W,	[rbx]
 	mov	rdi,	IntOutput
-	movsx	rsi,	R12W
+	movsx	rsi,	R10W
 	xor	rax,	rax
+PUSH	RBP
 	call	printf
-Label62:
+POP	RBP
+Label37:
 	mov	rbx,	rbp
-	add	rbx,	-13
-	mov	R13B,	[rbx]
-	mov	rdi,	Output
-	xor	rax,	rax
-	call	printf
-	CMP	R13B,	0
-	JE PLF62
-	mov	rdi,	BoolTrue
-	JMP	PLT62
-PLF62:
-	mov	rdi,	BoolFalse
-PLT62:
-	xor	rax,	rax
-	call	printf
-Label63:
+	add	rbx,	-8
+	inc	word [RBX]
+	JMP	Label17
+Label39:
+Label40:
 	mov	rax,	60		; system call for exit
 	xor	rdi,	rdi		; exit code 0
 	syscall		; invoke operating system to exit

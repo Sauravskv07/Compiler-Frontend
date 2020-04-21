@@ -8,6 +8,7 @@ start
 	declare a, b, c:integer;
 	declare u, v: boolean;
 	u:= true;
+	**print(u);**
 	a:= 5;
 	b:= 9;
 	get_value(x);

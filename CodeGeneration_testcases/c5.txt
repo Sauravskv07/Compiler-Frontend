@@ -9,7 +9,9 @@ start
 	declare m, temp:integer;	
 	declare A, B, C: array[6..10] of integer;
 	get_value(A);
+	**print(A);**
 	get_value(B);
+	**print(B);**
 	for(m in 6..10)
         start
 		temp:= A[m]+B[m];

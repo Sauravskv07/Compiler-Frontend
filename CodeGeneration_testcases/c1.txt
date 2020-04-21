@@ -9,8 +9,12 @@ start
 	a:= 5;
 	b:= 9;
 	get_value(x);
+	print(x);
 	get_value(y);
-	z:= x + y*b +(a-b)*y+ a*2 - b*x;	
+	print(y);
+
+	z:= x + y*b +(a-b)*y+ a*2 - b*x;
+	
         print(z);
 end
 
