@@ -277,12 +277,12 @@ int main(int argc,char** argv)
 					parseTree();
 
 					c_pars = 0;
-					int mem1 = 1024;
-					int mem2 = 200;
 					countparsetree(root);
+					int mem1 = sizeof(root)*c_pars;
 					printf("Parse tree number of nodes : %d\n",c_pars);
 					printf("Allocated memory : %d\n",mem1);
 					int c_ast = countAST(root);
+					int mem2 = sizeof(astroot)*c_ast;
 					printf("AST number of nodes : %d\n",c_ast);
 					printf("Allocated memory : %d\n",mem2);
 					printf("Compression percentage : %f\n",(((mem1-mem2)*1.0)/mem1)*100);
