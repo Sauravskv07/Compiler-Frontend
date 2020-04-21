@@ -111,7 +111,7 @@ int getReg(int size,quad_row *q)
 		printf("registers filled with temprories, abort \n");
 		exit(0);	
 	}
-	printf("outside get reg %s %d\n",registers[reg],size);
+	//printf("outside get reg %s %d\n",registers[reg],size);
 	return reg;
 }
 
@@ -314,7 +314,7 @@ void codeGen(quad_row *q,char * codeFile)
 
 	while(q!=NULL)
 	{
-		
+	/*	
 		//printf("Next Line\n");
 		printf("%d \t\t",q->srno);
 		printf("%s \t\t",OPNames[q->op]);
@@ -327,7 +327,7 @@ void codeGen(quad_row *q,char * codeFile)
 			else printf("\t\t");
 		}
 		//printf("Next Line\n");
-		
+	*/	
 		if(q->op!=NOP && q->op!=DEC && q->op!=JUMP && q->op!=START)
 		{
 			fprintf(fp,"Label%d:\n",q->srno);
@@ -342,6 +342,7 @@ void codeGen(quad_row *q,char * codeFile)
 					{
 						if(q->val[0].v_item->low==-1 || q->val[0].v_item->high==-1)
 						{
+							fprintf(fp,";dynamic array declaration\n");
 							if(q->val[0].v_item->low==-1)
 							{
 								if(q->val[0].v_item->lowNode!=NULL)
@@ -372,7 +373,7 @@ void codeGen(quad_row *q,char * codeFile)
 							}
 							
 							regop3=getReg(2,q);
-							fprintf(fp,"\txor\t%s,\t%s\n",registers[regop3],registers[regop3]);
+							fprintf(fp,"\txor\t%s,\t%s\n",registers[regop3+32],registers[regop3+32]);
 							fprintf(fp,"\tmov\t%s,\t%s\n",registers[regop3],registers[regop2]);
 							fprintf(fp,"\tsub\t%s,\t%s\n",registers[regop3],registers[regop1]);
 							fprintf(fp,"\tinc\t%s\n",registers[regop3]);
@@ -380,10 +381,10 @@ void codeGen(quad_row *q,char * codeFile)
 							if(q->val[0].v_item->eleType==0)
 								fprintf(fp,"\tadd\t%s,\t%s\n",registers[regop3],registers[regop3]);
 
-							fprintf(fp,"\tmov\t[rbp%d],\trsp\n",q->val[0].v_item->offset);
+							fprintf(fp,"\tsub\trsp,\t%s\n",registers[regop3+32]);
 							fprintf(fp,"\tpush\t%s\n",registers[regop2]);
 							fprintf(fp,"\tpush\t%s\n",registers[regop1]);
-							fprintf(fp,"\tsub\trsp,\t%s\n",registers[regop3+32]);		
+							fprintf(fp,"\tmov\t[rbp%d],\trsp\n",q->val[0].v_item->offset);		
 
 							freeReg(regop1);
 							freeReg(regop2);
