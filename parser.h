@@ -14,4 +14,6 @@ error_list* errors;
 error_list* parseTree();
 error_list* parseTree2();
 
+int c_pars;
 void printParseTree(treenode* root);
+void countparsetree(treenode *t);

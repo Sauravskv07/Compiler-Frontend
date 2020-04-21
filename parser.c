@@ -457,4 +457,25 @@ void printParseTree(treenode* root)
 
 	fclose(fp);
 }
+void countparsetree(treenode *t)
+{
+	if(t!=NULL)
+	{
+		if(t->child==NULL)
+		{
+			c_pars = c_pars + 1;
+		}
+		else
+		{
+			countparsetree(t->child);
+			c_pars = c_pars + 1;
+			treenode* rt=t->child->right;
+			while(rt!=NULL)
+			{
+				countparsetree(rt);
+				rt=rt->right;
+			}
+		}
+	}
+}
 

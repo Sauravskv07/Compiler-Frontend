@@ -63,47 +63,6 @@ astnode* createAST(treenode* root)
 	}
 }
 
-astnode* preproc(astnode* root)
-{
-	astnode* rt = NULL;
-	if(root!=NULL)
-	{
-		if(root->child==NULL)
-		{
-			printf("- %s ",root->data->token->lexeme);
-		}
-		else
-		{
-			if(root->data->nonterm->data->t_item->index == ht_search(mapping_table, "arithmeticOrBooleanExpr")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "AnyTerm")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "arithmeticExpr")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "term")->data->t_item->index)
-			{
-				astnode* t = root->child;
-				if(t!=NULL&&t->right!=NULL)
-				{
-				preproc(t->right->child);
-				preproc(root->child);
-				preproc(t->right->child->right);
-				preproc(t->right->child->right->right);
-				}
-				else {preproc(root->child);}
-			}
-			else
-			{
-			int v = root->data->nonterm->data->t_item->index;
-			if(v<65 || (v>73&&v<92) || v>114)
-			printf("- %s ",root->data->nonterm->key);
-			preproc(root->child);
-			rt = root->child;
-			while(rt!=NULL)
-			{
-				rt=rt->right;
-				preproc(rt);
-			}
-			}
-		}
-	}
-	return rt;
-}
-
 astnode* makeleaf(Token *tk)
 {
 	astnode * an = malloc(sizeof(astnode));
@@ -142,6 +101,48 @@ astnode* makeastnode(ht_item *t)
 	an->tag = 3;
 	return an;
 }
+astnode* preproc(astnode* root, int debug)
+{
+	astnode* rt = NULL;
+	if(root!=NULL)
+	{
+		if(root->child==NULL)
+		{
+			if(debug==1) printf("- %s ",root->data->token->lexeme);
+			count = count + 1;
+		}
+		else
+		{
+			if(root->data->nonterm->data->t_item->index == ht_search(mapping_table, "arithmeticOrBooleanExpr")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "AnyTerm")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "arithmeticExpr")->data->t_item->index || root->data->nonterm->data->t_item->index == ht_search(mapping_table, "term")->data->t_item->index)
+			{
+				astnode* t = root->child;
+				if(t!=NULL&&t->right!=NULL)
+				{
+				preproc(t->right->child,debug);
+				preproc(root->child,debug);
+				preproc(t->right->child->right,debug);
+				preproc(t->right->child->right->right,debug);
+				}
+				else {preproc(root->child,debug);}
+			}
+			else
+			{
+			int v = root->data->nonterm->data->t_item->index;
+			if(v<65 || (v>73&&v<92) || v>114)
+			if(debug==1) printf("- %s ",root->data->nonterm->key);
+			count = count + 1;
+			preproc(root->child,debug);
+			rt = root->child;
+			while(rt!=NULL)
+			{
+				rt=rt->right;
+				preproc(rt,debug);
+			}
+			}
+		}
+	}
+	return rt;
+}
 astnode* makenode1(ht_item *t, astnode *n1)
 {
 	astnode * an = makeastnode(t);
@@ -176,7 +177,7 @@ astnode* createpAST(treenode* root)
 {
 	printf("\nPre-order traversal of AST : \n");
 	astnode* p = createAST(root);
-	p = preproc(p);
+	p = preproc(p,1);
 	return p;
 }
 astnode *insertChildInAst(astnode *parent, astnode *child)
@@ -198,6 +199,13 @@ astnode *insertNextRightSiblingInAst(astnode *child, astnode *right)
 	child->right = right;
 	right->parent = child->parent;
 	return right;
+}
+int countAST(treenode* root)
+{
+	count = 0;
+	astnode* p = createAST(root);
+	p = preproc(p,0);
+	return count;
 }
 astnode *getRootInAst(astnode *child)
 {

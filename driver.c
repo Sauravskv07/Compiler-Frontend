@@ -239,25 +239,60 @@ int main(int argc,char** argv)
 
 					parseTree();
 
-					astnode *xp = createAST(root);
+					astnode *xp = createpAST(root);
+					printAST(xp);
 
-					FILE* fp2=fopen("ast_tree.txt","w");
-					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-					printf("OPEN AST_TREE TO VIEW THE SYMBOL TABLE\n");
-
-					
-					fclose(fp2);
 
 						printf("\n");
-					
-					semCheck(xp);
+
 			
 					break;
 				}
 
-			case 4:{
-				//memory calculation over here
-				break;
+			case 4:{//Memory 
+				forwardPointer=0;
+				
+					backPointer=0;
+
+					LN=1;
+
+					endReached=0;
+					
+					start_time = clock();
+
+					fp=(FILE*)fopen(argv[1],"r");
+	
+					fseek(fp, 0, SEEK_SET);
+
+					if(fp==NULL)
+					{
+						printf("Some error while opening the file");
+						exit(1);
+					}
+
+					fp=getStream(fp);
+
+					forwardPointer=-1;
+
+					parseTree();
+
+					c_pars = 0;
+					int mem1 = 1024;
+					int mem2 = 200;
+					countparsetree(root);
+					printf("Parse tree number of nodes : %d\n",c_pars);
+					printf("Allocated memory : %d\n",mem1);
+					int c_ast = countAST(root);
+					printf("AST number of nodes : %d\n",c_ast);
+					printf("Allocated memory : %d\n",mem2);
+					printf("Compression percentage : %f\n",(((mem1-mem2)*1.0)/mem1)*100);
+					
+					
+
+						printf("\n");
+					
+					break;
+			
 			}
 
 			case 5:{

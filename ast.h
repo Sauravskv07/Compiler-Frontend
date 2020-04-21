@@ -26,12 +26,14 @@ typedef struct astnode
 } astnode;
 
 astnode* astroot;
+int count;
 astnode* createAST(treenode* root);
 astnode *insertChildInAst(astnode *parent, astnode *child);
 astnode *insertNextRightSiblingInAst(astnode *child, astnode *right);
 astnode* createpAST(treenode* root);
 astnode* getRootInAst(astnode *child);
 void printAST(astnode *p);
+int countAST();
 astnode* makenode1(ht_item *t, astnode *n1);
 astnode* makenode2(ht_item *t, astnode *n1, astnode *n2);
 astnode* makenode3(ht_item *t, astnode *n1, astnode *n2, astnode *n3);
