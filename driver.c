@@ -82,7 +82,7 @@ int main(int argc,char** argv)
 
 	fclose(terminal_file);
 
-	printf("Number of terminals = %d\n",num_terminals);
+	//printf("Number of terminals = %d\n",num_terminals);
 	FILE* nonterminal_file=fopen("nonterminals.txt","r");
 	
     	if (nonterminal_file == NULL)
@@ -101,30 +101,31 @@ int main(int argc,char** argv)
 	fclose(nonterminal_file);
 
 
-	printf("PARSING RULES\n");
+	//printf("PARSING RULES\n");
 
 	parse("rules.txt");
 	
-	printf("RULES PARSING COMPLETE \n");
+	//printf("RULES PARSING COMPLETE \n");
 			
-	printf("CREATING PARSE TABLE\n");
+	//printf("CREATING PARSE TABLE\n");
 
 	create_parse_table();
 	//ht_insert_term_item(mapping_table, "qwerty", 1007,KEYWORD);
 	//printf("%s %d",ht_search(mapping_table,"qwerty")->key,ht_search(mapping_table,"qwerty")->data->t_item->index);
 	//printf("%s",tokensList[0]->key);
 
-	printf("CREATION OF PARSE TABLE COMPLETE\n");
+	//printf("CREATION OF PARSE TABLE COMPLETE\n");
 
 	while(1)
 	{
 		int choice=0;
 
+		printf("LEVEL 4: EVERYTHING WORKING SEMCHECK,SYNTAX CHECK,CODE GEN, TYPE CHECK, SYMBOL TABLE CREATION ETC.\n");
 		printf("\n\nDRIVER PROGRAM ..\n\n");
 
-		printf("FIRST AND FOLLOW SETS CALCULATION AUTOMATED..\n");
+		//printf("FIRST AND FOLLOW SETS CALCULATION AUTOMATED..\n");
 
-		printf("BOTH LEXICAL ANALYSER AND PARSER IMPLEMENTED\n");
+		//printf("BOTH LEXICAL ANALYSER AND PARSER IMPLEMENTED\n");
 		
 		printf("ALL TEST CASES WORKING, ERROR RECOVERY USING FIRST SET\n");
 		
@@ -398,6 +399,9 @@ int main(int argc,char** argv)
 						printf("\n");
 					
 						semCheck(xp);
+						if(sem_num_errors==0)
+							printf("Code compiles successfully..........\n");
+			
 					}
 					else
 						printf("SYNTACTIC ERRORS PRESENT\n");

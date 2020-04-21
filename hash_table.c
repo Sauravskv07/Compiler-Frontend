@@ -23,7 +23,7 @@ ht_item* ht_insert_term_item(ht_hash_table* ht, const char* key, int index, Type
     k->t_item = i;
     j->data = k;
     j->ct = 0;
-    printf("%s",key);
+    //printf("%s",key);
     return ht_insert(ht,j);
 }
 

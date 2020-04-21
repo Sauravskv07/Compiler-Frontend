@@ -34,7 +34,7 @@ int parse(char *fileName)
 	
 	fclose(rules_file);
 
-	printf("Rules parsing Successful\n");
+	//printf("Rules parsing Successful\n");
 	
 	return 0;
 }
