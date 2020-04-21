@@ -303,11 +303,15 @@ int main(int argc,char** argv)
 					
 						semCheck(xp);
 					}
-					if(sym_root->right==NULL) printf("ppp");
+					if(sym_root==NULL) printf("ppp");
+
+					else
+					{
 
 					printf("\n\n\nPrinting symbol table : \n");
 					
 					printsymnode(sym_root);
+					}
 			
 					break;
 			}
@@ -362,6 +366,57 @@ int main(int argc,char** argv)
 
 			case 7:{
 				//static and dynamic arrays
+
+					forwardPointer=0;
+				
+					backPointer=0;
+
+					LN=1;
+
+					endReached=0;
+					
+					start_time = clock();
+
+					fp=(FILE*)fopen(argv[1],"r");
+	
+					fseek(fp, 0, SEEK_SET);
+
+					if(fp==NULL)
+					{
+						printf("Some error while opening the file");
+						exit(1);
+					}
+
+					fp=getStream(fp);
+
+					forwardPointer=-1;
+					
+					parseTree();
+
+					if(num_errors==0)
+					{
+						astnode *xp = createAST(root);
+						astroot = xp;
+
+						FILE* fp2=fopen("ast_tree.txt","w");
+						fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
+					
+						fclose(fp2);
+
+						printf("\n");
+					
+						semCheck(xp);
+					}
+					if(sym_root==NULL) printf("ppp");
+					else
+					{
+
+					printf("\n\n\nPrinting array info : \n");
+					
+					printsymnodearr(sym_root);
+					}
+			
+					break;
 				}
 
 			case 8:{

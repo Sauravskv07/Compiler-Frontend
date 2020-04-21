@@ -141,7 +141,7 @@ void printhashtable(char *module_name, int linstart, int linend, ht_hash_table* 
 				{statdy="dynamic"; range = ht->items[i]->data->v_item->lowNode->key;}
 				else {sprintf(a, "%d", ht->items[i]->data->v_item->low); range = a;}
 				if(ht->items[i]->data->v_item->highNode!=NULL)
-				{statdy="dynamic";range = ht->items[i]->data->v_item->highNode->key;}
+				{statdy="dynamic";range =  strcat(range,",");range =  strcat(range,ht->items[i]->data->v_item->highNode->key);}
 				else {sprintf(b, "%d", ht->items[i]->data->v_item->high); range =  strcat(range,",");range =  strcat(range,b);}
 				if(ht->items[i]->data->v_item->lowNode==NULL && ht->items[i]->data->v_item->highNode==NULL)
 				{wd = wd + (ht->items[i]->data->v_item->high - ht->items[i]->data->v_item->low +1)*width[ht->items[i]->data->v_item->eleType];;}
@@ -341,11 +341,12 @@ void printhashtablearr(char *module_name, int linstart, int linend, ht_hash_tabl
 				{statdy="dynamic"; range = ht->items[i]->data->v_item->lowNode->key;}
 				else {sprintf(a, "%d", ht->items[i]->data->v_item->low); range = a;}
 				if(ht->items[i]->data->v_item->highNode!=NULL)
-				{statdy="dynamic";range = ht->items[i]->data->v_item->highNode->key;}
+				{statdy="dynamic";range =  strcat(range,",");range =  strcat(range,ht->items[i]->data->v_item->highNode->key);}
 				else {sprintf(b, "%d", ht->items[i]->data->v_item->high); range =  strcat(range,",");range =  strcat(range,b);}
+
 				if(ht->items[i]->data->v_item->lowNode==NULL && ht->items[i]->data->v_item->highNode==NULL)
 				{wd = wd + (ht->items[i]->data->v_item->high - ht->items[i]->data->v_item->low +1)*width[ht->items[i]->data->v_item->eleType];;}
-				printf("%s\t\t%s\t\t%s\t%s\t%s\t%s\t\n",ht->items[i]->key,module_name,lin,statdy,range,type);
+				printf("%s\t\t%s\t\t%s\t%s\t\t%s\t%s\t\n",ht->items[i]->key,module_name,lin,statdy,range,type);
 			}
 			else {type = tp[ht->items[i]->data->v_item->baseType]; isArr = "no";}
 			off = off + wd;
