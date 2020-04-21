@@ -11,7 +11,7 @@ GROUP NO. = 46
 
 error_list* errors;
 
-error_list* parseTree(char* parseTreeFile);
-error_list* parseTree2(char* parseTreeFile);
+error_list* parseTree();
+error_list* parseTree2();
 
-void printParseTree(treenode* root,char *parseTreeFile);
+void printParseTree(treenode* root);

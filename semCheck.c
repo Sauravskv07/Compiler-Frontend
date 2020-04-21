@@ -19,6 +19,30 @@ GROUP NO. = 46
 #include "symbol_table.h"
 #include "semCheck.h"
 
+void printSize()
+{
+	if(sym_root==NULL)
+	{
+		printf("sym root error\n");
+	}
+	else
+	{
+		symnode* current_func=sym_root->child;
+
+		while(current_func != NULL)
+		{
+			if(current_func->module_name==NULL)
+				printf("DRIVER:\t");
+			else
+			{
+				printf("%s\t",current_func->module_name);
+			}
+				printf("%d\n",current_func->current_offset);
+				current_func=current_func->right;
+		}
+	}
+}
+
 void setOutput(astnode *t, symnode *current)
 {
 	symnode* temp2=current;
@@ -409,8 +433,8 @@ void checkSemRules(astnode *t,symnode* current)
 						temp->data->f_item->isDef=-2;
 
 					new_node=create_new_symnode();
-					new_node->module_name=(char *)malloc(sizeof(char)*21);
 					current= insert_as_symchild(current,new_node);
+					new_node->module_name=(char *)malloc(sizeof(char)*21);
 					strcpy(current->module_name, t->child->data->token->lexeme);
 					current->isModuleScope=1;
 
@@ -735,7 +759,8 @@ void checkSemRules(astnode *t,symnode* current)
 
 					checkSemRules(t->child,current);
 					new_node=create_new_symnode();
-					new_node->module_name=(char *)malloc(sizeof(char)*21);
+					if(current->module_name!=NULL)
+						new_node->module_name=(char *)malloc(sizeof(char)*21);
 					new_node->current_offset=current->current_offset;
 					current= insert_as_symchild(current,new_node);
 
@@ -778,7 +803,8 @@ void checkSemRules(astnode *t,symnode* current)
 					checkSemRules(t->child,current);
 
 					new_node=create_new_symnode();
-					new_node->module_name=(char *)malloc(sizeof(char)*21);
+					if(current->module_name!=NULL)
+						new_node->module_name=(char *)malloc(sizeof(char)*21);
 					new_node->current_offset=current->current_offset;
 					current= insert_as_symchild(current,new_node);
 
@@ -939,12 +965,8 @@ void checkSemRules(astnode *t,symnode* current)
 				
 				case 117://default
 				{
-					//printf("default\n");
-					//new_node=create_new_symnode();
-					//new_node->module_name=(char *)malloc(sizeof(char)*21);
-					//current= insert_as_symchild(current,new_node);
 					checkSemRules(t->child,current);
-					//current=current->parent;
+
 					break;
 				}
 
@@ -1193,7 +1215,7 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 
 					while(rt!=NULL)
 					{
-						printf("current offset = %d\n",current_offset);
+						//printf("current offset = %d\n",current_offset);
 						current_offset=fillTheParams(rt,temp->data->f_item->pr,current_offset);
 						rt=rt->right;
 					}
@@ -1221,7 +1243,7 @@ symnode* modulesParHamla(astnode *t,symnode* root)
 	return root;
 }
 
-symnode* semCheck(astnode* t)
+void semCheck(astnode* t)
 {
 	sem_num_errors=0;
 

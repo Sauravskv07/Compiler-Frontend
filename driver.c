@@ -128,7 +128,7 @@ int main(int argc,char** argv)
 		
 		printf("ALL TEST CASES WORKING, ERROR RECOVERY USING FIRST SET\n");
 		
-		printf("\nENTER: \n 0: FOR EXITING \n 1: FOR COMMENT REMOVAL \n 2: FOR LEXICAL ANALYSIS \n 3: FOR LEXICAL ANALYSIS AND PARSING \n 4: FOR LEXICAL ANALYSIS , PARSING AND SEMANTIC ANALYSIS\n 5: FOR CODE GENERATION\n 6: PRINT AST\n 7: PRINT SYMBOL TABLE\n 8:Indeterminate 9:  \n10: Print array table\n");
+		printf("\nENTER: \n 0: FOR EXITING \n 1: LEXICAL ANALYSIS \n 2: FOR LEXICAL ANALYSIS AND PARSING \n 3: FOR AST GENERATION \n 4: FOR AST MEMORY CALCULATION \n 5: FOR SYMBOL TABLE\n 6: FOR ACTIVATION RECORD SIZES\n 7: PRINT STATIC AND DYNAMIC ARRAYS\n 8:COMPILER CHECKS(SYNTACTIC AND SEMANTIC)\n 9: FINAL CODE GENERATION\n");
 		
 		scanf("%d",&choice);	
 
@@ -136,15 +136,7 @@ int main(int argc,char** argv)
 		{
 			case 0: exit(0);
 
-			case 1:{
-				printf("ENTER THE DESTINATION FILE NAME:\n");
-				char dst[30];
-				scanf("%s",dst);
-				removeComments(argv[1],dst);
-				break;
-			}
-
-			case 2: {
+			case 1: {
 
 					forwardPointer=0;
 				
@@ -188,6 +180,37 @@ int main(int argc,char** argv)
 					break;
 				}
 
+			case 2:{
+					forwardPointer=0;
+				
+					backPointer=0;
+
+					LN=1;
+
+					endReached=0;
+
+					fp=(FILE*)fopen(argv[1],"r");
+	
+					fseek(fp, 0, SEEK_SET);
+
+					if(fp==NULL)
+					{
+						printf("Some error while opening the file");
+						exit(1);
+					}
+
+					fp=getStream(fp);
+
+					forwardPointer=-1;
+
+					parseTree();
+
+					printf("OPEN PARSE_TREE.TXT TO VIEW THE PARSE TREE\n");
+			
+					break;
+				}
+
+
 			case 3:{
 					forwardPointer=0;
 				
@@ -213,75 +236,32 @@ int main(int argc,char** argv)
 
 					forwardPointer=-1;
 
-					printf("ENTER THE DESTINATION FILE NAME FOR PARSE TREE:\n");
-					char dst[30];
-					scanf("%s",dst);
+					parseTree();
 
-					parseTree(dst);
+					astnode *xp = createAST(root);
 
-					end_time = clock();
+					FILE* fp2=fopen("ast_tree.txt","w");
+					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
+					printf("OPEN AST_TREE TO VIEW THE SYMBOL TABLE\n");
 
-					total_CPU_time  =  (double) (end_time - start_time);
 					
-					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
+					fclose(fp2);
+
+						printf("\n");
+					
+					semCheck(xp);
 			
 					break;
 				}
-
 
 			case 4:{
-					forwardPointer=0;
-				
-					backPointer=0;
-
-					LN=1;
-
-					endReached=0;
-					
-					start_time = clock();
-
-					fp=(FILE*)fopen(argv[1],"r");
-	
-					fseek(fp, 0, SEEK_SET);
-
-					if(fp==NULL)
-					{
-						printf("Some error while opening the file");
-						exit(1);
-					}
-
-					fp=getStream(fp);
-
-					forwardPointer=-1;
-
-				printf("ENTER THE DESTINATION FILE NAME:\n");
-				char dst[30];
-				scanf("%s",dst);
-					parseTree(argv[2]);
-
-					astnode *xp = createAST(root);
-
-					FILE* fp2=fopen("tree2.txt","w");
-					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-					
-					fclose(fp2);
-
-						printf("\n");
-					
-					semCheck(xp);
-
-					end_time = clock();
-
-					total_CPU_time  =  (double) (end_time - start_time);
-					
-					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
-			
-					break;
-				}
-
-
+				//memory calculation over here
+				break;
+			}
 
 			case 5:{
+					//print symbol table
+
 					forwardPointer=0;
 				
 					backPointer=0;
@@ -305,112 +285,15 @@ int main(int argc,char** argv)
 					fp=getStream(fp);
 
 					forwardPointer=-1;
-
-					parseTree(argv[2]);
-
-					astnode *xp = createAST(root);
-
-					FILE* fp2=fopen("tree2.txt","w");
-					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-
-					fclose(fp2);
-
-						printf("\n");
 					
-					semCheck(xp);
-/*
-You may encounter a segmentation fault due to existence of some syntax/semantic error in the program file. Please run code generation on a error free program only.");
-*/
-					resetIRParams();
-					genIRTable(xp,sym_root);
-					printIR(quad_row_tail);
-
-					codeGen(quad_row_tail);
-
-					end_time = clock();
-
-					total_CPU_time  =  (double) (end_time - start_time);
-					
-					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
-			
-					break;
-				}
-
-			case 6:{
-				
-					forwardPointer=0;
-				
-					backPointer=0;
-
-					LN=1;
-
-					endReached=0;
-					
-					start_time = clock();
-
-					fp=(FILE*)fopen(argv[1],"r");
-	
-					fseek(fp, 0, SEEK_SET);
-
-					if(fp==NULL)
-					{
-						printf("Some error while opening the file");
-						exit(1);
-					}
-
-					fp=getStream(fp);
-
-					forwardPointer=-1;
-
-					parseTree(argv[2]);
-
-					astnode *xp = createpAST(root);
-					printAST(xp);
-
-					end_time = clock();
-
-					total_CPU_time  =  (double) (end_time - start_time);
-					
-					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
-					break;
-					
-				}
-
-			case 7:{
-					forwardPointer=0;
-				
-					backPointer=0;
-
-					LN=1;
-
-					endReached=0;
-					
-					start_time = clock();
-
-					fp=(FILE*)fopen(argv[1],"r");
-	
-					fseek(fp, 0, SEEK_SET);
-
-					if(fp==NULL)
-					{
-						printf("Some error while opening the file");
-						exit(1);
-					}
-
-					fp=getStream(fp);
-
-					forwardPointer=-1;
-
-					char parse_name[]={'p','a','r','s','e','.','t','x','t','\0'};
-					
-					parseTree(parse_name);
+					parseTree();
 
 					if(num_errors==0)
 					{
 						astnode *xp = createAST(root);
 						astroot = xp;
 
-						FILE* fp2=fopen("tree2.txt","w");
+						FILE* fp2=fopen("ast_tree.txt","w");
 						fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
 					
 						fclose(fp2);
@@ -424,18 +307,54 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 					printf("\n\n\nPrinting symbol table : \n");
 					
 					printsymnode(sym_root);
-
-					end_time = clock();
-
-					total_CPU_time  =  (double) (end_time - start_time);
-					
-					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
-
-					printf("TOTAL_CPU_TIME = %lf\n",total_CPU_time);
-					printf("total_CPU_time_in_seconds = %lf\n",total_CPU_time_in_seconds);
 			
 					break;
+			}
+
+			case 6:{
+				
+					forwardPointer=0;
+				
+					backPointer=0;
+
+					LN=1;
+
+					endReached=0;
+
+					fp=(FILE*)fopen(argv[1],"r");
+	
+					fseek(fp, 0, SEEK_SET);
+
+					if(fp==NULL)
+					{
+						printf("Some error while opening the file");
+						exit(1);
+					}
+
+					fp=getStream(fp);
+
+					forwardPointer=-1;
+
+					parseTree();
+
+					astnode *xp = createpAST(root);
+
+					//printAST(xp);
+
+					semCheck(xp);
+
+					printf("STATIC SIZE OF ACTIVATION RECORDS ARE:\n");
+
+					printSize();
+
+					break;
+					
 				}
+
+			case 7:{
+				//static and dynamic arrays
+				}
+
 			case 8:{
 					forwardPointer=0;
 				
@@ -460,30 +379,20 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 					fp=getStream(fp);
 
 					forwardPointer=-1;
-
-					char parse_name[]={'p','a','r','s','e','.','t','x','t','\0'};
 					
-					parseTree(parse_name);
+					parseTree();
 
 					if(num_errors==0)
 					{
 						astnode *xp = createAST(root);
 						astroot = xp;
 
-						FILE* fp2=fopen("tree2.txt","w");
-						fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-					
-						fclose(fp2);
-
 						printf("\n");
 					
 						semCheck(xp);
 					}
-					//if(sym_root->right==NULL) printf("ppp");
-
-					//printf("\n\n\nPrinting symbol table : \n");
-					
-					//printsymnode(sym_root);
+					else
+						printf("SYNTACTIC ERRORS PRESENT\n");
 
 					end_time = clock();
 
@@ -496,6 +405,7 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 			
 					break;
 				}
+
 			case 9:{
 					forwardPointer=0;
 				
@@ -521,103 +431,32 @@ You may encounter a segmentation fault due to existence of some syntax/semantic 
 
 					forwardPointer=-1;
 
-					char parse_name[]={'p','a','r','s','e','.','t','x','t','\0'};
+					parseTree();
 
-					parseTree(parse_name);
+					astnode *xp = createAST(root);
 
-					if(num_errors==0)
-					{
-						astnode *xp = createAST(root);
-
-						FILE* fp2=fopen("tree2.txt","w");
-						fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-
-						fclose(fp2);
-
-						printf("\n");
+					FILE* fp2=fopen("ast_tree.txt","w");
 					
-					
-						semCheck(xp);
-/*
-You may encounter a segmentation fault due to existence of some syntax/semantic error in the program file. Please run code generation on a error free program only.");
-*/
-						if(sem_num_errors==0)
-						{
-							resetIRParams();
-							genIRTable(xp,sym_root);
-							printIR(quad_row_tail);
-					
-							codeGen(quad_row_tail);
-						}
-						else 
-							printf("some semantic errors present\n");
+					fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
 
-					}
-					else
-						printf("some syntactic errors present\n");
-			
-					break;
-				}
-case 10:{
-					forwardPointer=0;
+					fclose(fp2);
+
+					printf("\n");
 				
-					backPointer=0;
+					semCheck(xp);
 
-					LN=1;
-
-					endReached=0;
-					
-					start_time = clock();
-
-					fp=(FILE*)fopen(argv[1],"r");
+					resetIRParams();
+		
+					genIRTable(xp,sym_root);
+			
+					printIR(quad_row_tail);
 	
-					fseek(fp, 0, SEEK_SET);
+					codeGen(quad_row_tail,argv[2]);
 
-					if(fp==NULL)
-					{
-						printf("Some error while opening the file");
-						exit(1);
-					}
-
-					fp=getStream(fp);
-
-					forwardPointer=-1;
-
-					char parse_name[]={'p','a','r','s','e','.','t','x','t','\0'};
-					
-					parseTree(parse_name);
-
-					if(num_errors==0)
-					{
-						astnode *xp = createAST(root);
-						astroot = xp;
-
-						FILE* fp2=fopen("tree2.txt","w");
-						fprintf(fp2,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
-					
-						fclose(fp2);
-
-						printf("\n");
-					
-						semCheck(xp);
-					}
-					if(sym_root->right==NULL) printf("ppp");
-
-					printf("\n\n\nPrinting array table : \n");
-					
-					printsymnodearr(sym_root);
-
-					end_time = clock();
-
-					total_CPU_time  =  (double) (end_time - start_time);
-					
-					total_CPU_time_in_seconds =   total_CPU_time / CLOCKS_PER_SEC;
-
-					printf("TOTAL_CPU_TIME = %lf\n",total_CPU_time);
-					printf("total_CPU_time_in_seconds = %lf\n",total_CPU_time_in_seconds);
 			
 					break;
 				}
+
 
 			default: printf("INVALID ENTRY\n");
 		}

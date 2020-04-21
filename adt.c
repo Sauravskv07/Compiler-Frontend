@@ -126,7 +126,7 @@ void printTraversal(treenode *t,FILE* fp)
 		{
 			if(t->tag==1)
 			{
-				printf(" %s,%d ",t->data->token->lexeme,t->data->token->index);
+				//printf(" %s,%d ",t->data->token->lexeme,t->data->token->index);
 				if(t->data->token->index==ht_search(mapping_table,"RNUM")->data->t_item->index)
 					fprintf(fp,"%s\t%d\t\t%s\t\t\t\t%f\t%s\t\tYES\n",t->data->token->lexeme,t->data->token->LN,tokensList[t->data->token->index]->key,t->data->token->val.f_val,t->parent->data->nonterm->key);
 				else
@@ -134,7 +134,7 @@ void printTraversal(treenode *t,FILE* fp)
 			}
 			else
 			{
-				printf(" %s ",t->data->nonterm->key);
+				//printf(" %s ",t->data->nonterm->key);
 
 				fprintf(fp,"%s\t\t\t\tEPSILON\t\t\t\t\t\t%s\t\tYES\t\n",t->data->nonterm->key,t->parent->data->nonterm->key);
 			}
@@ -143,7 +143,7 @@ void printTraversal(treenode *t,FILE* fp)
 		{
 			printTraversal(t->child,fp);
 
-			printf("%s --",t->data->nonterm->key);
+			//printf("%s --",t->data->nonterm->key);
 
 			if(t->parent!=NULL)
 				fprintf(fp,"----\t\t\t\t\t\t\t\t\t\t%s\t\t\tNO\t\t%s\n",t->parent->data->nonterm->key,t->data->nonterm->key);

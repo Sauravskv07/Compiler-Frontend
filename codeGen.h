@@ -4,7 +4,7 @@ typedef enum
 
 
 void deallocMemory(symnode* current_func,FILE* fp);
-void codeGen(quad_row *q);
+void codeGen(quad_row *q,char* codeFile);
 int getTok(Token* tk,quad_row *q,FILE* fp);
 void allocMemory(symnode* current_func,FILE* fp);
 int getVarReg(var_item* v,quad_row *q,FILE* fp);

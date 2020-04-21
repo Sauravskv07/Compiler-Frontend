@@ -37,7 +37,7 @@ int getReg(int size,quad_row *q)
 {
 
 	current_reg++;
-	printf("GET_REG\n");
+	//printf("GET_REG\n");
 	int reg;
 	int flag=0;
 	for(int i=0;i<9;i++)
@@ -266,7 +266,7 @@ void setAddr(var_item* v,FILE* fp)
 }
 
 
-void codeGen(quad_row *q)
+void codeGen(quad_row *q,char * codeFile)
 {
 
 
@@ -277,7 +277,7 @@ void codeGen(quad_row *q)
 	}
 	FILE* fp;
 
-	fp= fopen("code.asm","w");
+	fp= fopen(codeFile,"w");
 	//fp=stdout;
 	if(fp==NULL)
 	{
@@ -1233,7 +1233,7 @@ void codeGen(quad_row *q)
 			}
 		}
 
-		regState();
+		//regState();
 		q=q->next;	
 	}
 

@@ -34,7 +34,7 @@ void validateLexError()
 		}
 }
 
-error_list* parseTree(char* parseTreeFile){
+error_list* parseTree(){
 
 	num_errors=0;
 
@@ -257,14 +257,14 @@ error_list* parseTree(char* parseTreeFile){
 	printTraversal(root);
 */
 
-	printParseTree(root,parseTreeFile);
+	printParseTree(root);
 
 	printf("TOTAL NUMBER OF ERRORS ENCOUNTERED = %d\n",num_errors);
 
 	return errors;
 }
 
-error_list* parseTree2(char* parseTreeFile){
+error_list* parseTree2(){
 
 	num_errors=0;
 
@@ -439,7 +439,7 @@ error_list* parseTree2(char* parseTreeFile){
 		printf("Parsing complete...");
 	}
 
-	printParseTree(root,parseTreeFile);
+	printParseTree(root);
 
 	printf("TOTAL NUMBER OF ERRORS ENCOUNTERED = %d\n",num_errors);
 
@@ -447,9 +447,9 @@ error_list* parseTree2(char* parseTreeFile){
 }
 
 
-void printParseTree(treenode* root,char * file)
+void printParseTree(treenode* root)
 {
-	FILE* fp=fopen(file,"w");
+	FILE* fp=fopen("parse_tree.txt","w");
 	
 	fprintf(fp,"lexeme\t\tlineno\t\ttokenName\t\tvalueIfNumber\t\tparentNodeSymbol\tisLeafNode(yes/no)\tNodeSymbol\n");
 
